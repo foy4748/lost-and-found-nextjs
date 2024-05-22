@@ -1,10 +1,7 @@
+import LostItemReportForm from "./LostItemReportForm";
 
-function ReportLostPageView(){
-	return(
-		<>
-			<LostItemReportForm/>
-		<>
-		)
+function ReportLostPageView() {
+  return <LostItemReportForm />;
 }
 
-export default ReportLostPageView
+export default ReportLostPageView;
