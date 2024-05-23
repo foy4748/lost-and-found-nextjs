@@ -4,20 +4,42 @@ import { useForm } from "react-hook-form";
 import { Dropdown } from "flowbite-react";
 import { useGetCategoryQuery } from "@/redux/apiSlices/categoryApiSlice";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import {
+  useGetReportFoundItemQuery,
+  usePostReportFoundItemMutation,
+} from "@/redux/apiSlices/reportFoundItemApiSlice";
 
 function LostItemReportForm() {
   const { register, handleSubmit } = useForm();
-  const submitReport = (data: any) => {
-    console.log({ ...data, categoryId: selectedCategory.id });
-  };
+  const [postReport, result] = usePostReportFoundItemMutation();
+
   const { data: categoires } = useGetCategoryQuery(null);
+  const { data: foundItems } = useGetReportFoundItemQuery({
+    limit: 5,
+    sortOrder: "desc",
+  });
   const [selectedCategory, setSelectedCategory] = useState({
     id: null,
     name: "Select Please",
   });
+
+  const submitReport = (data: any) => {
+    const payload = { ...data, categoryId: selectedCategory.id };
+    console.log(payload);
+    if (!selectedCategory.id) {
+      toast.error("Please, select category");
+      return;
+    }
+    //postReport(payload);
+    console.log(foundItems);
+  };
   return (
-    <form onSubmit={handleSubmit(submitReport)}>
-      <div className="flex max-w-md flex-col gap-4">
+    <form
+      onSubmit={handleSubmit(submitReport)}
+      className="flex w-11/12 md:w-1/2 flex-col gap-4"
+    >
+      <div className="flex flex-col gap-4">
         <div>
           <div className="mb-2 block">
             <Label htmlFor="small" value="Found Item Name" />
