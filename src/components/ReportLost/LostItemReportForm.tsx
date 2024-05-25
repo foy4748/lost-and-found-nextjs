@@ -1,24 +1,27 @@
 "use client";
+import { jwtDecode } from "jwt-decode";
 import { Label, TextInput } from "flowbite-react";
 import { useForm } from "react-hook-form";
-import { Dropdown } from "flowbite-react";
+import { Dropdown, Button } from "flowbite-react";
 import { useGetCategoryQuery } from "@/redux/apiSlices/categoryApiSlice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import {
   useGetReportFoundItemQuery,
   usePostReportFoundItemMutation,
 } from "@/redux/apiSlices/reportFoundItemApiSlice";
 
+let token = window.localStorage.getItem("token");
+console.log("ReportForm", token);
+const decoded = jwtDecode(
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI3ODM3MDlmLTEyNzYtNDU4ZC05Njg3LTEyNWFmODQ4MWUwMCIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlhdCI6MTcxNjQzOTYwNywiZXhwIjoxNzE2NDQzMjA3fQ.MPk_zvjxc4e41iywBqbutcBp5OUZ4EHUoib6aVjl2es"
+) as { id: string };
+
 function LostItemReportForm() {
   const { register, handleSubmit } = useForm();
   const [postReport, result] = usePostReportFoundItemMutation();
 
   const { data: categoires } = useGetCategoryQuery(null);
-  const { data: foundItems } = useGetReportFoundItemQuery({
-    limit: 5,
-    sortOrder: "desc",
-  });
   const [selectedCategory, setSelectedCategory] = useState({
     id: null,
     name: "Select Please",
@@ -34,6 +37,11 @@ function LostItemReportForm() {
     //postReport(payload);
     console.log(foundItems);
   };
+  const { data: foundItems } = useGetReportFoundItemQuery({
+    limit: 5,
+    sortOrder: "desc",
+    userId: String(decoded.id),
+  });
   return (
     <form
       onSubmit={handleSubmit(submitReport)}
@@ -42,7 +50,7 @@ function LostItemReportForm() {
       <div className="flex flex-col gap-4">
         <div>
           <div className="mb-2 block">
-            <Label htmlFor="small" value="Found Item Name" />
+            <Label htmlFor="small" value="Lost Item Name" />
           </div>
           <TextInput
             id="small"
@@ -94,7 +102,7 @@ function LostItemReportForm() {
           </Dropdown>
         </div>
       </div>
-      <button type="submit">Submit</button>
+      <Button type="submit">Submit</Button>
     </form>
   );
 }

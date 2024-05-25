@@ -7,6 +7,7 @@ type TQueryReportFoundItem = {
   page?: number;
   sortOrder?: "asc" | "desc";
   sortBy?: "foundItemName" | "category" | "foundDate";
+  userId?: string;
 };
 
 const TagReportFoundItems = "ReportFoundItems";
@@ -40,7 +41,7 @@ export const foundItemApi = baseApi
       getSingleReportFoundItem: builder.query({
         query: (id: string) => {
           return {
-            url: `/foundItems/${id}`,
+            url: `/api/found-items/${id}`,
           };
         },
       }),

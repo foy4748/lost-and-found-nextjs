@@ -1,10 +1,11 @@
+import CenterItem from "@/components/ui/CenterItem";
 import LoginForm from "./LoginForm";
 
 function LoginPageView() {
   return (
-    <section className="h-screen flex justify-center items-center">
+    <CenterItem>
       <LoginForm />
-    </section>
+    </CenterItem>
   );
 }
 
