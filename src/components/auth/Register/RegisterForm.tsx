@@ -18,15 +18,12 @@ function RegisterForm() {
   const { handleSubmit, register } = useForm<TRegisterInputType>();
 
   const onSubmit = async (data: TRegisterInputType) => {
-    console.log(data);
     const { name, email, password, bio, age } = data;
     const profile = { bio, age: Number(age) };
 
     const payload = { name, email, password, profile };
-    console.log(payload);
-    const result = await registerUser(payload);
-    console.log(result);
-    window.localStorage.setItem("token", result?.data?.token);
+    const { token } = await registerUser(payload);
+    window.localStorage.setItem("token", String(token));
   };
   return (
     <>

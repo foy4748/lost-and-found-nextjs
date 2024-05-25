@@ -13,7 +13,6 @@ export type TUserAndUserProfilePayLoad = {
 
 export const loginUser = async (email: string, password: string) => {
   const payload = { email, password };
-  console.log(payload);
 
   const res = await fetch(`${process.env.SERVER_ADDRESS}/api/login`, {
     credentials: "include",
@@ -42,8 +41,7 @@ export const registerUser = async (payload: TUserAndUserProfilePayLoad) => {
   });
 
   const result = await res.json();
-  console.log(result);
   const token = cookies().get("token");
   cookies().set("token", String(token));
-  return result;
+  return { result, token: res.headers.get("token") };
 };
