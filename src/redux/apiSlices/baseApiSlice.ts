@@ -32,7 +32,6 @@ const baseQueryWithRefreshToken: BaseQueryFn<
   const result = await baseQuery(args, api, extraOptions);
 
   if (result?.error?.status === 403) {
-    console.log("Hit");
     api.dispatch(logoutUser());
     return result;
   }

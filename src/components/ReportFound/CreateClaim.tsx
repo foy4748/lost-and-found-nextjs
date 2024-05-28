@@ -12,18 +12,30 @@ import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export type TCreateClaimPayload = {
+  foundbyId: string;
   distinguishingFeatures: string;
   lostDate: Date;
 };
 
-export default function CreateClaim({ foundItemId }: { foundItemId: string }) {
+export default function CreateClaim({ foundById }: { foundById: string }) {
   const [openModal, setOpenModal] = useState(false);
   const emailInputRef = useRef<HTMLInputElement>(null);
   const { register, handleSubmit } = useForm<TCreateClaimPayload>();
 
-  const handleClaimIssue = (data: TCreateClaimPayload) => {
+  const handleClaimIssue = async (data: TCreateClaimPayload) => {
     data.lostDate = new Date(data.lostDate);
-    console.log(JSON.stringify(data));
+    const payload = { ...data, foundById } as TCreateClaimPayload;
+    console.log(payload);
+    const res = await fetch(`http://localhost:3001/api/claims`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+    const result = await res.json();
+    console.log(result);
   };
 
   return (

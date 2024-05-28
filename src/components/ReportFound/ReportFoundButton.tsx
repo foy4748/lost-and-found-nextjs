@@ -11,6 +11,7 @@ function ReportFoundButton({ foundItemId }: { foundItemId: string }) {
       credentials: "include",
       method: "POST",
       body: JSON.stringify({ foundItemId }),
+      cache: "no-store",
     });
     const result = await res.json();
     console.log(result);

@@ -1,4 +1,3 @@
-import { Button } from "flowbite-react";
 import CreateClaim from "./CreateClaim";
 
 async function FoundBy({ foundItemId }: { foundItemId: string }) {
@@ -9,7 +8,7 @@ async function FoundBy({ foundItemId }: { foundItemId: string }) {
   return (
     <>
       {JSON.stringify(data)}
-      <CreateClaim foundItemId={foundItemId} />
+      <CreateClaim foundById={data.id} />
     </>
   );
 }
