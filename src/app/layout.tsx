@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import ReduxToolkitProvider from "@/Providers/RTKQueryProvider";
+import { NavBar } from "@/components/ui/NavBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +20,10 @@ export default function RootLayout({
   return (
     <ReduxToolkitProvider>
       <html lang="en">
-        <body className={inter.className}>{children}</body>
+        <body className={inter.className}>
+          <NavBar />
+          {children}
+        </body>
         <Toaster />
       </html>
     </ReduxToolkitProvider>

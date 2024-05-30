@@ -47,6 +47,7 @@ export const foundItemApi = baseApi
       }),
       postReportFoundItem: builder.mutation({
         query: (body) => {
+          console.log("report found payload", body);
           return {
             url: "/api/found-items/report-found",
             method: "POST",

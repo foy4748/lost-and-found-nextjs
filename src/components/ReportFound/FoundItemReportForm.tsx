@@ -13,9 +13,7 @@ import {
 
 let token = window.localStorage.getItem("token");
 console.log("ReportForm", token);
-const decoded = jwtDecode(
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI3ODM3MDlmLTEyNzYtNDU4ZC05Njg3LTEyNWFmODQ4MWUwMCIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlhdCI6MTcxNjQzOTYwNywiZXhwIjoxNzE2NDQzMjA3fQ.MPk_zvjxc4e41iywBqbutcBp5OUZ4EHUoib6aVjl2es"
-) as { id: string };
+const decoded = jwtDecode(String(token)) as { id: string };
 
 function FoundItemReportForm() {
   const { register, handleSubmit } = useForm();
@@ -57,7 +55,8 @@ function FoundItemReportForm() {
         return;
       }
       // Setting photo URL in payload
-      payload["photoUrl"] = String(photoUpResult.url);
+      console.log("photoUpResult", photoUpResult);
+      payload["photoUrl"] = String(photoUpResult.data.url);
     } catch (error) {
       console.error(error);
       toast.error("Couldn't Upload Product Photo");
@@ -66,6 +65,8 @@ function FoundItemReportForm() {
     //------ ---------- ----------- ----------
 
     // Posting Item data in database ------------
+    delete payload["photoFile"];
+    postReport(payload);
     //------ ---------- ----------- ----------
   };
   const { data: foundItems } = useGetReportFoundItemQuery({
