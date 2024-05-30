@@ -48,7 +48,17 @@ export const foundItemApi = baseApi
       postReportFoundItem: builder.mutation({
         query: (body) => {
           return {
-            url: "/api/found-items",
+            url: "/api/found-items/report-found",
+            method: "POST",
+            body,
+          };
+        },
+        invalidatesTags: [TagReportFoundItems],
+      }),
+      postReportLostItem: builder.mutation({
+        query: (body) => {
+          return {
+            url: "/api/found-items/report-lost",
             method: "POST",
             body,
           };
@@ -85,6 +95,7 @@ export const {
   useGetReportFoundItemQuery,
   useGetSingleReportFoundItemQuery,
   usePostReportFoundItemMutation,
+  usePostReportLostItemMutation,
   useEditReportFoundItemMutation,
   useDeleteReportFoundItemMutation,
 } = foundItemApi;

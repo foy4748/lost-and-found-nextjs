@@ -1,10 +1,10 @@
 "use client";
 import { jwtDecode } from "jwt-decode";
-import { Label, TextInput } from "flowbite-react";
+import { Label, TextInput, FileInput } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import { Dropdown, Button } from "flowbite-react";
 import { useGetCategoryQuery } from "@/redux/apiSlices/categoryApiSlice";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import {
   useGetReportFoundItemQuery,
@@ -17,7 +17,7 @@ const decoded = jwtDecode(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI3ODM3MDlmLTEyNzYtNDU4ZC05Njg3LTEyNWFmODQ4MWUwMCIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlhdCI6MTcxNjQzOTYwNywiZXhwIjoxNzE2NDQzMjA3fQ.MPk_zvjxc4e41iywBqbutcBp5OUZ4EHUoib6aVjl2es"
 ) as { id: string };
 
-function LostItemReportForm() {
+function FoundItemReportForm() {
   const { register, handleSubmit } = useForm();
   const [postReport, result] = usePostReportFoundItemMutation();
 
@@ -27,7 +27,7 @@ function LostItemReportForm() {
     name: "Select Please",
   });
 
-  const submitReport = (data: any) => {
+  const submitReport = async (data: any) => {
     const payload = { ...data, categoryId: selectedCategory.id };
     console.log(payload);
     if (!selectedCategory.id) {
@@ -36,6 +36,37 @@ function LostItemReportForm() {
     }
     //postReport(payload);
     console.log(foundItems);
+
+    // Uploading Photo to IMG BB ------------
+    const photoFile = new FormData();
+    const file = data["photoFile"][0];
+    photoFile.append("image", file);
+
+    const IMG_BB_KEY = "cece759e99e017fcbe370b51e1146b77";
+    const photoUpUrl = `https://api.imgbb.com/1/upload?key=${IMG_BB_KEY}`;
+    const photoUpOptions = {
+      method: "POST",
+      body: photoFile,
+    };
+
+    try {
+      const photoUpResponse = await fetch(photoUpUrl, photoUpOptions);
+      const photoUpResult = await photoUpResponse.json();
+      if (!photoUpResult.success) {
+        toast.error("Couldn't Upload Product Photo");
+        return;
+      }
+      // Setting photo URL in payload
+      payload["photoUrl"] = String(photoUpResult.url);
+    } catch (error) {
+      console.error(error);
+      toast.error("Couldn't Upload Product Photo");
+    }
+
+    //------ ---------- ----------- ----------
+
+    // Posting Item data in database ------------
+    //------ ---------- ----------- ----------
   };
   const { data: foundItems } = useGetReportFoundItemQuery({
     limit: 5,
@@ -50,7 +81,7 @@ function LostItemReportForm() {
       <div className="flex flex-col gap-4">
         <div>
           <div className="mb-2 block">
-            <Label htmlFor="small" value="Lost Item Name" />
+            <Label htmlFor="small" value="Found Item Name" />
           </div>
           <TextInput
             id="small"
@@ -101,10 +132,16 @@ function LostItemReportForm() {
             })}
           </Dropdown>
         </div>
+        <div>
+          <div className="mb-2 block">
+            <Label htmlFor="file-upload" value="Upload Photo" />
+          </div>
+          <FileInput id="file-upload" {...register("photoFile")} />
+        </div>
       </div>
       <Button type="submit">Submit</Button>
     </form>
   );
 }
 
-export default LostItemReportForm;
+export default FoundItemReportForm;

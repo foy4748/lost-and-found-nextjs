@@ -1,5 +1,5 @@
-import FoundBy from "@/components/ReportFound/FoundBy";
-import ReportFoundButton from "@/components/ReportFound/ReportFoundButton";
+import FoundBy from "@/components/ReportLost/FoundBy";
+import ReportFoundButton from "@/components/ReportLost/ReportFoundButton";
 
 async function ReportFoundItem({ params }: { params: { id: string } }) {
   const res = await fetch(
