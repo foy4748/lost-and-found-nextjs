@@ -16,7 +16,7 @@ function Claims({ foundById }: { foundById: string }) {
       console.log("Claims data", data);
       setClaims(data);
     })();
-  }, []);
+  }, [foundById]);
 
   return <>{JSON.stringify(claims)}</>;
 }
