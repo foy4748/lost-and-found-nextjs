@@ -7,6 +7,7 @@ import { useGetCategoryQuery } from "@/redux/apiSlices/categoryApiSlice";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { usePostReportLostItemMutation } from "@/redux/apiSlices/reportFoundItemApiSlice";
+import { revalidateTagFromClient } from "@/actions/revalidatingData";
 
 let token = window.localStorage.getItem("token");
 console.log("ReportForm", token);
@@ -58,9 +59,10 @@ function LostItemReportForm() {
 
       // Posting Item data in database ------------
       delete payload["photoFile"];
-      postReport(payload);
+      await postReport(payload);
       reset();
-	  toast.success("Reported Lost Item successfully");
+      revalidateTagFromClient("/lost-items");
+      toast.success("Reported Lost Item successfully");
       //------ ---------- ----------- ----------
     } catch (error) {
       console.error(error);

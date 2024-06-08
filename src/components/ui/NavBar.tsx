@@ -49,6 +49,9 @@ export function NavBar() {
         <Navbar.Link href="#" active>
           Home
         </Navbar.Link>
+        <Navbar.Link as={Link} href="/lost-items">
+          Lost Items
+        </Navbar.Link>
         <Navbar.Link as={Link} href="/report-lost-item">
           Report Lost
         </Navbar.Link>

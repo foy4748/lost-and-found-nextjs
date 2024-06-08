@@ -1,5 +1,6 @@
 "use client";
 
+import { revalidatePathFromClient } from "@/actions/revalidatingData";
 import {
   Button,
   Checkbox,
@@ -10,6 +11,7 @@ import {
 } from "flowbite-react";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 export type TCreateClaimPayload = {
   foundbyId: string;
@@ -17,25 +19,36 @@ export type TCreateClaimPayload = {
   lostDate: Date;
 };
 
-export default function CreateClaim({ foundById }: { foundById: string }) {
+export default function CreateClaim({
+  foundById,
+  foundItemId,
+}: {
+  foundById: string;
+  foundItemId: string;
+}) {
   const [openModal, setOpenModal] = useState(false);
   const emailInputRef = useRef<HTMLInputElement>(null);
   const { register, handleSubmit } = useForm<TCreateClaimPayload>();
 
   const handleClaimIssue = async (data: TCreateClaimPayload) => {
-    data.lostDate = new Date(data.lostDate);
-    const payload = { ...data, foundById } as TCreateClaimPayload;
-    console.log(payload);
-    const res = await fetch(`http://localhost:3001/api/claims`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      method: "POST",
-      body: JSON.stringify(payload),
-    });
-    const result = await res.json();
-    console.log(result);
+    try {
+      data.lostDate = new Date(data.lostDate);
+      const payload = { ...data, foundById } as TCreateClaimPayload;
+      console.log(payload);
+      const res = await fetch(`http://localhost:3001/api/claims`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+      const result = await res.json();
+      console.log(result);
+      revalidatePathFromClient(`/lost-items/${foundItemId}`);
+      setOpenModal(false);
+      toast.success("Reported a claim successfully");
+    } catch (error) {}
   };
 
   return (

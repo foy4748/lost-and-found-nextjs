@@ -10,13 +10,14 @@ import {
   useGetReportFoundItemQuery,
   usePostReportFoundItemMutation,
 } from "@/redux/apiSlices/reportFoundItemApiSlice";
+import { revalidatePathFromClient } from "@/actions/revalidatingData";
 
 let token = window.localStorage.getItem("token");
 console.log("ReportForm", token);
 const decoded = jwtDecode(String(token)) as { id: string };
 
 function FoundItemReportForm() {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const [postReport, result] = usePostReportFoundItemMutation();
 
   const { data: categoires } = useGetCategoryQuery(null);
@@ -62,7 +63,8 @@ function FoundItemReportForm() {
 
       // Posting Item data in database ------------
       delete payload["photoFile"];
-      postReport(payload);
+      await postReport(payload);
+      revalidatePathFromClient("/lost-items");
       reset();
       toast.success("Reported Found Item successfully");
       //------ ---------- ----------- ----------
