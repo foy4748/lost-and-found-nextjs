@@ -1,6 +1,23 @@
 "use client";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import MyItemsTable from "./MyItemsTable";
+export type TFoundItemType = {
+  category: {
+    name: string;
+  };
+  id: string;
+  userId: string;
+  categoryId: string;
+  foundItemName: string;
+  description: string;
+  location: string;
+  isItemFound: boolean;
+  photoUrl: any;
+  createdAt: string;
+  updatedAt: string;
+  claimsId: any;
+};
 
 function MyItemsPage() {
   const [data, setData] = useState([]);
@@ -25,8 +42,12 @@ function MyItemsPage() {
       const { data: result } = await res.json();
       setData(result);
     })();
-  }, [searchParams]);
-  return <>{JSON.stringify(data)}</>;
+  }, [isItemFound]);
+  return (
+    <>
+      <MyItemsTable data={data} />
+    </>
+  );
 }
 
 export default MyItemsPage;
