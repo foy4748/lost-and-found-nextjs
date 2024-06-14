@@ -6,6 +6,13 @@ export type TFoundItemType = {
   category: {
     name: string;
   };
+  FoundBy: {
+    id: string;
+    user: {
+      name: string;
+      email: string;
+    };
+  };
   id: string;
   userId: string;
   categoryId: string;
