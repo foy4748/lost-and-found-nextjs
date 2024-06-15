@@ -18,14 +18,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ReduxToolkitProvider>
-      <html lang="en">
-        <body className={inter.className}>
+    <html lang="en">
+      <body className={inter.className}>
+        <ReduxToolkitProvider>
           <NavBar />
           {children}
-        </body>
-        <Toaster />
-      </html>
-    </ReduxToolkitProvider>
+          <Toaster />
+        </ReduxToolkitProvider>
+      </body>
+    </html>
   );
 }

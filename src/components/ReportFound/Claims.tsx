@@ -2,9 +2,31 @@
 
 import { useEffect, useState } from "react";
 import { Table } from "flowbite-react";
+import moment from "moment";
+import { UpdateClaim } from "./UpdateClaim";
+
+export const STATUS = ["PENDING", "APPROVED", "REJECTED"] as const;
+export type TStatus = (typeof STATUS)[number];
+export type TClaims = {
+  id: string;
+  userId: string;
+  foundById: string;
+  status: TStatus;
+  distinguishingFeatures: string;
+  lostDate: string;
+  createdAt: string;
+  updatedAt: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+};
 
 function Claims({ foundById }: { foundById: string }) {
-  const [claims, setClaims] = useState([]);
+  const [claims, setClaims] = useState<TClaims[]>([]);
   useEffect(() => {
     (async () => {
       const res = await fetch(
@@ -24,63 +46,37 @@ function Claims({ foundById }: { foundById: string }) {
       <div className="overflow-x-auto">
         <Table hoverable>
           <Table.Head>
-            <Table.HeadCell>Product name</Table.HeadCell>
-            <Table.HeadCell>Color</Table.HeadCell>
-            <Table.HeadCell>Category</Table.HeadCell>
-            <Table.HeadCell>Price</Table.HeadCell>
+            <Table.HeadCell>Claimed By</Table.HeadCell>
+            <Table.HeadCell>Email</Table.HeadCell>
+            <Table.HeadCell>Status</Table.HeadCell>
+            <Table.HeadCell>Described Features</Table.HeadCell>
+            <Table.HeadCell>Lost Date</Table.HeadCell>
             <Table.HeadCell>
-              <span className="sr-only">Edit</span>
+              <span className="sr-only">Edit Status</span>
             </Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
-            <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-              <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                {'Apple MacBook Pro 17"'}
-              </Table.Cell>
-              <Table.Cell>Sliver</Table.Cell>
-              <Table.Cell>Laptop</Table.Cell>
-              <Table.Cell>$2999</Table.Cell>
-              <Table.Cell>
-                <a
-                  href="#"
-                  className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+            {claims?.map((d) => {
+              return (
+                <Table.Row
+                  key={d.id}
+                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
                 >
-                  Edit
-                </a>
-              </Table.Cell>
-            </Table.Row>
-            <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-              <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                Microsoft Surface Pro
-              </Table.Cell>
-              <Table.Cell>White</Table.Cell>
-              <Table.Cell>Laptop PC</Table.Cell>
-              <Table.Cell>$1999</Table.Cell>
-              <Table.Cell>
-                <a
-                  href="#"
-                  className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                >
-                  Edit
-                </a>
-              </Table.Cell>
-            </Table.Row>
-            <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-              <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                Magic Mouse 2
-              </Table.Cell>
-              <Table.Cell>Black</Table.Cell>
-              <Table.Cell>Accessories</Table.Cell>
-              <Table.Cell>$99</Table.Cell>
-              <Table.Cell>
-                <a
-                  href="#"
-                  className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                >
-                  Edit
-                </a>
-              </Table.Cell>
-            </Table.Row>
+                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                    {d.user.name}
+                  </Table.Cell>
+                  <Table.Cell>{d.user.email}</Table.Cell>
+                  <Table.Cell>{d.status}</Table.Cell>
+                  <Table.Cell>{d.distinguishingFeatures}</Table.Cell>
+                  <Table.Cell>
+                    {moment(d.lostDate).format("MMM d, YYYY")}
+                  </Table.Cell>
+                  <Table.Cell>
+                    <UpdateClaim data={d} />
+                  </Table.Cell>
+                </Table.Row>
+              );
+            })}
           </Table.Body>
         </Table>
       </div>
