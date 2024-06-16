@@ -1,17 +1,17 @@
 "use client";
 import { Table } from "flowbite-react";
 import { TFoundItemType } from "./MyItemsPage";
-import { useGetCategoryQuery } from "@/redux/apiSlices/categoryApiSlice";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import CreateClaim from "../ReportLost/CreateClaim";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import useCategory from "@/hooks/useCategory";
 
 function MyItemsTable({ data }: { data: TFoundItemType[] }) {
   console.log(data);
-  const { data: categoires } = useGetCategoryQuery(null);
   const searchParams = useSearchParams();
+  const mappedCategories = useCategory();
   const isFound = Number(searchParams.get("isItemFound"));
   return (
     <div className="overflow-x-auto">
@@ -59,7 +59,7 @@ function MyItemsTable({ data }: { data: TFoundItemType[] }) {
                 </Table.Cell>
                 <Table.Cell>{d.location || "Unknown"}</Table.Cell>
                 <Table.Cell>{d.description || "Unknown"}</Table.Cell>
-                <Table.Cell>{d.category.name}</Table.Cell>
+                <Table.Cell>{mappedCategories[d.categoryId]}</Table.Cell>
                 {d.isItemFound && (
                   <>
                     <Table.Cell>{d.FoundBy.user.name}</Table.Cell>

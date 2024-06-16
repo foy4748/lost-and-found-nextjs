@@ -11,6 +11,34 @@ export type TClaims = {
   id: string;
   userId: string;
   foundById: string;
+  foundBy: {
+    id: string;
+    userId: string;
+    foundItemId: string;
+    foundItem: {
+      id: string;
+      userId: string;
+      categoryId: string;
+      foundItemName: string;
+      description: string;
+      location: string;
+      isItemFound: boolean;
+      photoUrl: string;
+      createdAt: string;
+      updatedAt: string;
+      claimsId?: string | null;
+    };
+    createdAt: string;
+    updatedAt: string;
+    user: {
+      id: string;
+      name: string;
+      email: string;
+      createdAt: string;
+      updatedAt: string;
+    };
+  };
+
   status: TStatus;
   distinguishingFeatures: string;
   lostDate: string;
@@ -46,7 +74,7 @@ function Claims({ foundById }: { foundById: string }) {
       <div className="overflow-x-auto">
         <Table hoverable>
           <Table.Head>
-            <Table.HeadCell>Claimed By</Table.HeadCell>
+            <Table.HeadCell>Found By</Table.HeadCell>
             <Table.HeadCell>Email</Table.HeadCell>
             <Table.HeadCell>Status</Table.HeadCell>
             <Table.HeadCell>Described Features</Table.HeadCell>
