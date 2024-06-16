@@ -1,14 +1,17 @@
 "use client";
 import { loginUser } from "@/actions/authenticationActions";
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
+import { useRouter } from "next/navigation";
 
 function LoginForm() {
+  const router = useRouter();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const email = e.target.email.value as string;
     const password = e.target.password.value as string;
     const result = await loginUser(email, password);
     window.localStorage.setItem("token", result?.data?.token);
+    router.refresh();
   };
   return (
     <>
