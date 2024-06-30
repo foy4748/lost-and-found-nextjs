@@ -8,6 +8,7 @@ type TQueryReportFoundItem = {
   sortOrder?: "asc" | "desc";
   sortBy?: "foundItemName" | "category" | "foundDate";
   userId?: string;
+  isItemFound?: number | `${number}`;
 };
 
 const TagReportFoundItems = "ReportFoundItems";
@@ -69,7 +70,7 @@ export const foundItemApi = baseApi
       editReportFoundItem: builder.mutation({
         query: (body) => {
           return {
-            url: "/foundItems",
+            url: "/api/found-items",
             method: "PUT",
             body,
           };
@@ -77,12 +78,10 @@ export const foundItemApi = baseApi
         invalidatesTags: [TagReportFoundItems],
       }),
       deleteReportFoundItem: builder.mutation({
-        query: (body) => {
-          console.log(body);
+        query: (foundItemId: string) => {
           return {
-            url: "/foundItems",
+            url: `/api/found-items/${foundItemId}`,
             method: "DELETE",
-            body,
           };
         },
         invalidatesTags: [TagReportFoundItems],

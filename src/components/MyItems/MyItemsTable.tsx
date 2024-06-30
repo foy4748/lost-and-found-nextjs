@@ -7,6 +7,7 @@ import CreateClaim from "../ReportLost/CreateClaim";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import useCategory from "@/hooks/useCategory";
+import DeleteModal from "./MutationModal/DeleteModal";
 
 function MyItemsTable({ data }: { data: TFoundItemType[] }) {
   console.log(data);
@@ -22,6 +23,7 @@ function MyItemsTable({ data }: { data: TFoundItemType[] }) {
           <Table.HeadCell>Location</Table.HeadCell>
           <Table.HeadCell>Description</Table.HeadCell>
           <Table.HeadCell>Category</Table.HeadCell>
+          <Table.HeadCell>Delete</Table.HeadCell>
           {isFound ? (
             <>
               <Table.HeadCell>Found By</Table.HeadCell>
@@ -54,12 +56,15 @@ function MyItemsTable({ data }: { data: TFoundItemType[] }) {
                       className="object-cover"
                     />
                   ) : (
-                    "❌"
+                    "No Image"
                   )}
                 </Table.Cell>
                 <Table.Cell>{d.location || "Unknown"}</Table.Cell>
                 <Table.Cell>{d.description || "Unknown"}</Table.Cell>
                 <Table.Cell>{mappedCategories[d.categoryId]}</Table.Cell>
+                <Table.Cell>
+                  <DeleteModal foundItemId={d.id} />
+                </Table.Cell>
                 {d.isItemFound && (
                   <>
                     <Table.Cell>{d.FoundBy.user.name}</Table.Cell>
