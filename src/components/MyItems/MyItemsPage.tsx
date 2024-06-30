@@ -1,7 +1,9 @@
 "use client";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
 import MyItemsTable from "./MyItemsTable";
+import { useGetFoundItemByUserQuery } from "@/redux/apiSlices/reportFoundItemApiSlice";
+import { useState } from "react";
+import TablePagination from "../ui/TablePagination";
 export type TFoundItemType = {
   category: {
     name: string;
@@ -27,10 +29,19 @@ export type TFoundItemType = {
 };
 
 function MyItemsPage() {
-  const [data, setData] = useState([]);
+  //const [data, setData] = useState([]);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [itemLimit, setItemLimit] = useState<number>(5);
   const searchParams = useSearchParams();
   const isItemFound = searchParams.get("isItemFound");
   console.log(typeof isItemFound, !!isItemFound);
+  const { data } = useGetFoundItemByUserQuery({
+    isItemFound,
+    page: currentPage,
+    limit: itemLimit,
+  });
+  console.log(data);
+  /*
   useEffect(() => {
     (async () => {
       const res = await fetch(
@@ -50,9 +61,19 @@ function MyItemsPage() {
       setData(result);
     })();
   }, [isItemFound]);
+  */
   return (
     <>
-      <MyItemsTable data={data} />
+      <MyItemsTable data={data?.data} />
+      {data?.data && (
+        <TablePagination
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalItems={data?.meta?.total}
+          itemLimit={itemLimit}
+          setItemLimit={setItemLimit}
+        />
+      )}
     </>
   );
 }

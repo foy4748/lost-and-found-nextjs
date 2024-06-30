@@ -12,10 +12,13 @@ type TQueryReportFoundItem = {
 };
 
 const TagReportFoundItems = "ReportFoundItems";
+const TagReportFoundItemsByUser = "ReportFoundItemsByUser";
 
 // Define a service using a base URL and expected endpoints
 export const foundItemApi = baseApi
-  .enhanceEndpoints({ addTagTypes: [TagReportFoundItems] })
+  .enhanceEndpoints({
+    addTagTypes: [TagReportFoundItems, TagReportFoundItemsByUser],
+  })
   .injectEndpoints({
     endpoints: (builder) => ({
       getReportFoundItem: builder.query({
@@ -45,6 +48,25 @@ export const foundItemApi = baseApi
             url: `/api/found-items/${id}`,
           };
         },
+      }),
+      getFoundItemByUser: builder.query({
+        query: (isItemFound: unknown) => {
+          let queryParams = null;
+
+          if (isItemFound) {
+            queryParams = new URLSearchParams(
+              isItemFound as URLSearchParams
+            ).toString();
+          }
+          console.log("test", queryParams);
+          return {
+            url: queryParams
+              ? `/api/found-items/by-user?${queryParams}`
+              : "/api/found-items/by-user",
+            method: "GET",
+          };
+        },
+        providesTags: [TagReportFoundItemsByUser],
       }),
       postReportFoundItem: builder.mutation({
         query: (body) => {
@@ -84,7 +106,7 @@ export const foundItemApi = baseApi
             method: "DELETE",
           };
         },
-        invalidatesTags: [TagReportFoundItems],
+        invalidatesTags: [TagReportFoundItemsByUser],
       }),
     }),
   });
@@ -98,4 +120,5 @@ export const {
   usePostReportLostItemMutation,
   useEditReportFoundItemMutation,
   useDeleteReportFoundItemMutation,
+  useGetFoundItemByUserQuery,
 } = foundItemApi;
