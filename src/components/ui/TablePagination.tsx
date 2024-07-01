@@ -19,12 +19,17 @@ export default function TablePagination({
   setItemLimit,
 }: TTablePagination) {
   const onPageChange = (page: number) => setCurrentPage(page);
+  const totalPages = Math.ceil(totalItems / itemLimit);
 
   return (
-    <div className="flex overflow-x-auto sm:justify-center">
+    <div
+      className={`flex overflow-x-auto sm:justify-center ${
+        totalPages <= 1 ? "hidden" : ""
+      }`}
+    >
       <Pagination
         currentPage={currentPage}
-        totalPages={Math.ceil(totalItems / itemLimit)}
+        totalPages={totalPages}
         onPageChange={onPageChange}
       />
     </div>

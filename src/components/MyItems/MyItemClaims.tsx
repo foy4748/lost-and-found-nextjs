@@ -9,7 +9,7 @@ import Image from "next/image";
 
 function MyItemClaims() {
   const [claims, setClaims] = useState<TClaims[]>([]);
-  const mappedCategories = useCategory();
+  const { mappedCategories } = useCategory();
   useEffect(() => {
     (async () => {
       const res = await fetch(

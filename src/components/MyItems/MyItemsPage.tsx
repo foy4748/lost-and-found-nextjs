@@ -22,7 +22,8 @@ export type TFoundItemType = {
   description: string;
   location: string;
   isItemFound: boolean;
-  photoUrl: any;
+  photoUrl: string;
+  photoFile: any;
   createdAt: string;
   updatedAt: string;
   claimsId: any;

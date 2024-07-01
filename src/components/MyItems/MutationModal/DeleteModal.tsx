@@ -19,7 +19,9 @@ function DeleteModal({ foundItemId }: { foundItemId: string }) {
   };
   return (
     <>
-      <Button onClick={() => setOpenModal(true)}>🗑</Button>
+      <Button onClick={() => setOpenModal(true)} size={"xs"}>
+        🗑
+      </Button>
       <Modal
         show={openModal}
         size="md"

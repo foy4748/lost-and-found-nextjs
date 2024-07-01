@@ -146,7 +146,7 @@ function FoundItemReportForm() {
           <div className="mb-2 block">
             <Label htmlFor="file-upload" value="Upload Photo" />
           </div>
-          <FileInput id="file-upload" {...register("photoFile")} />
+          <FileInput id="file-upload" required {...register("photoFile")} />
         </div>
       </div>
       <Button type="submit">Submit</Button>

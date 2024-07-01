@@ -22,6 +22,6 @@ const useCategory = () => {
     }
   }, [categories]);
 
-  return mappedCategories;
+  return { mappedCategories, categories };
 };
 export default useCategory;

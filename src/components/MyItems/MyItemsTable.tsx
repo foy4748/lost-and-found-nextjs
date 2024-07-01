@@ -8,11 +8,12 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import useCategory from "@/hooks/useCategory";
 import DeleteModal from "./MutationModal/DeleteModal";
+import UpdateModal from "./MutationModal/UpdateModal";
 
 function MyItemsTable({ data }: { data: TFoundItemType[] }) {
   console.log(data);
   const searchParams = useSearchParams();
-  const mappedCategories = useCategory();
+  const { mappedCategories } = useCategory();
   const isFound = Number(searchParams.get("isItemFound"));
   return (
     <div className="overflow-x-auto">
@@ -23,6 +24,7 @@ function MyItemsTable({ data }: { data: TFoundItemType[] }) {
           <Table.HeadCell>Location</Table.HeadCell>
           <Table.HeadCell>Description</Table.HeadCell>
           <Table.HeadCell>Category</Table.HeadCell>
+          <Table.HeadCell>Update</Table.HeadCell>
           <Table.HeadCell>Delete</Table.HeadCell>
           {isFound ? (
             <>
@@ -62,6 +64,9 @@ function MyItemsTable({ data }: { data: TFoundItemType[] }) {
                 <Table.Cell>{d.location || "Unknown"}</Table.Cell>
                 <Table.Cell>{d.description || "Unknown"}</Table.Cell>
                 <Table.Cell>{mappedCategories[d.categoryId]}</Table.Cell>
+                <Table.Cell>
+                  <UpdateModal payload={d} />
+                </Table.Cell>
                 <Table.Cell>
                   <DeleteModal foundItemId={d.id} />
                 </Table.Cell>
