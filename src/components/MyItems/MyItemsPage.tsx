@@ -35,13 +35,11 @@ function MyItemsPage() {
   const [itemLimit, setItemLimit] = useState<number>(5);
   const searchParams = useSearchParams();
   const isItemFound = searchParams.get("isItemFound");
-  console.log(typeof isItemFound, !!isItemFound);
   const { data } = useGetFoundItemByUserQuery({
     isItemFound,
     page: currentPage,
     limit: itemLimit,
   });
-  console.log(data);
   /*
   useEffect(() => {
     (async () => {

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 //import type { PayloadAction } from "@reduxjs/toolkit";
 
 export type TQueryProduct = {
@@ -15,7 +15,7 @@ export type TQueryProduct = {
   camera: null | number;
   minPrice: null | number;
   maxPrice: null | number;
-  isRestock: boolean | false;
+  isRestock?: boolean | false;
 };
 
 export type TKeyOfQueryProduct = keyof TQueryProduct;
@@ -40,10 +40,8 @@ export const productQuerySlice = createSlice({
   name: "productQuery",
   initialState: initialValue,
   reducers: {
-    setProductQuery: (state, action) => {
-      for (const key in action.payload) {
-        state[key] = action.payload[key];
-      }
+    setProductQuery: (_, action: PayloadAction<TQueryProduct>) => {
+      return action.payload;
     },
     resetQuery: (state) => {
       state = initialValue;

@@ -1,3 +1,4 @@
+import { filterQueryObjectForProductApiSlice } from "@/utilities/utilities";
 import { TQueryProduct } from "../slices/productQuerySlice";
 import baseApi from "./baseApiSlice";
 
@@ -12,20 +13,13 @@ export const productApi = baseApi
         query: (productQuery: TQueryProduct | null) => {
           let queryParams = null;
           if (productQuery) {
-            const keyOfQueries = Object.keys(
-              productQuery
-            ) as TKeyOfQueryProduct[];
+            const updated = filterQueryObjectForProductApiSlice<
+              TQueryProduct | Record<string, string>
+            >(productQuery);
 
-            const updated = keyOfQueries.reduce((acc: TQueryProduct, itm) => {
-              if (productQuery[itm] || productQuery[itm] === 0) {
-                acc[itm] = productQuery[itm];
-                return acc;
-              } else {
-                return acc;
-              }
-            }, {} as TQueryProduct);
-
-            queryParams = new URLSearchParams(updated);
+            queryParams = new URLSearchParams(
+              updated as Record<string, string>
+            );
           }
           return {
             url: productQuery ? `/products?${queryParams}` : "/products",

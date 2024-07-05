@@ -7,6 +7,8 @@ import { Dropdown, FileInput, Select } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import useCategory from "@/hooks/useCategory";
 import toast from "react-hot-toast";
+import { useEditReportFoundItemMutation } from "@/redux/apiSlices/reportFoundItemApiSlice";
+import LoadingToast from "@/components/ui/LoadingToast";
 
 export type TUpdateModal = {
   payload: TFoundItemType;
@@ -15,6 +17,8 @@ export type TUpdateModal = {
 export default function UpdateModal({ payload }: TUpdateModal) {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const { categories } = useCategory();
+  const [editReportFoundItem, { isLoading }] = useEditReportFoundItemMutation();
+  console.log(isLoading);
   const { handleSubmit, register } = useForm({
     defaultValues: payload,
   });
@@ -26,10 +30,8 @@ export default function UpdateModal({ payload }: TUpdateModal) {
     "location",
     "photoUrl",
   ];
-  console.log(categories);
 
   const submitReport = async (data: TFoundItemType) => {
-    console.log(data);
     // Trying to upload photo
     if (data["photoFile"]?.length && data["photoFile"][0]) {
       // Uploading Photo to IMG BB ------------
@@ -53,20 +55,30 @@ export default function UpdateModal({ payload }: TUpdateModal) {
         }
         // Setting photo URL in payload
         console.log("photoUpResult", photoUpResult);
-        payload["photoUrl"] = String(photoUpResult.data.url);
+        data["photoUrl"] = String(photoUpResult.data.url);
 
         //------ ---------- ----------- ----------
       } catch (error) {
         console.error(error);
         toast.error("Couldn't Upload Product Photo");
       }
+    } else {
+      data["photoUrl"] = payload["photoUrl"];
     }
 
     const updatedPayload = {} as Partial<TFoundItemType>;
     for (let itm of allowedFields) {
-      updatedPayload[itm] = data[itm];
+      if (data[itm]) updatedPayload[itm] = data[itm];
     }
     console.log(updatedPayload);
+    const response = await editReportFoundItem(updatedPayload);
+    console.table(response);
+    if (response.data.statusCode == 200) {
+      toast.success(response.data.message);
+      setOpenModal(false);
+    } else {
+      toast.error(response.data.message);
+    }
   };
 
   return (
@@ -131,7 +143,6 @@ export default function UpdateModal({ payload }: TUpdateModal) {
                   {categories &&
                     categories?.data?.length &&
                     categories?.data?.map((c: { name: string; id: string }) => {
-                      console.log(c);
                       return (
                         <option key={c["id"]} value={c["id"]}>
                           {c["name"]}
@@ -151,6 +162,7 @@ export default function UpdateModal({ payload }: TUpdateModal) {
           </form>
         </Modal.Body>
       </Modal>
+      <LoadingToast isLoading={isLoading} />
     </>
   );
 }

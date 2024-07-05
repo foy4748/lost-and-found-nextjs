@@ -11,7 +11,6 @@ import DeleteModal from "./MutationModal/DeleteModal";
 import UpdateModal from "./MutationModal/UpdateModal";
 
 function MyItemsTable({ data }: { data: TFoundItemType[] }) {
-  console.log(data);
   const searchParams = useSearchParams();
   const { mappedCategories } = useCategory();
   const isFound = Number(searchParams.get("isItemFound"));

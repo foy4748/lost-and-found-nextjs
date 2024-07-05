@@ -93,11 +93,11 @@ export const foundItemApi = baseApi
         query: (body) => {
           return {
             url: "/api/found-items",
-            method: "PUT",
+            method: "PATCH",
             body,
           };
         },
-        invalidatesTags: [TagReportFoundItems],
+        invalidatesTags: [TagReportFoundItemsByUser, TagReportFoundItems],
       }),
       deleteReportFoundItem: builder.mutation({
         query: (foundItemId: string) => {
@@ -106,7 +106,7 @@ export const foundItemApi = baseApi
             method: "DELETE",
           };
         },
-        invalidatesTags: [TagReportFoundItemsByUser],
+        invalidatesTags: [TagReportFoundItemsByUser, TagReportFoundItems],
       }),
     }),
   });

@@ -7,7 +7,11 @@ import { useForm } from "react-hook-form";
 
 export function UpdateClaim({ data }: { data: TClaims }) {
   const [openModal, setOpenModal] = useState(false);
-  const { handleSubmit, register } = useForm();
+  const { handleSubmit, register } = useForm({
+    defaultValues: {
+      status: data.status,
+    },
+  });
 
   function onCloseModal() {
     setOpenModal(false);
@@ -52,11 +56,7 @@ export function UpdateClaim({ data }: { data: TClaims }) {
               <div className="mb-2 block">
                 <Label htmlFor="status" value="Select Current Status" />
               </div>
-              <Select
-                {...register("status")}
-                name="status"
-                defaultValue={data.status}
-              >
+              <Select {...register("status")} name="status">
                 {STATUS?.map((s: string, idx: Key) => {
                   return (
                     <option key={idx} value={s}>
