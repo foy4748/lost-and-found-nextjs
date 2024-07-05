@@ -1,17 +1,25 @@
 "use client";
 import { loginUser } from "@/actions/authenticationActions";
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import toast from "react-hot-toast";
 
 function LoginForm() {
   const router = useRouter();
+  const pathname = usePathname();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const email = e.target.email.value as string;
     const password = e.target.password.value as string;
     const result = await loginUser(email, password);
-    window.localStorage.setItem("token", result?.data?.token);
-    router.refresh();
+    if (!result?.data || !result?.data?.token) {
+      toast.error("Failed to login");
+    } else {
+      toast.success("Logged in!");
+      window.localStorage.setItem("token", result?.data?.token);
+      if (String(pathname).includes("auth")) router.push("/");
+      else router.refresh();
+    }
   };
   return (
     <>

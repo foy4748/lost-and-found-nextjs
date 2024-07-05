@@ -13,6 +13,11 @@ export type TUserCredentials = {
   password: string;
 };
 
+export type TUserPasswordChangePayload = {
+  currentPassword: string;
+  newPassword: string;
+};
+
 // Define a service using a base URL and expected endpoints
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -43,6 +48,15 @@ export const authApi = baseApi.injectEndpoints({
         };
       },
     }),
+    changePassword: builder.mutation({
+      query: (payload: TUserPasswordChangePayload) => {
+        return {
+          url: "/api/change-password",
+          method: "PATCH",
+          body: payload,
+        };
+      },
+    }),
   }),
 });
 
@@ -52,4 +66,5 @@ export const {
   useUserProfileQuery,
   useAuthLoginMutation,
   useAuthRegisterMutation,
+  useChangePasswordMutation,
 } = authApi;
