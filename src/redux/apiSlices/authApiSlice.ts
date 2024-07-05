@@ -16,6 +16,14 @@ export type TUserCredentials = {
 // Define a service using a base URL and expected endpoints
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    userProfile: builder.query({
+      query: () => {
+        return {
+          url: "/api/user",
+          method: "GET",
+        };
+      },
+    }),
     authRegister: builder.mutation({
       query: (userCredentials: TUserRegistractionCredentials) => {
         console.log(userCredentials);
@@ -40,4 +48,8 @@ export const authApi = baseApi.injectEndpoints({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useAuthLoginMutation, useAuthRegisterMutation } = authApi;
+export const {
+  useUserProfileQuery,
+  useAuthLoginMutation,
+  useAuthRegisterMutation,
+} = authApi;

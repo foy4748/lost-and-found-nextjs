@@ -14,8 +14,7 @@ export function DashboardDrawer({ isOpen, setIsOpen }: TDashboardDrawerProp) {
 
   return (
     <>
-      <Drawer open={isOpen} onClose={handleClose}>
-        <Drawer.Header title="MENU" titleIcon={() => <></>} />
+      <Drawer open={isOpen} onClose={handleClose} position="right">
         <Drawer.Items>
           <Sidebar
             aria-label="Sidebar with multi-level dropdown example"
@@ -32,11 +31,17 @@ export function DashboardDrawer({ isOpen, setIsOpen }: TDashboardDrawerProp) {
                   />
                 </form>
                 <Sidebar.Items>
+                  <Drawer.Header title="Dashboard" titleIcon={() => <></>} />
                   <Sidebar.ItemGroup>
-                    <Sidebar.Item as={Link} href="/dashboard/user/my-claims">
+                    <Sidebar.Item
+                      onClick={handleClose}
+                      as={Link}
+                      href="/dashboard/user/my-claims"
+                    >
                       My Claims
                     </Sidebar.Item>
                     <Sidebar.Item
+                      onClick={handleClose}
                       as={Link}
                       href="/dashboard/user/my-items?isItemFound=0"
                     >
@@ -44,26 +49,31 @@ export function DashboardDrawer({ isOpen, setIsOpen }: TDashboardDrawerProp) {
                     </Sidebar.Item>
                     <Sidebar.Item
                       as={Link}
+                      onClick={handleClose}
                       href="/dashboard/user/my-items?isItemFound=1"
                     >
                       My Found Items
                     </Sidebar.Item>
-                    <Sidebar.Item href="/authentication/sign-in">
-                      Sign in
-                    </Sidebar.Item>
-                    <Sidebar.Item href="/authentication/sign-up">
-                      Sign up
-                    </Sidebar.Item>
                   </Sidebar.ItemGroup>
+                  <Drawer.Header
+                    title="Personal"
+                    className="mt-8"
+                    titleIcon={() => <></>}
+                  />
                   <Sidebar.ItemGroup>
-                    <Sidebar.Item href="https://github.com/themesberg/flowbite-react/">
-                      Docs
+                    <Sidebar.Item
+                      as={Link}
+                      onClick={handleClose}
+                      href="/dashboard/user/profile"
+                    >
+                      Profile
                     </Sidebar.Item>
-                    <Sidebar.Item href="https://flowbite-react.com/">
-                      Components
-                    </Sidebar.Item>
-                    <Sidebar.Item href="https://github.com/themesberg/flowbite-react/issues">
-                      Help
+                    <Sidebar.Item
+                      as={Link}
+                      onClick={handleClose}
+                      href="/dashboard/user/change-password"
+                    >
+                      Change Password
                     </Sidebar.Item>
                   </Sidebar.ItemGroup>
                 </Sidebar.Items>
