@@ -5,6 +5,7 @@ import CenterItem from "../ui/CenterItem";
 import ProfilePicture from "../ui/ProfilePicture";
 import moment from "moment";
 import Link from "next/link";
+import EditProfile from "./EditProfile";
 
 export interface TUser {
   id: string;
@@ -47,6 +48,7 @@ function Profile() {
         <Link href="/dashboard/user/change-password" className="text-cyan-500">
           <p className="my-4 ">🔑 Change Password 🔑</p>
         </Link>
+        <EditProfile payload={userData} />
       </div>
     </CenterItem>
   );
