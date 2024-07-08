@@ -6,18 +6,15 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   const token = request.cookies.get("token");
   const path = request.nextUrl.pathname;
+  const url = new URL("/auth/login", request.url);
+  url.searchParams.append("callback", request.url);
   try {
     const decoded = jwtDecode(String(token?.value));
     if (path !== "/auth/login" && Date.now() >= Number(decoded.exp) * 1000) {
-      console.log("HIT", decoded);
-      return NextResponse.rewrite(new URL("/auth/login", request.url), {
-        status: 303,
-      });
+      return NextResponse.redirect(url);
     }
   } catch (error) {
-    return NextResponse.rewrite(new URL("/auth/login", request.url), {
-      status: 303,
-    });
+    return NextResponse.redirect(url);
   }
 }
 export const config = {
