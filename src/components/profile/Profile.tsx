@@ -13,6 +13,7 @@ export interface TUser {
   email: string;
   createdAt: string;
   updatedAt: string;
+  isDeleted?: boolean;
   profile: TUserProfile;
 }
 

@@ -19,10 +19,11 @@ export type TUserPasswordChangePayload = {
   newPassword: string;
 };
 const TagUserProfile = "UserProfile";
+const TagAllUsers = "AllUsers";
 
 // Define a service using a base URL and expected endpoints
 export const authApi = baseApi
-  .enhanceEndpoints({ addTagTypes: [TagUserProfile] })
+  .enhanceEndpoints({ addTagTypes: [TagUserProfile, TagAllUsers] })
   .injectEndpoints({
     endpoints: (builder) => ({
       userProfile: builder.query({
@@ -33,6 +34,33 @@ export const authApi = baseApi
           };
         },
         providesTags: [TagUserProfile],
+      }),
+      allUsers: builder.query({
+        query: () => {
+          return {
+            url: "/api/users/all",
+            method: "GET",
+          };
+        },
+        providesTags: [TagAllUsers],
+      }),
+      deleteUser: builder.mutation({
+        query: ({
+          isDeleted,
+          userId,
+        }: {
+          isDeleted: boolean;
+          userId: string;
+        }) => {
+          return {
+            url: `/api/delete-user/${userId}`,
+            method: "PATCH",
+            body: {
+              isDeleted,
+            },
+          };
+        },
+        invalidatesTags: [TagAllUsers],
       }),
       updateUserProfile: builder.mutation({
         query: <T>(body: T) => {
@@ -80,6 +108,8 @@ export const authApi = baseApi
 // auto-generated based on the defined endpoints
 export const {
   useUserProfileQuery,
+  useAllUsersQuery,
+  useDeleteUserMutation,
   useUpdateUserProfileMutation,
   useAuthLoginMutation,
   useAuthRegisterMutation,

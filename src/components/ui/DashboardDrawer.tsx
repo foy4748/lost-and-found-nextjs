@@ -76,6 +76,27 @@ export function DashboardDrawer({ isOpen, setIsOpen }: TDashboardDrawerProp) {
                       Change Password
                     </Sidebar.Item>
                   </Sidebar.ItemGroup>
+                  <Drawer.Header
+                    title="Admin"
+                    className="mt-8"
+                    titleIcon={() => <></>}
+                  />
+                  <Sidebar.ItemGroup>
+                    <Sidebar.Item
+                      as={Link}
+                      onClick={handleClose}
+                      href="/dashboard/admin/users"
+                    >
+                      Users
+                    </Sidebar.Item>
+                    <Sidebar.Item
+                      as={Link}
+                      onClick={handleClose}
+                      href="/dashboard/admin/analytics"
+                    >
+                      Analytics
+                    </Sidebar.Item>
+                  </Sidebar.ItemGroup>
                 </Sidebar.Items>
               </div>
             </div>
