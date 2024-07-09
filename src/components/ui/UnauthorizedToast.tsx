@@ -1,22 +1,34 @@
 "use client";
 
+import { useLogoutUserMutation } from "@/redux/apiSlices/authApiSlice";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 
-function UnauthorizedToast({ isNotAdmin }: { isNotAdmin: boolean }) {
+function UnauthorizedToast({
+  isNotAdmin,
+  isDeleted,
+}: {
+  isNotAdmin: boolean;
+  isDeleted: boolean;
+}) {
   const router = useRouter();
+  const [logoutUser] = useLogoutUserMutation();
   useEffect(() => {
     if (isNotAdmin) {
       toast.error("Unauthorized attempt");
     }
-  }, [isNotAdmin]);
+    if (isDeleted) {
+      toast.error("User was deleted");
+    }
+    if (isNotAdmin || isDeleted) {
+      logoutUser(null);
+    }
+  }, [isNotAdmin, isDeleted, logoutUser]);
   return (
     <>
-      Unauthorized access ||{" "}
-      <span className="cursor-pointer" onClick={() => router.back()}>
-        Go Back
-      </span>
+      Unauthorized access || <Link href="/">Go Home</Link>
     </>
   );
 }

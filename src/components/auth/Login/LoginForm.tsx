@@ -42,9 +42,11 @@ function LoginForm() {
         className="flex w-11/12 md:w-1/2 flex-col gap-4"
       >
         <p className="text-red-500">
-          {searchParams.get("isAdmin") === "0" ? (
+          {searchParams.get("isAdmin") === "0" ||
+          searchParams.get("isDeleted") === "1" ? (
             <UnauthorizedToast
               isNotAdmin={searchParams.get("isAdmin") === "0"}
+              isDeleted={searchParams.get("isDeleted") === "1"}
             />
           ) : (
             ""

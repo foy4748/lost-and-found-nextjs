@@ -8,6 +8,7 @@ import { Table } from "flowbite-react";
 import { TUser } from "../profile/Profile";
 import moment from "moment";
 import LoadingToast from "../ui/LoadingToast";
+import toast from "react-hot-toast";
 
 function UsersTable() {
   const { data: users } = useAllUsersQuery(null);
@@ -34,16 +35,28 @@ function UsersTable() {
                   className="bg-white dark:border-gray-700 dark:bg-gray-800"
                 >
                   <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                    {d?.name}
+                    {d?.name}{" "}
+                    {d?.isAdmin ? (
+                      <span className="text-cyan-500">(Admin)</span>
+                    ) : (
+                      ""
+                    )}
                   </Table.Cell>
                   <Table.Cell>{d?.email}</Table.Cell>
                   <Table.Cell>{moment(d?.createdAt).fromNow()}</Table.Cell>
                   <Table.Cell>{moment(d?.updatedAt).fromNow()}</Table.Cell>
                   <Table.Cell
                     className="cursor-pointer"
-                    onClick={() =>
-                      deleteUser({ isDeleted: !d?.isDeleted, userId: d?.id })
-                    }
+                    onClick={() => {
+                      if (!d?.isAdmin)
+                        deleteUser({ isDeleted: !d?.isDeleted, userId: d?.id });
+                      else {
+                        toast.error("You can't delete an admin that easy");
+                        return;
+                      }
+                      if (d.isDeleted) toast(`Activating user ${d?.name}`);
+                      else toast(`Deactivating user ${d?.name}`);
+                    }}
                   >
                     {d?.isDeleted ? <>🔴</> : <>🟢</>}
                   </Table.Cell>

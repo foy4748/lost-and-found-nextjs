@@ -14,6 +14,7 @@ export interface TUser {
   createdAt: string;
   updatedAt: string;
   isDeleted?: boolean;
+  isAdmin?: boolean;
   profile: TUserProfile;
 }
 
