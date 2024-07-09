@@ -1,5 +1,6 @@
 "use client";
 import { loginUser } from "@/actions/authenticationActions";
+import UnauthorizedToast from "@/components/ui/UnauthorizedToast";
 import { useUserProfileQuery } from "@/redux/apiSlices/authApiSlice";
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -16,6 +17,7 @@ function LoginForm() {
   });
   const router = useRouter();
   const searchParams = useSearchParams();
+
   const onFormSubmit = async (data: { email: string; password: string }) => {
     const { email, password } = data;
     const result = await loginUser(email, password);
@@ -39,6 +41,15 @@ function LoginForm() {
         onSubmit={handleSubmit(onFormSubmit)}
         className="flex w-11/12 md:w-1/2 flex-col gap-4"
       >
+        <p className="text-red-500">
+          {searchParams.get("isAdmin") === "0" ? (
+            <UnauthorizedToast
+              isNotAdmin={searchParams.get("isAdmin") === "0"}
+            />
+          ) : (
+            ""
+          )}
+        </p>
         <div>
           <div className="mb-2 block">
             <Label htmlFor="email1" value="Your email" />

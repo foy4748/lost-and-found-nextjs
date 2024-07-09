@@ -11,6 +11,8 @@ export type MyJWTPayLoad = {
 };
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
+  // Checking Request Object
+  // ----------------------------
   const path = request.nextUrl.pathname;
   const url = new URL("/auth/login", request.url);
   url.searchParams.append("callback", request.url);
@@ -21,11 +23,19 @@ export function middleware(request: NextRequest) {
     // Logics
     const notLoginPage = path !== "/auth/login";
     const isTokenInvalid = Date.now() >= Number(decoded.exp) * 1000;
+    const isUserDeleted = decoded.isDeleted;
 
     // Admin Logics
     const isAdminRoute = path.includes("/dashboard/admin");
     const isAdmin = decoded?.isAdmin;
+
+    if (isUserDeleted) {
+      url.searchParams.append("isDeleted", "1");
+      return NextResponse.redirect(url);
+    }
+
     if (isAdminRoute && !isAdmin) {
+      url.searchParams.append("isAdmin", "0");
       return NextResponse.redirect(url);
     }
 
