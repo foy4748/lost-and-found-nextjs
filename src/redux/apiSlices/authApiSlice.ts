@@ -62,6 +62,15 @@ export const authApi = baseApi
         },
         invalidatesTags: [TagAllUsers],
       }),
+      logoutUser: builder.mutation({
+        query: () => {
+          return {
+            url: "/api/log-out",
+            method: "POST",
+          };
+        },
+        invalidatesTags: [TagUserProfile, TagAllUsers],
+      }),
       updateUserProfile: builder.mutation({
         query: <T>(body: T) => {
           console.log(body);
@@ -110,6 +119,7 @@ export const {
   useUserProfileQuery,
   useAllUsersQuery,
   useDeleteUserMutation,
+  useLogoutUserMutation,
   useUpdateUserProfileMutation,
   useAuthLoginMutation,
   useAuthRegisterMutation,

@@ -1,5 +1,6 @@
 "use client";
 import { loginUser } from "@/actions/authenticationActions";
+import { useUserProfileQuery } from "@/redux/apiSlices/authApiSlice";
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -26,7 +27,10 @@ function LoginForm() {
       const { path } = url.parse(searchParams.get("callback") ?? "/");
       // console.log(searchParams.get("callback"));
       // console.log(path);
-      router.push(String(path));
+      setTimeout(() => {
+        router.push(String(path));
+        router.refresh();
+      }, 1000);
     }
   };
   return (

@@ -5,9 +5,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { DashboardDrawer } from "./DashboardDrawer";
 import { useState } from "react";
+import { useLogoutUserMutation } from "@/redux/apiSlices/authApiSlice";
+import LoadingToast from "./LoadingToast";
+import { useRouter } from "next/navigation";
 
 export function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+  const [logoutUserFunc, { isLoading }] = useLogoutUserMutation();
+  const logOutUser = async () => {
+    await logoutUserFunc(null);
+    window.localStorage.removeItem("token");
+    router.push("/");
+    router.refresh();
+  };
   return (
     <>
       <Navbar fluid rounded>
@@ -47,7 +58,9 @@ export function NavBar() {
             <Dropdown.Item>Settings</Dropdown.Item>
             <Dropdown.Item>Earnings</Dropdown.Item>
             <Dropdown.Divider />
-            <Dropdown.Item>Sign out</Dropdown.Item>
+            <Dropdown.Item onClick={async () => await logOutUser()}>
+              Sign out
+            </Dropdown.Item>
           </Dropdown>
           <Navbar.Toggle />
         </div>
@@ -74,6 +87,7 @@ export function NavBar() {
         </Navbar.Collapse>
       </Navbar>
       <DashboardDrawer isOpen={isOpen} setIsOpen={setIsOpen} />
+      <LoadingToast isLoading={isLoading} />
     </>
   );
 }
