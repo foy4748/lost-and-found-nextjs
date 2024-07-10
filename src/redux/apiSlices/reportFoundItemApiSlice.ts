@@ -108,6 +108,15 @@ export const foundItemApi = baseApi
         },
         invalidatesTags: [TagReportFoundItemsByUser, TagReportFoundItems],
       }),
+      getFoundItemsAnalytics: builder.query({
+        query: () => {
+          return {
+            url: "/api/found-items/analytics",
+            method: "GET",
+          };
+        },
+        providesTags: [TagReportFoundItemsByUser],
+      }),
     }),
   });
 
@@ -121,4 +130,5 @@ export const {
   useEditReportFoundItemMutation,
   useDeleteReportFoundItemMutation,
   useGetFoundItemByUserQuery,
+  useGetFoundItemsAnalyticsQuery,
 } = foundItemApi;

@@ -42,37 +42,44 @@ function MyItemClaims() {
             </Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
-            {claims?.map((d) => {
-              return (
-                <Table.Row
-                  key={d.id}
-                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                >
-                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                    {d.foundBy.user.name}
-                  </Table.Cell>
-                  <Table.Cell>{d.foundBy.user.email}</Table.Cell>
-                  <Table.Cell>{d.foundBy.foundItem.foundItemName}</Table.Cell>
-                  <Table.Cell>
-                    {mappedCategories[d.foundBy.foundItem.categoryId]}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Image
-                      src={d.foundBy.foundItem.photoUrl}
-                      alt={d.foundBy.foundItem.foundItemName}
-                      width={35}
-                      height={35}
-                    />
-                  </Table.Cell>
-                  <Table.Cell>{d.status}</Table.Cell>
-                  <Table.Cell>{d.distinguishingFeatures}</Table.Cell>
-                  <Table.Cell>
-                    {moment(d.lostDate).format("MMM d, YYYY")}
-                  </Table.Cell>
-                  <Table.Cell></Table.Cell>
-                </Table.Row>
-              );
-            })}
+            {claims &&
+              claims?.map((d) => {
+                return (
+                  <Table.Row
+                    key={d?.id}
+                    className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                  >
+                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                      {d?.foundBy?.user?.name}
+                    </Table.Cell>
+                    <Table.Cell>{d?.foundBy?.user?.email}</Table.Cell>
+                    <Table.Cell>
+                      {d?.foundBy?.foundItem?.foundItemName}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {mappedCategories[d?.foundBy?.foundItem?.categoryId]}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {d?.foundBy?.foundItem?.photoUrl ? (
+                        <Image
+                          src={d?.foundBy?.foundItem?.photoUrl}
+                          alt={d?.foundBy?.foundItem?.foundItemName}
+                          width={35}
+                          height={35}
+                        />
+                      ) : (
+                        "No Image"
+                      )}
+                    </Table.Cell>
+                    <Table.Cell>{d.status}</Table.Cell>
+                    <Table.Cell>{d.distinguishingFeatures}</Table.Cell>
+                    <Table.Cell>
+                      {moment(d.lostDate).format("MMM d, YYYY")}
+                    </Table.Cell>
+                    <Table.Cell></Table.Cell>
+                  </Table.Row>
+                );
+              })}
           </Table.Body>
         </Table>
       </div>

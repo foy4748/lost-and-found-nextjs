@@ -1,7 +1,9 @@
+import Analytics from "@/components/admin/Analytics";
+
 function page() {
   return (
     <>
-      <p>Body</p>
+      <Analytics />
     </>
   );
 }
