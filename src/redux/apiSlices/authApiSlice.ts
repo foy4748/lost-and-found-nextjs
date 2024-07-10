@@ -20,10 +20,13 @@ export type TUserPasswordChangePayload = {
 };
 const TagUserProfile = "UserProfile";
 const TagAllUsers = "AllUsers";
+const TagClaimsAnalytics = "ClaimsAnalytics";
 
 // Define a service using a base URL and expected endpoints
 export const authApi = baseApi
-  .enhanceEndpoints({ addTagTypes: [TagUserProfile, TagAllUsers] })
+  .enhanceEndpoints({
+    addTagTypes: [TagUserProfile, TagAllUsers, TagClaimsAnalytics],
+  })
   .injectEndpoints({
     endpoints: (builder) => ({
       userProfile: builder.query({
@@ -110,6 +113,15 @@ export const authApi = baseApi
           };
         },
       }),
+      getClaimsAnalytics: builder.query({
+        query: () => {
+          return {
+            url: "/api/claims/analytics",
+            method: "GET",
+          };
+        },
+        providesTags: [TagClaimsAnalytics],
+      }),
     }),
   });
 
@@ -124,4 +136,5 @@ export const {
   useAuthLoginMutation,
   useAuthRegisterMutation,
   useChangePasswordMutation,
+  useGetClaimsAnalyticsQuery,
 } = authApi;

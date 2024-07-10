@@ -13,11 +13,16 @@ type TQueryReportFoundItem = {
 
 const TagReportFoundItems = "ReportFoundItems";
 const TagReportFoundItemsByUser = "ReportFoundItemsByUser";
+const TagReportFoundItemAnalytics = "ReportFoundItemAnalytics";
 
 // Define a service using a base URL and expected endpoints
 export const foundItemApi = baseApi
   .enhanceEndpoints({
-    addTagTypes: [TagReportFoundItems, TagReportFoundItemsByUser],
+    addTagTypes: [
+      TagReportFoundItems,
+      TagReportFoundItemsByUser,
+      TagReportFoundItemAnalytics,
+    ],
   })
   .injectEndpoints({
     endpoints: (builder) => ({
@@ -115,7 +120,7 @@ export const foundItemApi = baseApi
             method: "GET",
           };
         },
-        providesTags: [TagReportFoundItemsByUser],
+        providesTags: [TagReportFoundItemAnalytics],
       }),
     }),
   });
