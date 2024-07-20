@@ -26,7 +26,9 @@ function ReportFoundButton({ foundItemId }: { foundItemId: string }) {
   };
   return (
     <>
-      <Button onClick={handleReportFound}>Report Found</Button>
+      <Button className="flex-1" onClick={handleReportFound}>
+        Report Found
+      </Button>
     </>
   );
 }

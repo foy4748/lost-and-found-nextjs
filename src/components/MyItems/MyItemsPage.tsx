@@ -8,13 +8,7 @@ export type TFoundItemType = {
   category: {
     name: string;
   };
-  FoundBy: {
-    id: string;
-    user: {
-      name: string;
-      email: string;
-    };
-  };
+  FoundBy: TFoundBy;
   id: string;
   userId: string;
   categoryId: string;
@@ -27,6 +21,14 @@ export type TFoundItemType = {
   createdAt: string;
   updatedAt: string;
   claimsId: any;
+};
+
+export type TFoundBy = {
+  id: string;
+  user: {
+    name: string;
+    email: string;
+  };
 };
 
 function MyItemsPage() {

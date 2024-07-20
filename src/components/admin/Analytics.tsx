@@ -1,7 +1,8 @@
 "use client";
 import { useGetClaimsAnalyticsQuery } from "@/redux/apiSlices/authApiSlice";
 import { useGetFoundItemsAnalyticsQuery } from "@/redux/apiSlices/reportFoundItemApiSlice";
-import Chart from "react-google-charts";
+import AnalyticsS from "./AnalyticsS";
+import { ReactGoogleChartProps } from "react-google-charts";
 
 function Analytics() {
   const { data: foundItemsAnlytics } = useGetFoundItemsAnalyticsQuery(null);
@@ -18,45 +19,23 @@ function Analytics() {
     claimsAnlytics?.data?.["allClaims"] -
     claimsAnlytics?.data?.["approavedClaims"];
 
-  const dataForFoundItems = [
+  const dataForFoundItems: ReactGoogleChartProps["data"] = [
     ["Task", "Count"],
     [`Found Items ${foundItemsCount}`, foundItemsCount],
     [`Lost Items ${lostItemsCount}`, lostItemsCount],
   ];
 
-  const dataForClaimItems = [
+  const dataForClaimItems: ReactGoogleChartProps["data"] = [
     ["Claims", "Counts"],
     [`Unresolved ${unresolvedClaimsCount}`, unresolvedClaimsCount],
     [`Resolved ${resolvedClaimsCount}`, resolvedClaimsCount],
   ];
   return (
     <>
-      <section className="flex w-full">
-        <aside>
-          <Chart
-            chartType="PieChart"
-            data={dataForFoundItems}
-            options={{
-              title: "Found Items",
-              slices: { 1: { offset: 0.2 } },
-            }}
-            width="400px"
-            height="300px"
-          />
-        </aside>
-        <aside>
-          <Chart
-            chartType="PieChart"
-            data={dataForClaimItems}
-            options={{
-              title: "Claims",
-              slices: { 1: { offset: 0.2 } },
-            }}
-            width="400px"
-            height="300px"
-          />
-        </aside>
-      </section>
+      <AnalyticsS
+        dataForFoundItems={dataForFoundItems}
+        dataForClaimItems={dataForClaimItems}
+      />
     </>
   );
 }

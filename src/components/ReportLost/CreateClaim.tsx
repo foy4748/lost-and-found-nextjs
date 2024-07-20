@@ -53,7 +53,9 @@ export default function CreateClaim({
 
   return (
     <>
-      <Button onClick={() => setOpenModal(true)}>Issue a Claim</Button>
+      <Button className="flex-1" onClick={() => setOpenModal(true)}>
+        Issue a Claim
+      </Button>
       <Modal
         show={openModal}
         size="md"
