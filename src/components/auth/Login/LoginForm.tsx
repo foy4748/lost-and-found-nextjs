@@ -6,8 +6,8 @@ import { Button, Checkbox, Label, TextInput } from "flowbite-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-
 import url from "url";
+
 function LoginForm() {
   const { handleSubmit, register } = useForm({
     defaultValues: {
@@ -41,6 +41,7 @@ function LoginForm() {
         onSubmit={handleSubmit(onFormSubmit)}
         className="flex w-11/12 md:w-1/2 flex-col gap-4"
       >
+        <h1 className="form-title mt-10">Login</h1>
         <p className="text-red-500">
           {searchParams.get("isAdmin") === "0" ||
           searchParams.get("isDeleted") === "1" ? (

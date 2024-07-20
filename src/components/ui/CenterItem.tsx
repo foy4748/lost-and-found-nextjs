@@ -6,9 +6,7 @@ function CenterItem({
   className?: string;
 }) {
   return (
-    <section
-      className={`h-screen flex justify-center items-center ${className}`}
-    >
+    <section className={`h-full flex justify-center items-center ${className}`}>
       {children}
     </section>
   );

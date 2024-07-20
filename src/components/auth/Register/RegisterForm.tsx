@@ -4,26 +4,62 @@ import {
   TUserAndUserProfilePayLoad,
 } from "@/actions/authenticationActions";
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import url from "url";
 
 export type TRegisterInputType = {
   name: string;
   email: string;
   password: string;
+  confirmPassword: string;
   bio: string;
   age: number;
 };
 
 function RegisterForm() {
-  const { handleSubmit, register } = useForm<TRegisterInputType>();
+  const {
+    handleSubmit,
+    register,
+    setError,
+    formState: { errors },
+  } = useForm<TRegisterInputType>();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const onSubmit = async (data: TRegisterInputType) => {
-    const { name, email, password, bio, age } = data;
+    const { name, email, password, confirmPassword, bio, age } = data;
     const profile = { bio, age: Number(age) };
+    if (password != confirmPassword) {
+      setError("password", { type: "value", message: "Password mismatched" });
+      setError("confirmPassword", {
+        type: "value",
+        message: "Password mismatched",
+      });
+      toast.error("Confirmation password did not matched");
+      console.log(errors);
+      return;
+    }
 
     const payload = { name, email, password, profile };
-    const { token } = await registerUser(payload);
-    window.localStorage.setItem("token", String(token));
+    try {
+      const { token } = await registerUser(payload);
+      if (token) {
+        window.localStorage.setItem("token", String(token));
+        const { path } = url.parse(searchParams.get("callback") ?? "/");
+        // console.log(searchParams.get("callback"));
+        // console.log(path);
+        setTimeout(() => {
+          router.push(String(path));
+          router.refresh();
+        }, 1000);
+      } else {
+        toast.error("Failed to Register");
+      }
+    } catch (e) {
+      toast.error("Failed to Register");
+    }
   };
   return (
     <>
@@ -31,6 +67,7 @@ function RegisterForm() {
         onSubmit={handleSubmit(onSubmit)}
         className="flex w-11/12 md:w-1/2 flex-col gap-4"
       >
+        <h1 className="form-title mt-10">Register</h1>
         <div>
           <div className="mb-2 block">
             <Label htmlFor="name1" value="Your Name" />
@@ -69,13 +106,34 @@ function RegisterForm() {
             min={8}
             required
           />
+          {errors.password && (
+            <p className="text-red-500 text-sm">{errors.password.message}</p>
+          )}
+        </div>
+        <div>
+          <div className="mb-2 block">
+            <Label htmlFor="confirmPassword" value="Confirm password" />
+          </div>
+          <TextInput
+            {...register("confirmPassword")}
+            name="confirmPassword"
+            id="confirmPassword"
+            type="password"
+            min={8}
+            required
+          />
+          {errors.confirmPassword && (
+            <p className="text-red-500 text-sm">
+              {errors.confirmPassword.message}
+            </p>
+          )}
         </div>
         <div>
           <div className="mb-2 block">
             <Label htmlFor="bio1" value="Bio" />
           </div>
           <TextInput
-            {...register("bio")}
+            {...register("bio", { required: true })}
             name="bio"
             id="bio1"
             type="text"

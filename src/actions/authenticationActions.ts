@@ -41,7 +41,7 @@ export const registerUser = async (payload: TUserAndUserProfilePayLoad) => {
   });
 
   const result = await res.json();
-  const token = cookies().get("token");
+  const token = res.headers.get("token");
   cookies().set("token", String(token));
   return { result, token: res.headers.get("token") };
 };
