@@ -2,7 +2,7 @@ import Claims from "@/components/ReportFound/Claims";
 function ClaimsForFounder({ params }: { params: { foundById: string } }) {
   return (
     <>
-      <Claims foundById={params.foundById} />
+      <Claims enableEditButton={true} foundById={params.foundById} />
     </>
   );
 }

@@ -1,7 +1,5 @@
 import SingleLostItem from "@/components/LostItems/SingleLostItem";
 import Claims from "@/components/ReportFound/Claims";
-import FoundBy from "@/components/ReportLost/FoundBy";
-import ReportFoundButton from "@/components/ReportLost/ReportFoundButton";
 
 async function ReportFoundItem({ params }: { params: { id: string } }) {
   // Single Item Data
@@ -20,7 +18,7 @@ async function ReportFoundItem({ params }: { params: { id: string } }) {
     <>
       <p className="mb-4">{/* JSON.stringify(foundItem) */}</p>
       <SingleLostItem payload={foundItem} foundBy={foundBy} />
-      {foundBy && <Claims foundById={foundBy?.id} />}
+      {foundBy && <Claims enableEditButton={false} foundById={foundBy?.id} />}
     </>
   );
 }

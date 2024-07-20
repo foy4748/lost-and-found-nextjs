@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+//import { useEffect, useState } from "react";
 import { Table } from "flowbite-react";
 import moment from "moment";
 import { UpdateClaim } from "./UpdateClaim";
+import { useGetClaimsQuery } from "@/redux/apiSlices/claimApiSlice";
 
 export const STATUS = ["PENDING", "APPROVED", "REJECTED"] as const;
 export type TStatus = (typeof STATUS)[number];
@@ -53,38 +54,35 @@ export type TClaims = {
   };
 };
 
-function Claims({ foundById }: { foundById: string }) {
-  const [claims, setClaims] = useState<TClaims[]>([]);
-  useEffect(() => {
-    (async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_ADDRESS}/api/claims/${foundById}`,
-        {
-          credentials: "include",
-        }
-      );
-      const { data } = await res.json();
-      console.log("Claims data", data);
-      setClaims(data);
-    })();
-  }, [foundById]);
+function Claims({
+  foundById,
+  enableEditButton,
+}: {
+  foundById: string;
+  enableEditButton: boolean;
+}) {
+  const { data: claims } = useGetClaimsQuery(foundById);
 
   return (
     <>
       <div className="overflow-x-auto">
         <Table hoverable>
           <Table.Head>
-            <Table.HeadCell>Found By</Table.HeadCell>
+            <Table.HeadCell>Claimed By</Table.HeadCell>
             <Table.HeadCell>Email</Table.HeadCell>
             <Table.HeadCell>Status</Table.HeadCell>
             <Table.HeadCell>Described Features</Table.HeadCell>
             <Table.HeadCell>Lost Date</Table.HeadCell>
-            <Table.HeadCell>
-              <span className="sr-only">Edit Status</span>
-            </Table.HeadCell>
+            {enableEditButton ? (
+              <Table.HeadCell>
+                <span className="sr-only">Edit Status</span>
+              </Table.HeadCell>
+            ) : (
+              <></>
+            )}
           </Table.Head>
           <Table.Body className="divide-y">
-            {claims?.map((d) => {
+            {claims?.data?.map((d: TClaims) => {
               return (
                 <Table.Row
                   key={d.id}
@@ -99,9 +97,13 @@ function Claims({ foundById }: { foundById: string }) {
                   <Table.Cell>
                     {moment(d.lostDate).format("MMM d, YYYY")}
                   </Table.Cell>
-                  <Table.Cell>
-                    <UpdateClaim data={d} />
-                  </Table.Cell>
+                  {enableEditButton ? (
+                    <Table.Cell>
+                      <UpdateClaim data={d} />
+                    </Table.Cell>
+                  ) : (
+                    <></>
+                  )}
                 </Table.Row>
               );
             })}

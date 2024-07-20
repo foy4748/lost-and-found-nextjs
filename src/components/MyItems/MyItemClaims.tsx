@@ -6,23 +6,12 @@ import moment from "moment";
 import { TClaims } from "../ReportFound/Claims";
 import useCategory from "@/hooks/useCategory";
 import Image from "next/image";
+import { useGetClaimsByUserQuery } from "@/redux/apiSlices/claimApiSlice";
 
 function MyItemClaims() {
-  const [claims, setClaims] = useState<TClaims[]>([]);
+  //const [claims, setClaims] = useState<TClaims[]>([]);
   const { mappedCategories } = useCategory();
-  useEffect(() => {
-    (async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_ADDRESS}/api/claims/by-user`,
-        {
-          credentials: "include",
-        }
-      );
-      const { data } = await res.json();
-      console.log("Claims data", data);
-      setClaims(data);
-    })();
-  }, []);
+  const { data } = useGetClaimsByUserQuery(null);
 
   return (
     <>
@@ -42,8 +31,8 @@ function MyItemClaims() {
             </Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
-            {claims &&
-              claims?.map((d) => {
+            {data?.data &&
+              data?.data?.map((d: TClaims) => {
                 return (
                   <Table.Row
                     key={d?.id}

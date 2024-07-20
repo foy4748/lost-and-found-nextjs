@@ -4,9 +4,13 @@ import { Button, Select, Label, Modal } from "flowbite-react";
 import { Key, useState } from "react";
 import { STATUS, TStatus, TClaims } from "./Claims";
 import { useForm } from "react-hook-form";
+import { useEditClaimMutation } from "@/redux/apiSlices/claimApiSlice";
+import LoadingToast from "../ui/LoadingToast";
+import toast from "react-hot-toast";
 
 export function UpdateClaim({ data }: { data: TClaims }) {
   const [openModal, setOpenModal] = useState(false);
+  const [updatedClaim, { isLoading }] = useEditClaimMutation();
   const { handleSubmit, register } = useForm({
     defaultValues: {
       status: data.status,
@@ -17,21 +21,14 @@ export function UpdateClaim({ data }: { data: TClaims }) {
     setOpenModal(false);
   }
 
-  const handleUpdate = async (d: { status: TStatus }) => {
-    console.log(d);
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_ADDRESS}/api/claims/${data.id}`,
-      {
-        method: "PUT",
-        body: JSON.stringify(d),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }
-    );
-    const { data: isUpdated } = await res.json();
-    console.log(isUpdated);
+  const handleUpdate = async (body: { status: TStatus }) => {
+    const res = await updatedClaim({ claimId: data.id, body });
+    if (res.data?.success) {
+      toast.success("Updated Claim Status");
+      onCloseModal();
+    } else {
+      toast.error("Failed to update claim status");
+    }
   };
 
   return (
@@ -71,6 +68,7 @@ export function UpdateClaim({ data }: { data: TClaims }) {
             </div>
           </form>
         </Modal.Body>
+        <LoadingToast isLoading={isLoading} />
       </Modal>
     </>
   );

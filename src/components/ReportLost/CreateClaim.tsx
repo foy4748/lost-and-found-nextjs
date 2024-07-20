@@ -45,9 +45,13 @@ export default function CreateClaim({
       });
       const result = await res.json();
       console.log(result);
-      revalidatePathFromClient(`/lost-items/${foundItemId}`);
-      setOpenModal(false);
-      toast.success("Reported a claim successfully");
+      if (result.success) {
+        revalidatePathFromClient(`/lost-items/${foundItemId}`);
+        setOpenModal(false);
+        toast.success("Reported a claim successfully");
+      } else {
+        toast.error("Already Claimed");
+      }
     } catch (error) {}
   };
 

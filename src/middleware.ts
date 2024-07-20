@@ -2,7 +2,7 @@ import { JwtPayload, jwtDecode } from "jwt-decode";
 
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import toast from "react-hot-toast";
+//import toast from "react-hot-toast";
 export type MyJWTPayLoad = {
   isAdmin: boolean;
   isDeleted: boolean;
@@ -47,5 +47,10 @@ export function middleware(request: NextRequest) {
   }
 }
 export const config = {
-  matcher: ["/dashboard/:path*", "/report-lost-item", "/report-found-item"],
+  matcher: [
+    "/lost-items/:path*",
+    "/dashboard/:path*",
+    "/report-lost-item",
+    "/report-found-item",
+  ],
 };

@@ -8,6 +8,7 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store";
 import { logoutUser } from "../slices/authSlice";
+import toast from "react-hot-toast";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.NEXT_PUBLIC_SERVER_ADDRESS,
@@ -33,6 +34,8 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 
   if (result?.error?.status === 403) {
     api.dispatch(logoutUser());
+    toast.error("Unauthenticated State. Please Login");
+    window.location.href = "/auth/login";
     return result;
   }
 

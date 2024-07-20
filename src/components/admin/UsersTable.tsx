@@ -14,7 +14,6 @@ function UsersTable() {
   const { data: users } = useAllUsersQuery(null);
   const [deleteUser, { isLoading }] = useDeleteUserMutation();
   const usersData: TUser[] = users?.data;
-  console.log(usersData);
   return (
     <>
       <div className="overflow-x-auto">
