@@ -1,9 +1,13 @@
 import LostItemPageView from "@/components/ReportLost/LostItemPageView";
 
-function LostItemPage() {
+function LostItemPage({
+  searchParams,
+}: {
+  searchParams: { limit?: `${number}`; page?: `${number}` };
+}) {
   return (
     <>
-      <LostItemPageView />
+      <LostItemPageView params={searchParams} />
     </>
   );
 }
