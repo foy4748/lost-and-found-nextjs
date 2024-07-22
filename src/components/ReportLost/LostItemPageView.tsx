@@ -3,6 +3,7 @@ import LostItemCard from "./LostItemCard";
 import { TSearchParams } from "@/app/lost-items/page";
 import PaginationButton from "../ui/PaginationButton";
 import { Suspense } from "react";
+import CenterItem from "../ui/CenterItem";
 
 export type TLostItem = {
   id: string;
@@ -30,8 +31,12 @@ async function LostItemPageView({ params }: { params: TSearchParams }) {
   return (
     <>
       <Suspense fallback={"Loading..."}>
+        {data.length <= 0 ? (
+          <CenterItem className="font-extrabold">No Items found</CenterItem>
+        ) : (
+          <></>
+        )}
         <GridLayout>
-          {!data.length ?? "No Items found"}
           {data?.map((d: TLostItem) => (
             <LostItemCard key={d.id} data={d} />
           ))}

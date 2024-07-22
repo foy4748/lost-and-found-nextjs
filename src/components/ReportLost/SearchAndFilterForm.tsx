@@ -2,7 +2,8 @@
 
 import useCategory from "@/hooks/useCategory";
 import { Select } from "flowbite-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 let debounce: unknown;
 function SearchAndFilterForm() {
@@ -10,6 +11,11 @@ function SearchAndFilterForm() {
   const searchParams = useSearchParams();
   console.log(searchParams.get("categoryId"));
   const { mappedCategories } = useCategory();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    setSearchTerm(String(searchParams.get("searchTerm") ?? ""));
+  }, [searchParams]);
 
   const handleCategoryChange = (e: any) => {
     const value = String(e.target.value);
@@ -22,20 +28,21 @@ function SearchAndFilterForm() {
 
   const handleSearchChange = (e: any) => {
     clearInterval(debounce as number);
+    const value = String(e.target.value);
+    setSearchTerm(value);
     debounce = setTimeout(() => {
-      const value = String(e.target.value);
       const path = window.location.href;
       const url = new URL(path);
-      url.searchParams.set("searchTerm", value);
+      url.searchParams.set("searchTerm", String(value));
       url.searchParams.set("page", String(1));
       router.push(url.toString());
       console.log(url.searchParams.get("searchTerm"));
-    }, 800);
+    }, 850);
   };
   return (
     <>
       <Select
-        defaultValue={searchParams.get("categoryId") || ""}
+        value={searchParams.get("categoryId") || ""}
         onChange={handleCategoryChange}
       >
         <option value={""}>Select Category</option>
@@ -45,7 +52,11 @@ function SearchAndFilterForm() {
           </option>
         ))}
       </Select>
-      <input type="search" onChange={handleSearchChange} />
+      <input
+        value={searchTerm ? String(searchTerm) : ""}
+        type="search"
+        onChange={handleSearchChange}
+      />
     </>
   );
 }
