@@ -16,7 +16,6 @@ async function ReportFoundItem({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <p className="mb-4">{/* JSON.stringify(foundItem) */}</p>
       <SingleLostItem payload={foundItem} foundBy={foundBy} />
       {foundBy && <Claims enableEditButton={false} foundById={foundBy?.id} />}
     </>

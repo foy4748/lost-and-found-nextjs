@@ -5,6 +5,7 @@ export type TSearchParams = {
   limit?: `${number}`;
   page?: `${number}`;
   categoryId: string;
+  searchTerm: string;
 };
 function LostItemPage({ searchParams }: { searchParams: TSearchParams }) {
   return (
