@@ -1,8 +1,8 @@
 import { Button } from "flowbite-react";
 import GridLayout from "../ui/GridLayout";
-import TablePagination from "../ui/TablePagination";
 import LostItemCard from "./LostItemCard";
 import Link from "next/link";
+import { TSearchParams } from "@/app/lost-items/page";
 
 export type TLostItem = {
   id: string;
@@ -14,20 +14,17 @@ export type TLostItem = {
   isItemFound: boolean;
 };
 
-async function LostItemPageView({
-  params,
-}: {
-  params: {
-    limit?: `${number}`;
-    page?: `${number}`;
-  };
-}) {
-  const res = await fetch(
-    `${process.env.SERVER_ADDRESS}/api/found-items?limit=${
-      params?.limit ?? 12
-    }&page=${params?.page ?? 1}`
-  );
+async function LostItemPageView({ params }: { params: TSearchParams }) {
+  const url = `${process.env.SERVER_ADDRESS}/api/found-items?limit=${
+    params?.limit ?? 12
+  }&page=${params?.page ?? 1}${
+    params?.categoryId ? `&categoryId=${params?.categoryId}` : ""
+  }`;
+
+  const res = await fetch(url);
   const { data, meta } = await res.json();
+
+  // For pagination
   const pages = [];
   for (let i = 1; i <= Math.ceil(meta?.total / meta?.limit); i++) pages.push(i);
   return (

@@ -7,3 +7,7 @@
     @apply text-center font-semibold text-2xl;
   }
 }
+
+.slider-overlay {
+  background-image: linear-gradient(45deg, #824044, 70%, #320f0f1c);
+}
