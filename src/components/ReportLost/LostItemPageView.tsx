@@ -16,13 +16,21 @@ export type TLostItem = {
 };
 
 async function LostItemPageView({ params }: { params: TSearchParams }) {
-  const url = `${process.env.SERVER_ADDRESS}/api/found-items?limit=${
-    params?.limit ?? 12
-  }&page=${params?.page ?? 1}${
-    params?.categoryId ? `&categoryId=${params?.categoryId}` : ""
-  }${params?.searchTerm ? `&searchTerm=${params?.searchTerm}` : ""}`;
+  const url = new URL(`${process.env.SERVER_ADDRESS}/api/found-items`);
 
-  const res = await fetch(url);
+  url.searchParams.set("limit", params?.limit ?? "12");
+  url.searchParams.set("page", params?.page ?? "1");
+
+  if (params?.categoryId) {
+    url.searchParams.set("categoryId", params?.categoryId);
+  }
+
+  if (params?.searchTerm) {
+    url.searchParams.set("searchTerm", params?.searchTerm);
+  }
+
+  console.log(url.toString());
+  const res = await fetch(url.toString(), { next: { tags: ["Items"] } });
   const { data, meta } = await res.json();
 
   // For pagination
