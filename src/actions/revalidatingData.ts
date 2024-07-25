@@ -6,6 +6,6 @@ export const revalidatePathFromClient = (path: string) => {
   revalidatePath(path);
 };
 
-export const revalidateTagFromClient = (path: string) => {
-  revalidateTag(path);
+export const revalidateTagFromClient = (tag: string) => {
+  revalidateTag(tag);
 };

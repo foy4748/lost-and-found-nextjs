@@ -29,7 +29,6 @@ async function LostItemPageView({ params }: { params: TSearchParams }) {
     url.searchParams.set("searchTerm", params?.searchTerm);
   }
 
-  console.log(url.toString());
   const res = await fetch(url.toString(), { next: { tags: ["Items"] } });
   const { data, meta } = await res.json();
 

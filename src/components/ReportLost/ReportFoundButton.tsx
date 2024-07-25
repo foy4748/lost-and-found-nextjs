@@ -1,6 +1,8 @@
 "use client";
-import { revalidatePathFromClient } from "@/actions/revalidatingData";
+import { revalidateTagFromClient } from "@/actions/revalidatingData";
 import { Button } from "flowbite-react";
+import toast from "react-hot-toast";
+//import { revalidateTag } from "next/cache";
 
 function ReportFoundButton({ foundItemId }: { foundItemId: string }) {
   console.log("foundItemId", foundItemId);
@@ -19,10 +21,17 @@ function ReportFoundButton({ foundItemId }: { foundItemId: string }) {
           cache: "no-store",
         }
       );
+
+      // Revalidating Tags
+      revalidateTagFromClient("Items");
+      revalidateTagFromClient("isFound");
+      revalidateTagFromClient(foundItemId);
+
       const result = await res.json();
-      revalidatePathFromClient(`/lost-items/${foundItemId}`);
       console.log(result);
-    } catch (error) {}
+    } catch (error) {
+      toast.error("Failed to report found");
+    }
   };
   return (
     <>

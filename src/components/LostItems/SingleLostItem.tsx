@@ -30,10 +30,15 @@ function SingleLostItem({ payload, foundBy }: TSingleLostItem) {
         <aside className="p-4 lg:w-1/2 flex items-center justify-center">
           <article>
             <h1 className="form-title mb-4">{payload.foundItemName}</h1>
-            <p className="text-center my-4">
-              <strong>Found By </strong>: {foundBy?.user?.name} ||{" "}
-              {foundBy?.user?.email}
-            </p>
+            {payload.isItemFound ? (
+              <p className="text-center my-4">
+                <strong>Found By </strong>: {foundBy?.user?.name} ||{" "}
+                {foundBy?.user?.email}
+              </p>
+            ) : (
+              <></>
+            )}
+
             <div className="grid lg:grid-cols-2 gap-x-4 lg:text-center">
               <p>Category : {payload.category.name}</p>
               <p>Found Status : {payload.isItemFound ? "🟢" : "🔴"}</p>
