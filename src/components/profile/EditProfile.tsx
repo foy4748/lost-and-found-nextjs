@@ -32,7 +32,8 @@ const TUserUpdateProfilePayloadFields: Array<keyof TUserProfileUpdatePayload> =
 
 function EditProfile({ payload }: { payload: TUserUpdatePayload }) {
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [updateUserProfile, { isLoading }] = useUpdateUserProfileMutation();
+  const [updateUserProfile, { isLoading, isError }] =
+    useUpdateUserProfileMutation();
   const { handleSubmit, register } = useForm<TUserUpdatePayload>({
     defaultValues: payload,
   });
@@ -79,7 +80,13 @@ function EditProfile({ payload }: { payload: TUserUpdatePayload }) {
     payload["profile"] = updatedProfile;
     if (payload?.profile) payload.profile.age = Number(payload.profile.age);
 
-    updateUserProfile(payload);
+    try {
+      await updateUserProfile(payload);
+      toast.success("Updated Profile successfully");
+      setOpenModal(false);
+    } catch (error) {
+      toast.error("Failed to update Profile");
+    }
   };
   return (
     <>
