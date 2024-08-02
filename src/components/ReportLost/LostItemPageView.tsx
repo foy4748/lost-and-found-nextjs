@@ -33,8 +33,11 @@ async function LostItemPageView({ params }: { params: TSearchParams }) {
   const { data, meta } = await res.json();
 
   // For pagination
-  const pages = [];
-  for (let i = 1; i <= Math.ceil(meta?.total / meta?.limit); i++) pages.push(i);
+  const pages = Array.from(
+    { length: Math.ceil(meta?.total / meta?.limit) },
+    (_, i) => i + 1
+  );
+
   return (
     <>
       <Suspense fallback={"Loading..."}>
