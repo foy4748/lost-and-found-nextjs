@@ -1,7 +1,15 @@
+import AboutUs from "@/components/ui/AboutUs";
 import Banner from "@/components/ui/Banner";
+import WhatWeDo from "@/components/ui/WhatWeDo";
 
 export default function Home() {
-  return <Banner />;
+  return (
+    <>
+      <Banner />
+      <WhatWeDo />
+      <AboutUs />
+    </>
+  );
 }
 
 /*

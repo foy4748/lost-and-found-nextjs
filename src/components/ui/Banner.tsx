@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 import {
   Navigation,
   A11y,
@@ -16,6 +17,7 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import "swiper/css/effect-fade";
 import { useEffect, useState } from "react";
+import { Button } from "flowbite-react";
 
 export function SliderButton() {
   const swiperParent = useSwiper();
@@ -87,7 +89,7 @@ export default function Banner() {
                       />
                     </figure>
                     <aside className="w-1/2 me-4">
-                      <article className="p-8 h-full w-full bg-green-200 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-20">
+                      <article className="p-8 h-full w-full bg-green-200 rounded-xl bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-20">
                         <h1 className="text-6xl text-white text-shadow drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
                           Lost Something?
                         </h1>
@@ -100,6 +102,14 @@ export default function Banner() {
                             here to help.
                           </em>
                         </p>
+                        <div className="my-4 flex gap-2">
+                          <Link href={"/report-lost-item"}>
+                            <Button size="sm">Report Lost</Button>
+                          </Link>
+                          <Link href={"/report-found-item"}>
+                            <Button size="sm">Report Found</Button>
+                          </Link>
+                        </div>
                         <SliderButton />
                       </article>
                     </aside>
