@@ -4,6 +4,7 @@ import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import ReduxToolkitProvider from "@/Providers/RTKQueryProvider";
 import { NavBar } from "@/components/ui/NavBar";
+import Footer from "@/components/ui/Footer";
 
 //const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +26,7 @@ export default function RootLayout({
           <NavBar />
           {children}
           <Toaster />
+          <Footer />
         </ReduxToolkitProvider>
       </body>
     </html>

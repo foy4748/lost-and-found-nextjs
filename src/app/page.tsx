@@ -1,5 +1,6 @@
 import AboutUs from "@/components/ui/AboutUs";
 import Banner from "@/components/ui/Banner";
+import RecentLostItems from "@/components/ui/RecentLostItems";
 import WhatWeDo from "@/components/ui/WhatWeDo";
 
 export default function Home() {
@@ -8,6 +9,7 @@ export default function Home() {
       <Banner />
       <WhatWeDo />
       <AboutUs />
+      <RecentLostItems />
     </>
   );
 }

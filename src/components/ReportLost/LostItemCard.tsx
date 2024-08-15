@@ -11,7 +11,7 @@ type TLostItemCardPropType = {
 export default function LostItemCard({ data }: TLostItemCardPropType) {
   return (
     <Link href={`/lost-items/${data.id}`}>
-      <Card className="max-w-sm">
+      <Card className="w-full h-full place-items-center">
         <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
           {data.foundItemName}
         </h5>
