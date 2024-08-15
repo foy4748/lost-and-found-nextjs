@@ -8,11 +8,9 @@
   }
 }
 
-/*
 .slider-overlay {
-  background-image: linear-gradient(45deg, #824044, 70%, #320f0f1c);
+  background-image: linear-gradient(-45deg, #383737, 70%, #320f0f1c);
 }
-*/
 
 .blob {
   width: 400px;
@@ -29,4 +27,24 @@
   left: 50%;
   z-index: 5;
   transform: translate(-50%, -50%);
+}
+
+.blob2 {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.blob3 {
+  transform: translate(-50%, -50%) rotate(180deg);
+}
+
+.blob4 {
+  transform: translate(-50%, -50%) rotate(270deg);
+}
+
+.text-shadow {
+  text-shadow: #6a848c 1px 0 10px;
+}
+
+.text-shadow-2 {
+  text-shadow: 1px -1px 3px #000;
 }
