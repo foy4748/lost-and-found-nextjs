@@ -9,14 +9,16 @@ import toast from "react-hot-toast";
 import { usePostReportLostItemMutation } from "@/redux/apiSlices/reportFoundItemApiSlice";
 import { revalidateTagFromClient } from "@/actions/revalidatingData";
 import { uploadPhoto } from "@/actions/uploadPhoto";
+import LoadingToast from "../ui/LoadingToast";
 
 let token = window.localStorage.getItem("token");
 console.log("ReportForm", token);
 const decoded = jwtDecode(String(token)) as { id: string };
 
 function LostItemReportForm() {
+  const [loading, setLoading] = useState(false);
   const { register, handleSubmit, reset } = useForm();
-  const [postReport, result] = usePostReportLostItemMutation();
+  const [postReport, { isLoading }] = usePostReportLostItemMutation();
 
   const { data: categoires } = useGetCategoryQuery(null);
   const [selectedCategory, setSelectedCategory] = useState({
@@ -25,6 +27,7 @@ function LostItemReportForm() {
   });
 
   const submitReport = async (data: any) => {
+    setLoading(true);
     const payload = { ...data, categoryId: selectedCategory.id };
     console.log(payload);
     if (!selectedCategory.id) {
@@ -52,13 +55,14 @@ function LostItemReportForm() {
       delete payload["photoFile"];
       await postReport(payload);
       reset();
-      revalidateTagFromClient("/lost-items");
+      revalidateTagFromClient("Items");
       toast.success("Reported Lost Item successfully");
       //------ ---------- ----------- ----------
     } catch (error) {
       console.error(error);
       toast.error("Couldn't Upload Product Photo");
     }
+    setLoading(false);
   };
   /*
   const { data: foundItems } = useGetReportFoundItemQuery({
@@ -138,6 +142,7 @@ function LostItemReportForm() {
         </div>
       </div>
       <Button type="submit">Submit</Button>
+      <LoadingToast isLoading={loading || isLoading} />
     </form>
   );
 }

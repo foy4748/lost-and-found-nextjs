@@ -13,6 +13,7 @@ export type TLostItem = {
   description: string;
   location: string;
   isItemFound: boolean;
+  photoUrl?: string;
 };
 
 async function LostItemPageView({ params }: { params: TSearchParams }) {

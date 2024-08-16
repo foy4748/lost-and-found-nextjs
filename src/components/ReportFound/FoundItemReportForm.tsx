@@ -10,16 +10,21 @@ import {
   useGetReportFoundItemQuery,
   usePostReportFoundItemMutation,
 } from "@/redux/apiSlices/reportFoundItemApiSlice";
-import { revalidatePathFromClient } from "@/actions/revalidatingData";
+import {
+  revalidatePathFromClient,
+  revalidateTagFromClient,
+} from "@/actions/revalidatingData";
 import { uploadPhoto } from "@/actions/uploadPhoto";
+import LoadingToast from "../ui/LoadingToast";
 
 let token = window.localStorage.getItem("token");
 console.log("ReportForm", token);
 const decoded = jwtDecode(String(token)) as { id: string };
 
 function FoundItemReportForm() {
+  const [loading, setLoading] = useState(false);
   const { register, handleSubmit, reset } = useForm();
-  const [postReport, result] = usePostReportFoundItemMutation();
+  const [postReport, { isLoading }] = usePostReportFoundItemMutation();
 
   const { data: categoires } = useGetCategoryQuery(null);
   const [selectedCategory, setSelectedCategory] = useState({
@@ -28,6 +33,7 @@ function FoundItemReportForm() {
   });
 
   const submitReport = async (data: any) => {
+    setLoading(true);
     const payload = { ...data, categoryId: selectedCategory.id };
     console.log(payload);
     if (!selectedCategory.id) {
@@ -56,7 +62,7 @@ function FoundItemReportForm() {
       // Posting Item data in database ------------
       delete payload["photoFile"];
       await postReport(payload);
-      revalidatePathFromClient("/lost-items");
+      revalidateTagFromClient("Items");
       reset();
       toast.success("Reported Found Item successfully");
       //------ ---------- ----------- ----------
@@ -64,6 +70,7 @@ function FoundItemReportForm() {
       console.error(error);
       toast.error("Couldn't Upload Product Photo");
     }
+    setLoading(false);
   };
   /*
   const { data: foundItems } = useGetReportFoundItemQuery({
@@ -142,6 +149,7 @@ function FoundItemReportForm() {
         </div>
       </div>
       <Button type="submit">Submit</Button>
+      <LoadingToast isLoading={loading || isLoading} />
     </form>
   );
 }

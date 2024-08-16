@@ -26,6 +26,5 @@ export const uploadPhoto = async (form: FormData) => {
     console.error(error);
   }
 
-  console.log("testing", result);
   return result;
 };
