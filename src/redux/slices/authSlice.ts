@@ -2,19 +2,21 @@ import { createSlice } from "@reduxjs/toolkit";
 //import type { PayloadAction } from "@reduxjs/toolkit";
 
 export interface IAuthState {
-  _id: null | string;
+  id: null | string;
   email: null | string;
-  username: null | string;
-  role: null | string;
+  name: null | string;
   token: null | string;
+  isAdmin: false | undefined | null | boolean;
+  photoUrl?: string;
 }
 
 const initialState: IAuthState = {
-  _id: null,
+  id: null,
   email: null,
-  username: null,
-  role: null,
+  name: null,
+  isAdmin: false,
   token: null,
+  photoUrl: undefined,
 };
 
 export const authSlice = createSlice({
@@ -22,27 +24,35 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     authenticateUser: (state, action) => {
-      const { user, token } = action.payload;
+      const { user, token, photoUrl } = action.payload;
       console.log(action.payload);
       const {
-        _id,
+        id,
         email,
-        username,
-        role,
-      }: { _id: string; email: string; username: string; role: string } = user;
+        name,
+        isAdmin,
+      }: {
+        id: string;
+        email: string;
+        name: string;
+        isAdmin: false | undefined | boolean;
+      } = user;
 
-      state._id = _id;
+      console.log(photoUrl);
+      state.id = id;
       state.email = email;
-      state.username = username;
-      state.role = role;
+      state.name = name;
+      state.isAdmin = Boolean(isAdmin);
       state.token = token;
+      state.photoUrl = photoUrl;
     },
     logoutUser: (state) => {
-      state._id = null;
+      state.id = null;
       state.email = null;
-      state.username = null;
-      state.role = null;
+      state.name = null;
+      state.isAdmin = null;
       state.token = null;
+      state.photoUrl = undefined;
     },
   },
 });

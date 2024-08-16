@@ -41,22 +41,25 @@ function SearchAndFilterForm() {
   };
   return (
     <>
-      <Select
-        value={searchParams.get("categoryId") || ""}
-        onChange={handleCategoryChange}
-      >
-        <option value={""}>Select Category</option>
-        {Object.keys(mappedCategories).map((itm) => (
-          <option key={itm} value={itm}>
-            {mappedCategories[itm]}
-          </option>
-        ))}
-      </Select>
-      <input
-        value={searchTerm ? String(searchTerm) : ""}
-        type="search"
-        onChange={handleSearchChange}
-      />
+      <section className="flex justify-end px-2 my-4">
+        <Select
+          value={searchParams.get("categoryId") || ""}
+          onChange={handleCategoryChange}
+        >
+          <option value={""}>Select Category</option>
+          {Object.keys(mappedCategories).map((itm) => (
+            <option key={itm} value={itm}>
+              {mappedCategories[itm]}
+            </option>
+          ))}
+        </Select>
+        <input
+          value={searchTerm ? String(searchTerm) : ""}
+          type="search"
+          placeholder="Search..."
+          onChange={handleSearchChange}
+        />
+      </section>
     </>
   );
 }

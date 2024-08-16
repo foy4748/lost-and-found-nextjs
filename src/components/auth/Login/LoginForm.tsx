@@ -1,7 +1,8 @@
 "use client";
 import { loginUser } from "@/actions/authenticationActions";
 import UnauthorizedToast from "@/components/ui/UnauthorizedToast";
-import { useUserProfileQuery } from "@/redux/apiSlices/authApiSlice";
+import { useAppDispatch } from "@/redux/useRedux";
+import { authenticateUser } from "@/redux/slices/authSlice";
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -9,6 +10,8 @@ import toast from "react-hot-toast";
 import url from "url";
 
 function LoginForm() {
+  const dispatch = useAppDispatch();
+  //const auth = useAppSelector((state) => state.auth);
   const { handleSubmit, register } = useForm({
     defaultValues: {
       email: "",
@@ -25,6 +28,14 @@ function LoginForm() {
       toast.error("Failed to login");
     } else {
       toast.success("Logged in!");
+      console.log(result);
+      dispatch(
+        authenticateUser({
+          user: result.data,
+          token: result.data.token,
+          photoUrl: result.data.profile.photoUrl,
+        })
+      );
       window.localStorage.setItem("token", result?.data?.token);
       const { path } = url.parse(searchParams.get("callback") ?? "/");
       // console.log(searchParams.get("callback"));

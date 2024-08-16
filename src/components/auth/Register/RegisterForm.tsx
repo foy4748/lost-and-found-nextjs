@@ -1,9 +1,12 @@
 "use client";
+import { useState } from "react";
 import { registerUser } from "@/actions/authenticationActions";
 import { uploadPhoto } from "@/actions/uploadPhoto";
 import LoadingToast from "@/components/ui/LoadingToast";
 import { Button, Checkbox, FileInput, Label, TextInput } from "flowbite-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useAppDispatch } from "@/redux/useRedux";
+import { authenticateUser } from "@/redux/slices/authSlice";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import url from "url";
@@ -25,6 +28,7 @@ function RegisterForm() {
     setError,
     formState: { errors },
   } = useForm<TRegisterInputType>();
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
@@ -66,8 +70,16 @@ function RegisterForm() {
 
     const payload = { name, email, password, profile };
     try {
-      const { token } = await registerUser(payload);
+      const { result, token } = await registerUser(payload);
+      console.log(result);
       if (token) {
+        dispatch(
+          authenticateUser({
+            user: result.data,
+            token,
+            photoUrl: result.data.profile.photoUrl,
+          })
+        );
         window.localStorage.setItem("token", String(token));
         const { path } = url.parse(searchParams.get("callback") ?? "/");
         // console.log(searchParams.get("callback"));
