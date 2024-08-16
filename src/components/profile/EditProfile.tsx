@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import LoadingToast from "../ui/LoadingToast";
 import { pickFieldsFromObject } from "@/utilities/utilities";
 import { useUpdateUserProfileMutation } from "@/redux/apiSlices/authApiSlice";
+import { uploadPhoto } from "@/actions/uploadPhoto";
 
 export type TUserUpdatePayload = {
   id?: string;
@@ -45,25 +46,10 @@ function EditProfile({ payload }: { payload: TUserUpdatePayload }) {
       const file = data["photoFile"][0];
       photoFile.append("image", file);
 
-      const IMG_BB_KEY = process.env.NEXT_PUBLIC_IMG_BB_KEY;
-      const photoUpUrl = `https://api.imgbb.com/1/upload?key=${IMG_BB_KEY}`;
-      const photoUpOptions = {
-        method: "POST",
-        body: photoFile,
-      };
-
       try {
-        const photoUpResponse = await fetch(photoUpUrl, photoUpOptions);
-        const photoUpResult = await photoUpResponse.json();
-        if (!photoUpResult.success) {
-          toast.error("Couldn't Upload Product Photo");
-          return;
-        }
-        // Setting photo URL in payload
-        console.log("photoUpResult", photoUpResult);
-        data["profile.photoUrl" as keyof TUserUpdatePayload] = String(
-          photoUpResult.data.url
-        );
+        const resultUrl = await uploadPhoto(photoFile);
+        console.log("photoUpResult", resultUrl);
+        data["profile"]["photoUrl"] = String(resultUrl);
 
         //------ ---------- ----------- ----------
       } catch (error) {
