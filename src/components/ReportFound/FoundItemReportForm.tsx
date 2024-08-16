@@ -11,6 +11,7 @@ import {
   usePostReportFoundItemMutation,
 } from "@/redux/apiSlices/reportFoundItemApiSlice";
 import { revalidatePathFromClient } from "@/actions/revalidatingData";
+import { uploadPhoto } from "@/actions/uploadPhoto";
 
 let token = window.localStorage.getItem("token");
 console.log("ReportForm", token);
@@ -41,23 +42,14 @@ function FoundItemReportForm() {
     const file = data["photoFile"][0];
     photoFile.append("image", file);
 
-    const IMG_BB_KEY = process.env.NEXT_PUBLIC_IMG_BB_KEY;
-    const photoUpUrl = `https://api.imgbb.com/1/upload?key=${IMG_BB_KEY}`;
-    const photoUpOptions = {
-      method: "POST",
-      body: photoFile,
-    };
-
     try {
-      const photoUpResponse = await fetch(photoUpUrl, photoUpOptions);
-      const photoUpResult = await photoUpResponse.json();
-      if (!photoUpResult.success) {
+      const photoUrl = await uploadPhoto(photoFile);
+      if (!photoUrl) {
         toast.error("Couldn't Upload Product Photo");
         return;
       }
       // Setting photo URL in payload
-      console.log("photoUpResult", photoUpResult);
-      payload["photoUrl"] = String(photoUpResult.data.url);
+      payload["photoUrl"] = String(photoUrl);
 
       //------ ---------- ----------- ----------
 

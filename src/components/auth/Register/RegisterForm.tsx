@@ -1,9 +1,8 @@
 "use client";
-import {
-  registerUser,
-  TUserAndUserProfilePayLoad,
-} from "@/actions/authenticationActions";
-import { Button, Checkbox, Label, TextInput } from "flowbite-react";
+import { registerUser } from "@/actions/authenticationActions";
+import { uploadPhoto } from "@/actions/uploadPhoto";
+import LoadingToast from "@/components/ui/LoadingToast";
+import { Button, Checkbox, FileInput, Label, TextInput } from "flowbite-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -16,6 +15,7 @@ export type TRegisterInputType = {
   confirmPassword: string;
   bio: string;
   age: number;
+  photoFile?: string;
 };
 
 function RegisterForm() {
@@ -27,10 +27,32 @@ function RegisterForm() {
   } = useForm<TRegisterInputType>();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data: TRegisterInputType) => {
     const { name, email, password, confirmPassword, bio, age } = data;
-    const profile = { bio, age: Number(age) };
+    let photoUrl: string | undefined;
+
+    setLoading(true);
+    if (data["photoFile"]?.length && data["photoFile"][0]) {
+      // Uploading Photo to IMG BB ------------
+      const photoFile = new FormData();
+      const file = data["photoFile"][0];
+      photoFile.append("image", file);
+
+      try {
+        const resultUrl = await uploadPhoto(photoFile);
+        console.log("photoUpResult", resultUrl);
+        //data["profile"]["photoUrl"] = String(resultUrl);
+        photoUrl = resultUrl;
+
+        //------ ---------- ----------- ----------
+      } catch (error) {
+        console.error(error);
+        toast.error("Couldn't Upload Product Photo");
+      }
+    }
+    const profile = { bio, age: Number(age), photoUrl };
     if (password != confirmPassword) {
       setError("password", { type: "value", message: "Password mismatched" });
       setError("confirmPassword", {
@@ -60,6 +82,7 @@ function RegisterForm() {
     } catch (e) {
       toast.error("Failed to Register");
     }
+    setLoading(false);
   };
   return (
     <>
@@ -153,12 +176,15 @@ function RegisterForm() {
             required
           />
         </div>
-        <div className="flex items-center gap-2">
-          <Checkbox id="remember" />
-          <Label htmlFor="remember">Remember me</Label>
+        <div>
+          <div className="mb-2 block">
+            <Label htmlFor="file-upload" value="Upload Photo" />
+          </div>
+          <FileInput id="file-upload" {...register("photoFile")} />
         </div>
         <Button type="submit">Submit</Button>
       </form>
+      <LoadingToast isLoading={loading} />
     </>
   );
 }
