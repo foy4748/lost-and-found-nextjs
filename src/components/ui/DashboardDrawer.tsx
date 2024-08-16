@@ -1,5 +1,6 @@
 "use client";
 
+import { useAppSelector } from "@/redux/useRedux";
 import { Drawer, Sidebar, TextInput } from "flowbite-react";
 import Link from "next/link";
 import { Dispatch, SetStateAction } from "react";
@@ -11,6 +12,7 @@ type TDashboardDrawerProp = {
 
 export function DashboardDrawer({ isOpen, setIsOpen }: TDashboardDrawerProp) {
   const handleClose = () => setIsOpen(false);
+  const { isAdmin } = useAppSelector((state) => state.auth);
 
   return (
     <>
@@ -76,27 +78,33 @@ export function DashboardDrawer({ isOpen, setIsOpen }: TDashboardDrawerProp) {
                       Change Password
                     </Sidebar.Item>
                   </Sidebar.ItemGroup>
-                  <Drawer.Header
-                    title="Admin"
-                    className="mt-8"
-                    titleIcon={() => <></>}
-                  />
-                  <Sidebar.ItemGroup>
-                    <Sidebar.Item
-                      as={Link}
-                      onClick={handleClose}
-                      href="/dashboard/admin/users"
-                    >
-                      Users
-                    </Sidebar.Item>
-                    <Sidebar.Item
-                      as={Link}
-                      onClick={handleClose}
-                      href="/dashboard/admin/analytics"
-                    >
-                      Analytics
-                    </Sidebar.Item>
-                  </Sidebar.ItemGroup>
+                  {isAdmin ? (
+                    <>
+                      <Drawer.Header
+                        title="Admin"
+                        className="mt-8"
+                        titleIcon={() => <></>}
+                      />
+                      <Sidebar.ItemGroup>
+                        <Sidebar.Item
+                          as={Link}
+                          onClick={handleClose}
+                          href="/dashboard/admin/users"
+                        >
+                          Users
+                        </Sidebar.Item>
+                        <Sidebar.Item
+                          as={Link}
+                          onClick={handleClose}
+                          href="/dashboard/admin/analytics"
+                        >
+                          Analytics
+                        </Sidebar.Item>
+                      </Sidebar.ItemGroup>
+                    </>
+                  ) : (
+                    <></>
+                  )}
                 </Sidebar.Items>
               </div>
             </div>

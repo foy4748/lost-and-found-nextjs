@@ -8,13 +8,20 @@ import { useState } from "react";
 import { useLogoutUserMutation } from "@/redux/apiSlices/authApiSlice";
 import LoadingToast from "./LoadingToast";
 import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/redux/useRedux";
+import { logoutUser } from "@/redux/slices/authSlice";
 
 export function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useAppDispatch();
+  const { token, name, email, photoUrl } = useAppSelector(
+    (state) => state.auth
+  );
   const router = useRouter();
   const [logoutUserFunc, { isLoading }] = useLogoutUserMutation();
   const logOutUser = async () => {
     await logoutUserFunc(null);
+    dispatch(logoutUser());
     window.localStorage.removeItem("token");
     router.push("/");
     router.refresh();
@@ -41,26 +48,37 @@ export function NavBar() {
             label={
               <Avatar
                 alt="User settings"
-                img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                img={photoUrl || "/user-placeholder.png"}
                 rounded
               />
             }
           >
-            <Dropdown.Header>
-              <span className="block text-sm">Bonnie Green</span>
-              <span className="block truncate text-sm font-medium">
-                name@flowbite.com
-              </span>
-            </Dropdown.Header>
-            <Dropdown.Item onClick={() => setIsOpen(true)}>
-              Dashboard
-            </Dropdown.Item>
-            <Dropdown.Item>Settings</Dropdown.Item>
-            <Dropdown.Item>Earnings</Dropdown.Item>
-            <Dropdown.Divider />
-            <Dropdown.Item onClick={async () => await logOutUser()}>
-              Sign out
-            </Dropdown.Item>
+            {token ? (
+              <>
+                <Dropdown.Header>
+                  <span className="block text-sm">{name}</span>
+                  <span className="block truncate text-sm font-medium">
+                    {email}
+                  </span>
+                </Dropdown.Header>
+                <Dropdown.Item onClick={() => setIsOpen(true)}>
+                  Dashboard
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item onClick={async () => await logOutUser()}>
+                  Sign out
+                </Dropdown.Item>
+              </>
+            ) : (
+              <>
+                <Dropdown.Item as={Link} href="/auth/login">
+                  Login
+                </Dropdown.Item>
+                <Dropdown.Item as={Link} href="/auth/register">
+                  Register
+                </Dropdown.Item>
+              </>
+            )}
           </Dropdown>
           <Navbar.Toggle />
         </div>
@@ -77,13 +95,22 @@ export function NavBar() {
           <Navbar.Link as={Link} href="/report-found-item">
             Report Found
           </Navbar.Link>
-          <Navbar.Link as={Link} href="/auth/login">
-            Login
-          </Navbar.Link>
-          <Navbar.Link as={Link} href="/auth/register">
-            Register
-          </Navbar.Link>
-          <Navbar.Link onClick={() => setIsOpen(true)}>Dashboard</Navbar.Link>
+          {token ? (
+            <>
+              <Navbar.Link onClick={() => setIsOpen(true)}>
+                Dashboard
+              </Navbar.Link>
+            </>
+          ) : (
+            <>
+              <Navbar.Link as={Link} href="/auth/login">
+                Login
+              </Navbar.Link>
+              <Navbar.Link as={Link} href="/auth/register">
+                Register
+              </Navbar.Link>
+            </>
+          )}
         </Navbar.Collapse>
       </Navbar>
       <DashboardDrawer isOpen={isOpen} setIsOpen={setIsOpen} />
