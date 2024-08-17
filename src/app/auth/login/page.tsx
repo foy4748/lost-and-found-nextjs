@@ -1,4 +1,4 @@
-import LoginPageView from "@/components/auth/Login/LoginPageView";
+import LoginPageView from "./components/LoginPageView";
 
 function LoginPage() {
   return <LoginPageView />;

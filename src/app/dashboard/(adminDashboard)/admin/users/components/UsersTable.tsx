@@ -5,9 +5,9 @@ import {
 } from "@/redux/apiSlices/authApiSlice";
 
 import { Table } from "flowbite-react";
-import { TUser } from "../profile/Profile";
+import { TUser } from "@/app/dashboard/(userDashboard)/user/profile/components/Profile";
 import moment from "moment";
-import LoadingToast from "../ui/LoadingToast";
+import LoadingToast from "@/components/ui/LoadingToast";
 import toast from "react-hot-toast";
 
 function UsersTable() {

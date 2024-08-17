@@ -1,5 +1,3 @@
-import { TUserUpdatePayload } from "@/components/profile/EditProfile";
-import { IAuthState } from "../slices/authSlice";
 import baseApi from "./baseApiSlice";
 
 export type TUserRegistractionCredentials = {

@@ -1,5 +1,5 @@
 import GridLayout from "@/components/ui/GridLayout";
-import LostItemCard from "@/components/ReportLost/LostItemCard";
+import LostItemCard from "@/components/ui/LostItemCard";
 import { TSearchParams } from "@/app/lost-items/page";
 import PaginationButton from "@/components/ui/PaginationButton";
 import { Suspense } from "react";

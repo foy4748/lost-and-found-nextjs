@@ -1,4 +1,4 @@
-import SingleLostItem from "@/components/LostItems/SingleLostItem";
+import SingleLostItem from "./components/SingleLostItem";
 import Claims from "@/app/dashboard/(userDashboard)/user/claims/[foundById]/components/Claims";
 
 async function ReportFoundItem({ params }: { params: { id: string } }) {

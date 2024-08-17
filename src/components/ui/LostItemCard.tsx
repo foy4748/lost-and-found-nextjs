@@ -1,7 +1,6 @@
 "use client";
 
-import { Card } from "flowbite-react";
-import { TLostItem } from "./LostItemPageView";
+import { TLostItem } from "@/app/lost-items/components/LostItemPageView";
 import Link from "next/link";
 import Image from "next/image";
 

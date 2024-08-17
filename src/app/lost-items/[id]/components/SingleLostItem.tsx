@@ -1,8 +1,11 @@
 import Image from "next/image";
-import { TFoundBy, TFoundItemType } from "../MyItems/MyItemsPage";
 import moment from "moment";
-import ReportFoundButton from "../ReportLost/ReportFoundButton";
-import CreateClaim from "../ReportLost/CreateClaim";
+import ReportFoundButton from "./ReportFoundButton";
+import CreateClaim from "./CreateClaim";
+import {
+  TFoundBy,
+  TFoundItemType,
+} from "@/app/my-items/components/MyItemsPage";
 
 type TSingleLostItem = {
   payload: TFoundItemType;

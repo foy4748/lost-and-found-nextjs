@@ -1,5 +1,5 @@
-import LostItemCard from "@/components/ReportLost/LostItemCard";
-import { TLostItem } from "@/components/ReportLost/LostItemPageView";
+import LostItemCard from "@/components/ui/LostItemCard";
+import { TLostItem } from "@/app/lost-items/components/LostItemPageView";
 
 async function RecentLostItems() {
   const url = new URL(`${process.env.SERVER_ADDRESS}/api/found-items`);

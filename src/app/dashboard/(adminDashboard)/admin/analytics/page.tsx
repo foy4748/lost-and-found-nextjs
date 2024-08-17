@@ -1,4 +1,4 @@
-import Analytics from "@/components/admin/Analytics";
+import Analytics from "./components/Analytics";
 
 function page() {
   return (

@@ -1,4 +1,4 @@
-import RegisterPageView from "@/components/auth/Register/RegisterPageView";
+import RegisterPageView from "./components/RegisterPageView";
 
 function RegisterPage() {
   return <RegisterPageView />;

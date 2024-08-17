@@ -1,4 +1,4 @@
-import UsersPage from "@/components/admin/UsersPage";
+import UsersPage from "./components/UsersPage";
 
 function page() {
   return (
