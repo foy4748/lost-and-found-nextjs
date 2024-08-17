@@ -67,7 +67,7 @@ export default function Banner() {
               <section className="relative">
                 <figure>
                   <Image
-                    className="w-full h-[91vh] object-cover"
+                    className="w-full sm:h-[700px] lg:h-[91vh] object-cover"
                     src={`/images/banner/banner-bg-${slideNum}.jpg`}
                     width={1920}
                     height={500}
@@ -77,8 +77,8 @@ export default function Banner() {
                 <div className="slider-overlay z-10 absolute top-0 left-0 w-full h-full">
                   {/* <div className="slider-overlay w-full h-full"></div> */}
                   {/* Slider Body */}
-                  <div className="flex h-full justify-center items-center">
-                    <figure className="relative w-1/2">
+                  <div className="flex flex-col lg:flex-row h-full justify-start lg:justify-center items-center">
+                    <figure className="relative w-full lg:w-1/2 hidden sm:block">
                       <div className={`blob blob-center blob${slideNum}`}></div>
                       <Image
                         className="relative blob-center z-10"
@@ -88,7 +88,7 @@ export default function Banner() {
                         alt="Phone"
                       />
                     </figure>
-                    <aside className="w-1/2 me-4">
+                    <aside className="w-full lg:w-1/2 px-4 lg:me-4 -order-1 lg:order-1">
                       <article className="p-8 h-full w-full bg-green-200 rounded-xl bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-20">
                         <h1 className="text-6xl text-white text-shadow drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
                           Lost Something?

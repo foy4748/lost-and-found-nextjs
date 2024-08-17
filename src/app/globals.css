@@ -48,3 +48,15 @@
 .text-shadow-2 {
   text-shadow: 1px -1px 3px #000;
 }
+
+@media screen and (max-width: 1023px) {
+  .blob-center {
+    left: 70%;
+    transform: scale(0.9) translate(-50%, -40%);
+  }
+}
+@media screen and (max-width: 740px) {
+  .blob-center {
+    transform: scale(0.8) translate(-50%, -57%);
+  }
+}

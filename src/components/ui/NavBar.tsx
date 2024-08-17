@@ -51,7 +51,7 @@ export function NavBar() {
             label={
               <Avatar
                 alt="User settings"
-                img={photoUrl || "/user-placeholder.png"}
+                img={validity && photoUrl ? photoUrl : "/user-placeholder.png"}
                 rounded
               />
             }
