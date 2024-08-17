@@ -1,5 +1,5 @@
-import LostItemPageView from "@/components/ReportLost/LostItemPageView";
-import SearchAndFilterForm from "@/components/ReportLost/SearchAndFilterForm";
+import LostItemPageView from "./components/LostItemPageView";
+import SearchAndFilterForm from "./components/SearchAndFilterForm";
 
 export type TSearchParams = {
   limit?: `${number}`;

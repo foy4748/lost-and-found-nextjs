@@ -1,7 +1,7 @@
-import AboutUs from "@/components/ui/AboutUs";
-import Banner from "@/components/ui/Banner";
-import RecentLostItems from "@/components/ui/RecentLostItems";
-import WhatWeDo from "@/components/ui/WhatWeDo";
+import AboutUs from "./components/AboutUs";
+import Banner from "./components/Banner";
+import RecentLostItems from "./components/RecentLostItems";
+import WhatWeDo from "./components/WhatWeDo";
 
 export default function Home() {
   return (
