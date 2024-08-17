@@ -5,7 +5,7 @@ import { Key, useState } from "react";
 import { STATUS, TStatus, TClaims } from "./Claims";
 import { useForm } from "react-hook-form";
 import { useEditClaimMutation } from "@/redux/apiSlices/claimApiSlice";
-import LoadingToast from "../ui/LoadingToast";
+import LoadingToast from "@/components/ui/LoadingToast";
 import toast from "react-hot-toast";
 
 export function UpdateClaim({ data }: { data: TClaims }) {

@@ -4,7 +4,7 @@ import { Button, Label, Modal, TextInput, FileInput } from "flowbite-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import LoadingToast from "../ui/LoadingToast";
+import LoadingToast from "@/components/ui/LoadingToast";
 import { pickFieldsFromObject } from "@/utilities/utilities";
 import { useUpdateUserProfileMutation } from "@/redux/apiSlices/authApiSlice";
 import { uploadPhoto } from "@/actions/uploadPhoto";

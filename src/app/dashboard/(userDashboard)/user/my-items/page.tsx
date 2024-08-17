@@ -1,4 +1,4 @@
-import MyItemsPage from "@/components/MyItems/MyItemsPage";
+import MyItemsPage from "./components/MyItemsPage";
 
 function MyItems() {
   return (

@@ -1,8 +1,8 @@
 "use client";
 
 import { useUserProfileQuery } from "@/redux/apiSlices/authApiSlice";
-import CenterItem from "../ui/CenterItem";
-import ProfilePicture from "../ui/ProfilePicture";
+import CenterItem from "@/components/ui/CenterItem";
+import ProfilePicture from "@/components/ui/ProfilePicture";
 import moment from "moment";
 import Link from "next/link";
 import EditProfile from "./EditProfile";

@@ -1,4 +1,4 @@
-import ChangePasswordPage from "@/components/ChangePassword/ChangePasswordPage";
+import ChangePasswordPage from "./components/ChangePasswordPage";
 
 function page() {
   return (

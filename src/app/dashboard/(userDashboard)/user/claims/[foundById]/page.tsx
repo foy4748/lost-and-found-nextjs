@@ -1,4 +1,4 @@
-import Claims from "@/components/ReportFound/Claims";
+import Claims from "./components/Claims";
 function ClaimsForFounder({ params }: { params: { foundById: string } }) {
   return (
     <>

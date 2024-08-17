@@ -1,9 +1,9 @@
-import MyItemCalims from "@/components/MyItems/MyItemClaims";
+import MyItemClaims from "./components/MyItemClaims";
 
 function MyClaims() {
   return (
     <>
-      <MyItemCalims />
+      <MyItemClaims />
     </>
   );
 }

@@ -3,7 +3,7 @@ import { useSearchParams } from "next/navigation";
 import MyItemsTable from "./MyItemsTable";
 import { useGetFoundItemByUserQuery } from "@/redux/apiSlices/reportFoundItemApiSlice";
 import { useState } from "react";
-import TablePagination from "../ui/TablePagination";
+import TablePagination from "@/components/ui/TablePagination";
 export type TFoundItemType = {
   category: {
     name: string;

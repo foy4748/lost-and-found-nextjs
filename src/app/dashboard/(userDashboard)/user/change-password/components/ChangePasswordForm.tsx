@@ -5,7 +5,7 @@ import {
 } from "@/redux/apiSlices/authApiSlice";
 import { Button, Label, TextInput } from "flowbite-react";
 import { useForm } from "react-hook-form";
-import LoadingToast from "../ui/LoadingToast";
+import LoadingToast from "@/components/ui/LoadingToast";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 function ChangePasswordForm() {

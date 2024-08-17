@@ -1,5 +1,5 @@
 import SingleLostItem from "@/components/LostItems/SingleLostItem";
-import Claims from "@/components/ReportFound/Claims";
+import Claims from "@/app/dashboard/(userDashboard)/user/claims/[foundById]/components/Claims";
 
 async function ReportFoundItem({ params }: { params: { id: string } }) {
   // Single Item Data

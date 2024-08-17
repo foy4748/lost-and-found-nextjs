@@ -1,9 +1,7 @@
 "use client";
 import { Table } from "flowbite-react";
 import { TFoundItemType } from "./MyItemsPage";
-import { useEffect, useState } from "react";
 import Image from "next/image";
-import CreateClaim from "../ReportLost/CreateClaim";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import useCategory from "@/hooks/useCategory";

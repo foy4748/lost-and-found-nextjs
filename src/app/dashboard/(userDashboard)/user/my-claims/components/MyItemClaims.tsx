@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Table } from "flowbite-react";
 import moment from "moment";
-import { TClaims } from "../ReportFound/Claims";
+import { TClaims } from "@/app/dashboard/(userDashboard)/user/claims/[foundById]/components/Claims";
 import useCategory from "@/hooks/useCategory";
 import Image from "next/image";
 import { useGetClaimsByUserQuery } from "@/redux/apiSlices/claimApiSlice";
