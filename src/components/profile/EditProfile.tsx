@@ -8,6 +8,8 @@ import LoadingToast from "../ui/LoadingToast";
 import { pickFieldsFromObject } from "@/utilities/utilities";
 import { useUpdateUserProfileMutation } from "@/redux/apiSlices/authApiSlice";
 import { uploadPhoto } from "@/actions/uploadPhoto";
+import { useAppDispatch, useAppSelector } from "@/redux/useRedux";
+import { authenticateUser } from "@/redux/slices/authSlice";
 
 export type TUserUpdatePayload = {
   id?: string;
@@ -32,12 +34,15 @@ const TUserUpdateProfilePayloadFields: Array<keyof TUserProfileUpdatePayload> =
   ["age", "bio", "photoUrl"];
 
 function EditProfile({ payload }: { payload: TUserUpdatePayload }) {
+  const auth = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [updateUserProfile, { isLoading, isError }] =
     useUpdateUserProfileMutation();
   const { handleSubmit, register } = useForm<TUserUpdatePayload>({
     defaultValues: payload,
   });
+  let resultUrl: string | undefined;
   const submitReport = async (data: TUserUpdatePayload) => {
     // Trying to upload photo
     if (data["photoFile"]?.length && data["photoFile"][0]) {
@@ -47,9 +52,21 @@ function EditProfile({ payload }: { payload: TUserUpdatePayload }) {
       photoFile.append("image", file);
 
       try {
-        const resultUrl = await uploadPhoto(photoFile);
+        resultUrl = await uploadPhoto(photoFile);
         console.log("photoUpResult", resultUrl);
         data["profile"]["photoUrl"] = String(resultUrl);
+        dispatch(
+          authenticateUser({
+            user: {
+              name: auth.name,
+              id: auth.id,
+              email: auth.email,
+              isAdmin: auth.isAdmin,
+            },
+            token: auth.token,
+            photoUrl: String(resultUrl) || auth.photoUrl,
+          })
+        );
 
         //------ ---------- ----------- ----------
       } catch (error) {
@@ -58,7 +75,21 @@ function EditProfile({ payload }: { payload: TUserUpdatePayload }) {
       }
     }
     const payload = {} as TUserUpdatePayload;
-    if (data["name"]) payload["name"] = data["name"];
+    if (data["name"]) {
+      payload["name"] = data["name"];
+      dispatch(
+        authenticateUser({
+          user: {
+            name: data["name"],
+            id: auth.id,
+            email: auth.email,
+            isAdmin: auth.isAdmin,
+          },
+          token: auth.token,
+          photoUrl: String(resultUrl) || auth.photoUrl,
+        })
+      );
+    }
     const updatedProfile = pickFieldsFromObject(
       data.profile,
       TUserUpdateProfilePayloadFields

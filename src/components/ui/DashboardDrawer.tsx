@@ -1,5 +1,6 @@
 "use client";
 
+import useTokenExpireCheck from "@/hooks/useTokenExpireCheck";
 import { useAppSelector } from "@/redux/useRedux";
 import { Drawer, Sidebar, TextInput } from "flowbite-react";
 import Link from "next/link";
@@ -12,7 +13,8 @@ type TDashboardDrawerProp = {
 
 export function DashboardDrawer({ isOpen, setIsOpen }: TDashboardDrawerProp) {
   const handleClose = () => setIsOpen(false);
-  const { isAdmin } = useAppSelector((state) => state.auth);
+  const { isAdmin, token } = useAppSelector((state) => state.auth);
+  const [validity] = useTokenExpireCheck(token);
 
   return (
     <>
@@ -24,14 +26,6 @@ export function DashboardDrawer({ isOpen, setIsOpen }: TDashboardDrawerProp) {
           >
             <div className="flex h-full flex-col justify-between py-2">
               <div>
-                <form className="pb-3 md:hidden">
-                  <TextInput
-                    type="search"
-                    placeholder="Search"
-                    required
-                    size={32}
-                  />
-                </form>
                 <Sidebar.Items>
                   <Drawer.Header title="Dashboard" titleIcon={() => <></>} />
                   <Sidebar.ItemGroup>
@@ -78,7 +72,7 @@ export function DashboardDrawer({ isOpen, setIsOpen }: TDashboardDrawerProp) {
                       Change Password
                     </Sidebar.Item>
                   </Sidebar.ItemGroup>
-                  {isAdmin ? (
+                  {validity && isAdmin ? (
                     <>
                       <Drawer.Header
                         title="Admin"

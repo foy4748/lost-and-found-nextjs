@@ -10,6 +10,7 @@ import LoadingToast from "./LoadingToast";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/redux/useRedux";
 import { logoutUser } from "@/redux/slices/authSlice";
+import useTokenExpireCheck from "@/hooks/useTokenExpireCheck";
 
 export function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,6 +18,8 @@ export function NavBar() {
   const { token, name, email, photoUrl } = useAppSelector(
     (state) => state.auth
   );
+  const [validity] = useTokenExpireCheck(String(token));
+  console.log("validity", validity);
   const router = useRouter();
   const [logoutUserFunc, { isLoading }] = useLogoutUserMutation();
   const logOutUser = async () => {
@@ -53,7 +56,7 @@ export function NavBar() {
               />
             }
           >
-            {token ? (
+            {validity ? (
               <>
                 <Dropdown.Header>
                   <span className="block text-sm">{name}</span>
@@ -95,7 +98,7 @@ export function NavBar() {
           <Navbar.Link as={Link} href="/report-found-item">
             Report Found
           </Navbar.Link>
-          {token ? (
+          {validity ? (
             <>
               <Navbar.Link onClick={() => setIsOpen(true)}>
                 Dashboard
