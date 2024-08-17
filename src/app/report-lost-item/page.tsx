@@ -1,4 +1,4 @@
-import LostItemReportForm from "@/components/ReportLost/LostItemReportForm";
+import LostItemReportForm from "./components/LostItemReportForm";
 import CenterItem from "@/components/ui/CenterItem";
 
 function ReportFoundItem() {

@@ -6,25 +6,19 @@ import { Dropdown, Button } from "flowbite-react";
 import { useGetCategoryQuery } from "@/redux/apiSlices/categoryApiSlice";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import {
-  useGetReportFoundItemQuery,
-  usePostReportFoundItemMutation,
-} from "@/redux/apiSlices/reportFoundItemApiSlice";
-import {
-  revalidatePathFromClient,
-  revalidateTagFromClient,
-} from "@/actions/revalidatingData";
+import { usePostReportLostItemMutation } from "@/redux/apiSlices/reportFoundItemApiSlice";
+import { revalidateTagFromClient } from "@/actions/revalidatingData";
 import { uploadPhoto } from "@/actions/uploadPhoto";
-import LoadingToast from "../ui/LoadingToast";
+import LoadingToast from "@/components/ui/LoadingToast";
 
 let token = window.localStorage.getItem("token");
 console.log("ReportForm", token);
-const decoded = jwtDecode(String(token)) as { id: string };
+//const decoded = jwtDecode(String(token)) as { id: string };
 
-function FoundItemReportForm() {
+function LostItemReportForm() {
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit, reset } = useForm();
-  const [postReport, { isLoading }] = usePostReportFoundItemMutation();
+  const [postReport, { isLoading }] = usePostReportLostItemMutation();
 
   const { data: categoires } = useGetCategoryQuery(null);
   const [selectedCategory, setSelectedCategory] = useState({
@@ -52,19 +46,17 @@ function FoundItemReportForm() {
       const photoUrl = await uploadPhoto(photoFile);
       if (!photoUrl) {
         toast.error("Couldn't Upload Product Photo");
-        return;
+      } else {
+        payload["photoUrl"] = String(photoUrl);
       }
-      // Setting photo URL in payload
-      payload["photoUrl"] = String(photoUrl);
-
       //------ ---------- ----------- ----------
 
       // Posting Item data in database ------------
       delete payload["photoFile"];
       await postReport(payload);
-      revalidateTagFromClient("Items");
       reset();
-      toast.success("Reported Found Item successfully");
+      revalidateTagFromClient("Items");
+      toast.success("Reported Lost Item successfully");
       //------ ---------- ----------- ----------
     } catch (error) {
       console.error(error);
@@ -75,7 +67,8 @@ function FoundItemReportForm() {
   /*
   const { data: foundItems } = useGetReportFoundItemQuery({
     limit: 5,
-    sortOrder: "desc",
+    sortOr
+	der: "desc",
     userId: String(decoded.id),
   });
   */
@@ -85,7 +78,7 @@ function FoundItemReportForm() {
       className="flex w-11/12 md:w-1/2 flex-col gap-4"
     >
       <div>
-        <h1 className="form-title">Report a Found Item</h1>
+        <h1 className="form-title">Report a Lost Item</h1>
       </div>
       <div className="flex flex-col gap-4">
         <div>
@@ -145,7 +138,7 @@ function FoundItemReportForm() {
           <div className="mb-2 block">
             <Label htmlFor="file-upload" value="Upload Photo" />
           </div>
-          <FileInput id="file-upload" required {...register("photoFile")} />
+          <FileInput id="file-upload" {...register("photoFile")} />
         </div>
       </div>
       <Button type="submit">Submit</Button>
@@ -154,4 +147,4 @@ function FoundItemReportForm() {
   );
 }
 
-export default FoundItemReportForm;
+export default LostItemReportForm;
