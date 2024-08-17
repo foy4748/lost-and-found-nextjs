@@ -11,7 +11,7 @@ type TLostItemCardPropType = {
 export default function LostItemCard({ data }: TLostItemCardPropType) {
   return (
     <Link href={`/lost-items/${data.id}`}>
-      <div className="min-h-[400px] flex flex-col justify-between border h-full p-4">
+      <div className="min-h-[400px] flex flex-col justify-between border-2 h-full p-4">
         <figure className="h-[100px] flex justify-center items-center">
           {data?.photoUrl ? (
             <Image
@@ -22,7 +22,7 @@ export default function LostItemCard({ data }: TLostItemCardPropType) {
               alt={data.foundItemName}
             />
           ) : (
-            <div className="flex justify-center items-center border border-red-200 h-full min-h-[300px]">
+            <div className="flex justify-center items-center h-full min-h-[300px]">
               <p>No Image</p>
             </div>
           )}
