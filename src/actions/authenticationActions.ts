@@ -27,7 +27,7 @@ export const loginUser = async (email: string, password: string) => {
   const result = await res.json();
   cookies().set("token", result?.data?.token, {
     httpOnly: false,
-    secure: false,
+    secure: true,
     sameSite: "none",
   });
   return result;
@@ -48,7 +48,7 @@ export const registerUser = async (payload: TUserAndUserProfilePayLoad) => {
   const token = res.headers.get("token");
   cookies().set("token", String(token), {
     httpOnly: false,
-    secure: false,
+    secure: true,
     sameSite: "none",
   });
   return { result, token: res.headers.get("token") };
