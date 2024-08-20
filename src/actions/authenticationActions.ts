@@ -25,7 +25,11 @@ export const loginUser = async (email: string, password: string) => {
   });
 
   const result = await res.json();
-  cookies().set("token", result?.data?.token);
+  cookies().set("token", result?.data?.token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+  });
   return result;
 };
 
@@ -42,6 +46,10 @@ export const registerUser = async (payload: TUserAndUserProfilePayLoad) => {
 
   const result = await res.json();
   const token = res.headers.get("token");
-  cookies().set("token", String(token));
+  cookies().set("token", String(token), {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+  });
   return { result, token: res.headers.get("token") };
 };
