@@ -10,7 +10,7 @@ function ReportFoundButton({ foundItemId }: { foundItemId: string }) {
   const handleReportFound = async () => {
     try {
       const res = await fetch(
-        `http://localhost:3001/api/found-items/found-by`,
+        `${process.env.NEXT_PUBLIC_SERVER_ADDRESS}/api/found-items/found-by`,
         {
           headers: {
             "Content-Type": "application/json",

@@ -35,14 +35,17 @@ export default function CreateClaim({
       data.lostDate = new Date(data.lostDate);
       const payload = { ...data, foundById } as TCreateClaimPayload;
       console.log(payload);
-      const res = await fetch(`http://localhost:3001/api/claims`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        method: "POST",
-        body: JSON.stringify(payload),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_ADDRESS}/api/claims`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          method: "POST",
+          body: JSON.stringify(payload),
+        }
+      );
       const result = await res.json();
       console.log(result);
       if (result.success) {

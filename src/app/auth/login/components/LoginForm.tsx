@@ -1,5 +1,4 @@
 "use client";
-import { loginUser } from "@/actions/authenticationActions";
 import UnauthorizedToast from "@/components/ui/UnauthorizedToast";
 import { useAppDispatch } from "@/redux/useRedux";
 import { authenticateUser } from "@/redux/slices/authSlice";
@@ -8,10 +7,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import url from "url";
+import { useLoginUserMutation } from "@/redux/apiSlices/authApiSlice";
 
 function LoginForm() {
   const dispatch = useAppDispatch();
   //const auth = useAppSelector((state) => state.auth);
+  const [loginUser] = useLoginUserMutation();
   const { handleSubmit, register } = useForm({
     defaultValues: {
       email: "",
@@ -23,7 +24,8 @@ function LoginForm() {
 
   const onFormSubmit = async (data: { email: string; password: string }) => {
     const { email, password } = data;
-    const result = await loginUser(email, password);
+    const { data: result } = await loginUser({ email, password });
+    console.log(result);
     if (!result?.data || !result?.data?.token) {
       toast.error("Failed to login");
     } else {

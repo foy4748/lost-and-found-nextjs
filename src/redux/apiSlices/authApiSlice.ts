@@ -63,6 +63,24 @@ export const authApi = baseApi
         },
         invalidatesTags: [TagAllUsers],
       }),
+      loginUser: builder.mutation({
+        query: (payload) => {
+          return {
+            url: "/api/login",
+            body: payload,
+            method: "POST",
+          };
+        },
+      }),
+      registerUser: builder.mutation({
+        query: (payload) => {
+          return {
+            url: "/api/register",
+            body: payload,
+            method: "POST",
+          };
+        },
+      }),
       logoutUser: builder.mutation({
         query: () => {
           return {
@@ -135,4 +153,6 @@ export const {
   useAuthRegisterMutation,
   useChangePasswordMutation,
   useGetClaimsAnalyticsQuery,
+  useLoginUserMutation,
+  useRegisterUserMutation,
 } = authApi;

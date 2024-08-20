@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { registerUser } from "@/actions/authenticationActions";
 import { uploadPhoto } from "@/actions/uploadPhoto";
 import LoadingToast from "@/components/ui/LoadingToast";
 import { Button, Checkbox, FileInput, Label, TextInput } from "flowbite-react";
@@ -10,6 +9,7 @@ import { authenticateUser } from "@/redux/slices/authSlice";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import url from "url";
+import { useRegisterUserMutation } from "@/redux/apiSlices/authApiSlice";
 
 export type TRegisterInputType = {
   name: string;
@@ -32,6 +32,7 @@ function RegisterForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
+  const [registerUser] = useRegisterUserMutation();
 
   const onSubmit = async (data: TRegisterInputType) => {
     const { name, email, password, confirmPassword, bio, age } = data;
@@ -70,7 +71,9 @@ function RegisterForm() {
 
     const payload = { name, email, password, profile };
     try {
-      const { result, token } = await registerUser(payload);
+      const { data } = await registerUser(payload);
+      console.log(data);
+      const { result, token } = data.data;
       console.log(result);
       if (token) {
         dispatch(
