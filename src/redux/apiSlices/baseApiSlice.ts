@@ -21,6 +21,10 @@ const baseQuery = fetchBaseQuery({
       headers.set("authorization", token);
     }
 
+    headers.set(
+      "Access-Control-Allow-Origin",
+      "https://apollo-assignment-09.vercel.app"
+    );
     return headers;
   },
 });
