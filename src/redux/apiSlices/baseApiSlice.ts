@@ -35,7 +35,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
   if (result?.error?.status === 403) {
     api.dispatch(logoutUser());
     toast.error("Unauthenticated State. Please Login");
-    window.location.href = "/auth/login";
+    //window.location.href = "/auth/login";
     return result;
   }
 
