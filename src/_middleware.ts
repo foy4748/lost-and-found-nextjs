@@ -19,6 +19,7 @@ export function middleware(request: NextRequest) {
 
   try {
     const token = request.cookies.get("token");
+    console.log(token);
     const decoded: JwtPayload & MyJWTPayLoad = jwtDecode(String(token?.value));
     // Logics
     const notLoginPage = path !== "/auth/login";

@@ -23,8 +23,8 @@ export default function Footer() {
           <div>
             <FooterTitle title="Contact Info" />
             <FooterLinkGroup col>
-              <FooterLink href="#">
-                Email: <a href="mailto:test@test.com">test@test.com</a>
+              <FooterLink href="mailto:test@test.com">
+                Email: test@test.com
               </FooterLink>
               <FooterLink
                 target="_blank"
