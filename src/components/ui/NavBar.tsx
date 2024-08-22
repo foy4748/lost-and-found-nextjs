@@ -34,7 +34,7 @@ export function NavBar() {
       <Navbar fluid rounded>
         <Navbar.Brand as={Link} href="/">
           <Image
-            src="/next.svg"
+            src="/logo.png"
             className="mr-3 h-6 sm:h-9"
             alt="Flowbite React Logo"
             width={50}
