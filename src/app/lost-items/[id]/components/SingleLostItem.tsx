@@ -5,7 +5,7 @@ import CreateClaim from "./CreateClaim";
 import {
   TFoundBy,
   TFoundItemType,
-} from "@/app/my-items/components/MyItemsPage";
+} from "@/app/dashboard/(userDashboard)/user/my-items/components/MyItemsPage";
 
 type TSingleLostItem = {
   payload: TFoundItemType;

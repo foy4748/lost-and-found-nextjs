@@ -1,4 +1,4 @@
-import { MyJWTPayLoad } from "@/middleware";
+import { MyJWTPayLoad } from "@/_middleware";
 import { JwtPayload, jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 
