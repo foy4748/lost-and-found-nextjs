@@ -5,7 +5,11 @@ import LoadingToast from "@/components/ui/LoadingToast";
 import { Button, Checkbox, FileInput, Label, TextInput } from "flowbite-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAppDispatch } from "@/redux/useRedux";
-import { authenticateUser } from "@/redux/slices/authSlice";
+import {
+  authenticateUser,
+  startAuthLoading,
+  stopAuthLoading,
+} from "@/redux/slices/authSlice";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import url from "url";
@@ -39,6 +43,7 @@ function RegisterForm() {
     let photoUrl: string | undefined;
 
     setLoading(true);
+    dispatch(startAuthLoading());
     if (data["photoFile"]?.length && data["photoFile"][0]) {
       // Uploading Photo to IMG BB ------------
       const photoFile = new FormData();
@@ -72,9 +77,7 @@ function RegisterForm() {
     const payload = { name, email, password, profile };
     try {
       const { data } = await registerUser(payload);
-      console.log(data);
       const { result, token } = data.data;
-      console.log(result);
       if (token) {
         dispatch(
           authenticateUser({
@@ -92,9 +95,11 @@ function RegisterForm() {
           router.refresh();
         }, 1000);
       } else {
+        dispatch(stopAuthLoading());
         toast.error("Failed to Register");
       }
     } catch (e) {
+      dispatch(stopAuthLoading());
       toast.error("Failed to Register");
     }
     setLoading(false);

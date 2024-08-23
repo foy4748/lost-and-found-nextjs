@@ -1,25 +1,25 @@
 "use client";
 
+import LoadingToast from "@/components/ui/LoadingToast";
 import useAuthProtection from "@/hooks/useAuthProtection";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 function UserOnly({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { isUserDeleted, isTokenOK } = useAuthProtection();
-  const router = useRouter();
-  useEffect(() => {
-    if (!(!isUserDeleted && isTokenOK)) {
-      router.push(`/auth/login?callback=${window.location.href}`);
-    }
-  }, [isUserDeleted, isTokenOK, router]);
+  const { isUserDeleted, isTokenOK, isAuthLoading } = useAuthProtection();
+
+  if (isAuthLoading) {
+    return (
+      <>
+        <LoadingToast isLoading={isAuthLoading} />
+      </>
+    );
+  }
+
   if (!isUserDeleted && isTokenOK) {
     return <>{children}</>;
-  } else {
-    return <></>;
   }
 }
 

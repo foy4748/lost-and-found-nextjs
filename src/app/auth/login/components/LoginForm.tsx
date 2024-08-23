@@ -1,7 +1,11 @@
 "use client";
 import UnauthorizedToast from "@/components/ui/UnauthorizedToast";
 import { useAppDispatch } from "@/redux/useRedux";
-import { authenticateUser } from "@/redux/slices/authSlice";
+import {
+  authenticateUser,
+  startAuthLoading,
+  stopAuthLoading,
+} from "@/redux/slices/authSlice";
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -23,29 +27,36 @@ function LoginForm() {
   const searchParams = useSearchParams();
 
   const onFormSubmit = async (data: { email: string; password: string }) => {
+    dispatch(startAuthLoading());
     const { email, password } = data;
-    const { data: result } = await loginUser({ email, password });
-    console.log(result);
-    if (!result?.data || !result?.data?.token) {
-      toast.error("Failed to login");
-    } else {
-      toast.success("Logged in!");
+    try {
+      const { data: result } = await loginUser({ email, password });
       console.log(result);
-      dispatch(
-        authenticateUser({
-          user: result.data,
-          token: result.data.token,
-          photoUrl: result.data.profile.photoUrl,
-        })
-      );
-      window.localStorage.setItem("token", result?.data?.token);
-      const { path } = url.parse(searchParams.get("callback") ?? "/");
-      // console.log(searchParams.get("callback"));
-      // console.log(path);
-      setTimeout(() => {
-        router.push(String(path));
-        router.refresh();
-      }, 1000);
+      if (!result?.data || !result?.data?.token) {
+        toast.error("Failed to login");
+      } else {
+        toast.success("Logged in!");
+        console.log(result);
+        dispatch(
+          authenticateUser({
+            user: result.data,
+            token: result.data.token,
+            photoUrl: result.data.profile.photoUrl,
+          })
+        );
+        window.localStorage.setItem("token", result?.data?.token);
+        const { path } = url.parse(searchParams.get("callback") ?? "/");
+        // console.log(searchParams.get("callback"));
+        // console.log(path);
+        dispatch(stopAuthLoading());
+        setTimeout(() => {
+          router.push(String(path));
+          router.refresh();
+        }, 1000);
+      }
+    } catch (error) {
+      console.log(error);
+      dispatch(stopAuthLoading());
     }
   };
   return (

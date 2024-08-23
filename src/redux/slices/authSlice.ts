@@ -7,6 +7,7 @@ export interface IAuthState {
   name: null | string;
   token: null | string;
   isAdmin: false | undefined | null | boolean;
+  isAuthLoading: true | boolean;
   photoUrl?: string;
 }
 
@@ -15,6 +16,7 @@ const initialState: IAuthState = {
   email: null,
   name: null,
   isAdmin: false,
+  isAuthLoading: true,
   token: null,
   photoUrl: undefined,
 };
@@ -45,6 +47,7 @@ export const authSlice = createSlice({
       state.isAdmin = Boolean(isAdmin);
       state.token = token;
       state.photoUrl = photoUrl;
+      state.isAuthLoading = false;
     },
     logoutUser: (state) => {
       state.id = null;
@@ -53,11 +56,23 @@ export const authSlice = createSlice({
       state.isAdmin = null;
       state.token = null;
       state.photoUrl = undefined;
+      state.isAuthLoading = false;
+    },
+    stopAuthLoading: (state) => {
+      state.isAuthLoading = false;
+    },
+    startAuthLoading: (state) => {
+      state.isAuthLoading = true;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { authenticateUser, logoutUser } = authSlice.actions;
+export const {
+  authenticateUser,
+  logoutUser,
+  stopAuthLoading,
+  startAuthLoading,
+} = authSlice.actions;
 
 export default authSlice.reducer;

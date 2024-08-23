@@ -1,5 +1,6 @@
 import { MyJWTPayLoad } from "@/_middleware";
-import { useAppSelector } from "@/redux/useRedux";
+import { stopAuthLoading } from "@/redux/slices/authSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/useRedux";
 import { JwtPayload, jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -7,9 +8,12 @@ import { useEffect, useState } from "react";
 const useAuthProtection = () => {
   const router = useRouter();
   const auth = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+  const { isAuthLoading } = auth;
   const [isTokenOK, setIsTokenOK] = useState(false);
   const [isUserDeleted, setIsUserDeleted] = useState(false);
   const [isUserAdmin, setIsUserAdmin] = useState(false);
+  console.log("HIT 1", isUserDeleted, isTokenOK);
   useEffect(() => {
     try {
       const decoded: JwtPayload & MyJWTPayLoad = jwtDecode(String(auth?.token));
@@ -19,11 +23,13 @@ const useAuthProtection = () => {
       setIsUserAdmin(decoded?.isAdmin);
     } catch (error) {
       console.log(error);
-      router.push(`/auth/login?callback=${window.location.href}`);
-    }
-  }, [auth.token, router]);
 
-  return { isTokenOK, isUserDeleted, isUserAdmin };
+      router.push(`/auth/login?callback=${window.location.href}`);
+      dispatch(stopAuthLoading());
+    }
+  }, [auth.token]);
+
+  return { isTokenOK, isUserDeleted, isUserAdmin, isAuthLoading };
 };
 
 export default useAuthProtection;
