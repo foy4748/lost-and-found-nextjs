@@ -9,10 +9,8 @@ function DeleteModal({ foundItemId }: { foundItemId: string }) {
   const handleDelete = async () => {
     try {
       await deleteReportFoundItem(foundItemId);
-      console.log(result);
     } catch (error) {
       toast.error("Failed to delete Item");
-      console.log("Result\n", result);
       console.log(error);
     }
     setOpenModal(false);

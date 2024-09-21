@@ -9,7 +9,6 @@ const useTokenExpireCheck = (token: string) => {
       const decoded: JwtPayload & MyJWTPayLoad = jwtDecode(String(token));
       // Logics
       const isTokenInvalid = Date.now() >= Number(decoded.exp) * 1000;
-      console.log("expired", isTokenInvalid);
       setValidity(!isTokenInvalid);
     } catch (error) {
       setValidity(false);

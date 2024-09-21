@@ -12,7 +12,6 @@ import { uploadPhoto } from "@/actions/uploadPhoto";
 import LoadingToast from "@/components/ui/LoadingToast";
 
 let token = window.localStorage.getItem("token");
-console.log("ReportForm", token);
 //const decoded = jwtDecode(String(token)) as { id: string };
 
 function LostItemReportForm() {
@@ -29,13 +28,10 @@ function LostItemReportForm() {
   const submitReport = async (data: any) => {
     setLoading(true);
     const payload = { ...data, categoryId: selectedCategory.id };
-    console.log(payload);
     if (!selectedCategory.id) {
       toast.error("Please, select category");
       return;
     }
-    //postReport(payload);
-    //console.log(foundItems);
 
     // Uploading Photo to IMG BB ------------
     const photoFile = new FormData();

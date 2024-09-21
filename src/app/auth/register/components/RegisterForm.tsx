@@ -52,7 +52,6 @@ function RegisterForm() {
 
       try {
         const resultUrl = await uploadPhoto(photoFile);
-        console.log("photoUpResult", resultUrl);
         //data["profile"]["photoUrl"] = String(resultUrl);
         photoUrl = resultUrl;
 
@@ -77,7 +76,6 @@ function RegisterForm() {
     const payload = { name, email, password, profile };
     try {
       const { data } = await registerUser(payload);
-      console.log(data);
       const { token } = data.data;
       if (token) {
         dispatch(
@@ -89,8 +87,6 @@ function RegisterForm() {
         );
         window.localStorage.setItem("token", String(token));
         const { path } = url.parse(searchParams.get("callback") ?? "/");
-        // console.log(searchParams.get("callback"));
-        // console.log(path);
         setTimeout(() => {
           router.push(String(path));
           router.refresh();
@@ -98,13 +94,11 @@ function RegisterForm() {
       } else {
         dispatch(stopAuthLoading());
         toast.error("Failed to Register || Invalid Token");
-        console.log("Failed to Register || Invalid Token");
       }
     } catch (e) {
       console.log(e);
       dispatch(stopAuthLoading());
       toast.error("Failed to Register");
-      console.log("Failed to Register");
     }
     setLoading(false);
   };

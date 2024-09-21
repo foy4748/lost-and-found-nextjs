@@ -24,7 +24,6 @@ export function NavBar() {
   const [, { isLoading: isRegistering }] = useRegisterUserMutation();
   const [, { isLoading: isLogingIn }] = useLogoutUserMutation();
   const [validity] = useTokenExpireCheck(String(token));
-  console.log("validity", validity);
   const router = useRouter();
   const [logoutUserFunc, { isLoading }] = useLogoutUserMutation();
   const logOutUser = async () => {

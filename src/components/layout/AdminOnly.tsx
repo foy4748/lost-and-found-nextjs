@@ -14,8 +14,6 @@ function AdminOnly({
 }>) {
   const { isUserDeleted, isUserAdmin, isTokenOK, isAuthLoading } =
     useAuthProtection();
-  const router = useRouter();
-  const dispatch = useDispatch();
 
   if (isAuthLoading) {
     return (
@@ -23,13 +21,6 @@ function AdminOnly({
         <LoadingToast isLoading={isAuthLoading} />
       </>
     );
-  }
-
-  if (!isUserAdmin) {
-    toast.error("Admin Only Route");
-    dispatch(logoutUser());
-    router.push(`/auth/login?callback=${window.location.href}`);
-    return <></>;
   }
 
   if (!isUserDeleted && isTokenOK && isUserAdmin) {

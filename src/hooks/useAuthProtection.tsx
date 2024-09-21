@@ -16,7 +16,7 @@ const useAuthProtection = () => {
   const dispatch = useAppDispatch();
   const { isAuthLoading } = auth;
   const [isTokenOK, setIsTokenOK] = useState(false);
-  const [isUserDeleted, setIsUserDeleted] = useState(false);
+  const [isUserDeleted, setIsUserDeleted] = useState(true);
   const [isUserAdmin, setIsUserAdmin] = useState(false);
 
   useEffect(() => {
@@ -37,6 +37,14 @@ const useAuthProtection = () => {
         dispatch(logoutUser());
         router.push(`/auth/login?callback=${window.location.href}`);
       }
+      if (
+        !decoded?.isAdmin &&
+        window.location.href.includes("/dashboard/admin")
+      ) {
+        toast.error("Admin Only Route");
+        dispatch(logoutUser());
+        router.push(`/auth/login?callback=${window.location.href}`);
+      }
       dispatch(stopAuthLoading());
     } catch (error) {
       console.log(error);
@@ -45,7 +53,7 @@ const useAuthProtection = () => {
       router.push(`/auth/login?callback=${window.location.href}`);
       dispatch(stopAuthLoading());
     }
-  }, []);
+  }, [auth?.token, dispatch, router]);
 
   return { isTokenOK, isUserDeleted, isUserAdmin, isAuthLoading };
 };

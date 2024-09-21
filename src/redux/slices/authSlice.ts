@@ -40,7 +40,6 @@ export const authSlice = createSlice({
         isAdmin: false | undefined | boolean;
       } = user;
 
-      console.log(photoUrl);
       state.id = id;
       state.email = email;
       state.name = name;
