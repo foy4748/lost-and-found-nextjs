@@ -1,5 +1,5 @@
 import { MyJWTPayLoad } from "@/_middleware";
-import { stopAuthLoading } from "@/redux/slices/authSlice";
+import { startAuthLoading, stopAuthLoading } from "@/redux/slices/authSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/useRedux";
 import { JwtPayload, jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
@@ -16,11 +16,13 @@ const useAuthProtection = () => {
   console.log("HIT 1", isUserDeleted, isTokenOK);
   useEffect(() => {
     try {
+      dispatch(startAuthLoading());
       const decoded: JwtPayload & MyJWTPayLoad = jwtDecode(String(auth?.token));
       const isTokenInvalid = Date.now() >= Number(decoded.exp) * 1000;
       setIsTokenOK(!isTokenInvalid);
       setIsUserDeleted(decoded.isDeleted);
       setIsUserAdmin(decoded?.isAdmin);
+      dispatch(stopAuthLoading());
     } catch (error) {
       console.log(error);
 
