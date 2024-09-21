@@ -29,7 +29,7 @@ const useAuthProtection = () => {
       router.push(`/auth/login?callback=${window.location.href}`);
       dispatch(stopAuthLoading());
     }
-  }, [auth.token]);
+  }, []);
 
   return { isTokenOK, isUserDeleted, isUserAdmin, isAuthLoading };
 };
