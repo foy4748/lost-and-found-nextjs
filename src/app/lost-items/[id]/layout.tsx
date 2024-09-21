@@ -1,4 +1,4 @@
-import UserOnly from "./UserOnly";
+import UserOnly from "@/components/layout/UserOnly";
 
 function layout({
   children,

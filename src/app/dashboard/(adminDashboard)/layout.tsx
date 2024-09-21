@@ -1,4 +1,4 @@
-import AdminOnly from "./AdminOnly";
+import AdminOnly from "@/components/layout/AdminOnly";
 
 function layout({
   children,

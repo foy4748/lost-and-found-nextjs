@@ -2,6 +2,8 @@
 
 import LoadingToast from "@/components/ui/LoadingToast";
 import useAuthProtection from "@/hooks/useAuthProtection";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 function UserOnly({
   children,
@@ -9,6 +11,7 @@ function UserOnly({
   children: React.ReactNode;
 }>) {
   const { isUserDeleted, isTokenOK, isAuthLoading } = useAuthProtection();
+  const router = useRouter();
 
   if (isAuthLoading) {
     return (
@@ -20,6 +23,10 @@ function UserOnly({
 
   if (!isUserDeleted && isTokenOK) {
     return <>{children}</>;
+  } else {
+    router.push("/");
+    toast.error("Bad Credential Or, User has been deleted");
+    return <></>;
   }
 }
 
