@@ -1,5 +1,9 @@
 import { MyJWTPayLoad } from "@/_middleware";
-import { startAuthLoading, stopAuthLoading } from "@/redux/slices/authSlice";
+import {
+  logoutUser,
+  startAuthLoading,
+  stopAuthLoading,
+} from "@/redux/slices/authSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/useRedux";
 import { JwtPayload, jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
@@ -23,18 +27,21 @@ const useAuthProtection = () => {
       setIsTokenOK(!isTokenInvalid);
       setIsUserDeleted(decoded.isDeleted);
       setIsUserAdmin(decoded?.isAdmin);
-      dispatch(stopAuthLoading());
       if (isTokenInvalid) {
         toast("Please login first");
+        dispatch(logoutUser());
         router.push(`/auth/login?callback=${window.location.href}`);
       }
       if (decoded.isDeleted) {
         toast.error("Your account has been deleted by an Admin");
+        dispatch(logoutUser());
         router.push(`/auth/login?callback=${window.location.href}`);
       }
+      dispatch(stopAuthLoading());
     } catch (error) {
       console.log(error);
-
+      dispatch(logoutUser());
+      toast.error("Something went wrong");
       router.push(`/auth/login?callback=${window.location.href}`);
       dispatch(stopAuthLoading());
     }
