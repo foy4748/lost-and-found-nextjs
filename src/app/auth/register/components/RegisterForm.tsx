@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { uploadPhoto } from "@/actions/uploadPhoto";
 import LoadingToast from "@/components/ui/LoadingToast";
-import { Button, Checkbox, FileInput, Label, TextInput } from "flowbite-react";
+import { Button, FileInput, Label, TextInput } from "flowbite-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAppDispatch } from "@/redux/useRedux";
 import {
@@ -77,13 +77,14 @@ function RegisterForm() {
     const payload = { name, email, password, profile };
     try {
       const { data } = await registerUser(payload);
-      const { result, token } = data.data;
+      console.log(data);
+      const { token } = data.data;
       if (token) {
         dispatch(
           authenticateUser({
-            user: result.data,
+            user: data.data,
             token,
-            photoUrl: result.data.profile.photoUrl,
+            photoUrl: data.data.profile.photoUrl,
           })
         );
         window.localStorage.setItem("token", String(token));
@@ -96,11 +97,14 @@ function RegisterForm() {
         }, 1000);
       } else {
         dispatch(stopAuthLoading());
-        toast.error("Failed to Register");
+        toast.error("Failed to Register || Invalid Token");
+        console.log("Failed to Register || Invalid Token");
       }
     } catch (e) {
+      console.log(e);
       dispatch(stopAuthLoading());
       toast.error("Failed to Register");
+      console.log("Failed to Register");
     }
     setLoading(false);
   };

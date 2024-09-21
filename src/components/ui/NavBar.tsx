@@ -1,11 +1,14 @@
 "use client";
 
-import { Avatar, Dropdown, Navbar } from "flowbite-react";
+import { Avatar, Dropdown, Navbar, Spinner } from "flowbite-react";
 import Image from "next/image";
 import Link from "next/link";
 import { DashboardDrawer } from "./DashboardDrawer";
 import { useState } from "react";
-import { useLogoutUserMutation } from "@/redux/apiSlices/authApiSlice";
+import {
+  useLogoutUserMutation,
+  useRegisterUserMutation,
+} from "@/redux/apiSlices/authApiSlice";
 import LoadingToast from "./LoadingToast";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/redux/useRedux";
@@ -18,6 +21,8 @@ export function NavBar() {
   const { token, name, email, photoUrl } = useAppSelector(
     (state) => state.auth
   );
+  const [, { isLoading: isRegistering }] = useRegisterUserMutation();
+  const [, { isLoading: isLogingIn }] = useLogoutUserMutation();
   const [validity] = useTokenExpireCheck(String(token));
   console.log("validity", validity);
   const router = useRouter();
@@ -45,44 +50,50 @@ export function NavBar() {
           </span>
         </Navbar.Brand>
         <div className="flex md:order-2">
-          <Dropdown
-            arrowIcon={false}
-            inline
-            label={
-              <Avatar
-                alt="User settings"
-                img={validity && photoUrl ? photoUrl : "/user-placeholder.png"}
-                rounded
-              />
-            }
-          >
-            {validity ? (
-              <>
-                <Dropdown.Header>
-                  <span className="block text-sm">{name}</span>
-                  <span className="block truncate text-sm font-medium">
-                    {email}
-                  </span>
-                </Dropdown.Header>
-                <Dropdown.Item onClick={() => setIsOpen(true)}>
-                  Dashboard
-                </Dropdown.Item>
-                <Dropdown.Divider />
-                <Dropdown.Item onClick={async () => await logOutUser()}>
-                  Sign out
-                </Dropdown.Item>
-              </>
-            ) : (
-              <>
-                <Dropdown.Item as={Link} href="/auth/login">
-                  Login
-                </Dropdown.Item>
-                <Dropdown.Item as={Link} href="/auth/register">
-                  Register
-                </Dropdown.Item>
-              </>
-            )}
-          </Dropdown>
+          {isRegistering || isLogingIn ? (
+            <Spinner></Spinner>
+          ) : (
+            <Dropdown
+              arrowIcon={false}
+              inline
+              label={
+                <Avatar
+                  alt="User settings"
+                  img={
+                    validity && photoUrl ? photoUrl : "/user-placeholder.png"
+                  }
+                  rounded
+                />
+              }
+            >
+              {validity ? (
+                <>
+                  <Dropdown.Header>
+                    <span className="block text-sm">{name}</span>
+                    <span className="block truncate text-sm font-medium">
+                      {email}
+                    </span>
+                  </Dropdown.Header>
+                  <Dropdown.Item onClick={() => setIsOpen(true)}>
+                    Dashboard
+                  </Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item onClick={async () => await logOutUser()}>
+                    Sign out
+                  </Dropdown.Item>
+                </>
+              ) : (
+                <>
+                  <Dropdown.Item as={Link} href="/auth/login">
+                    Login
+                  </Dropdown.Item>
+                  <Dropdown.Item as={Link} href="/auth/register">
+                    Register
+                  </Dropdown.Item>
+                </>
+              )}
+            </Dropdown>
+          )}
           <Navbar.Toggle />
         </div>
         <Navbar.Collapse>
@@ -117,7 +128,7 @@ export function NavBar() {
         </Navbar.Collapse>
       </Navbar>
       <DashboardDrawer isOpen={isOpen} setIsOpen={setIsOpen} />
-      <LoadingToast isLoading={isLoading} />
+      <LoadingToast isLoading={isLoading || isRegistering || isLogingIn} />
     </>
   );
 }
