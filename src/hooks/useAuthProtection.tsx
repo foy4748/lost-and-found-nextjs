@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/useRedux";
 import { JwtPayload, jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const useAuthProtection = () => {
   const router = useRouter();
@@ -13,7 +14,7 @@ const useAuthProtection = () => {
   const [isTokenOK, setIsTokenOK] = useState(false);
   const [isUserDeleted, setIsUserDeleted] = useState(false);
   const [isUserAdmin, setIsUserAdmin] = useState(false);
-  console.log("HIT 1", isUserDeleted, isTokenOK);
+
   useEffect(() => {
     try {
       dispatch(startAuthLoading());
@@ -23,6 +24,14 @@ const useAuthProtection = () => {
       setIsUserDeleted(decoded.isDeleted);
       setIsUserAdmin(decoded?.isAdmin);
       dispatch(stopAuthLoading());
+      if (isTokenInvalid) {
+        toast("Please login first");
+        router.push(`/auth/login?callback=${window.location.href}`);
+      }
+      if (decoded.isDeleted) {
+        toast.error("Your account has been deleted by an Admin");
+        router.push(`/auth/login?callback=${window.location.href}`);
+      }
     } catch (error) {
       console.log(error);
 

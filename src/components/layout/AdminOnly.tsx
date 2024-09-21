@@ -22,12 +22,13 @@ function AdminOnly({
     );
   }
 
+  if (!isUserAdmin) {
+    router.push(`/auth/login?callback=${window.location.href}`);
+    return <></>;
+  }
+
   if (!isUserDeleted && isTokenOK && isUserAdmin) {
     return <>{children}</>;
-  } else {
-    router.push("/");
-    toast.error("Bad Credential Or, User has been deleted");
-    return <></>;
   }
 }
 
