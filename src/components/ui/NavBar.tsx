@@ -12,7 +12,7 @@ import {
 import LoadingToast from "./LoadingToast";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/redux/useRedux";
-import { logoutUser } from "@/redux/slices/authSlice";
+import { logoutUser, startAuthLoading } from "@/redux/slices/authSlice";
 import useTokenExpireCheck from "@/hooks/useTokenExpireCheck";
 
 export function NavBar() {
@@ -27,11 +27,12 @@ export function NavBar() {
   const router = useRouter();
   const [logoutUserFunc, { isLoading }] = useLogoutUserMutation();
   const logOutUser = async () => {
+    dispatch(startAuthLoading());
     await logoutUserFunc(null);
-    dispatch(logoutUser());
     window.localStorage.removeItem("token");
     router.push("/");
     router.refresh();
+    dispatch(logoutUser());
   };
   return (
     <>

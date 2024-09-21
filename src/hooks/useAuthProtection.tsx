@@ -49,8 +49,8 @@ const useAuthProtection = () => {
     } catch (error) {
       console.log(error);
       dispatch(logoutUser());
-      toast.error("Something went wrong");
-      router.push(`/auth/login?callback=${window.location.href}`);
+      toast("...Logging out...");
+      router.push("/");
       dispatch(stopAuthLoading());
     }
   }, [auth?.token, dispatch, router]);

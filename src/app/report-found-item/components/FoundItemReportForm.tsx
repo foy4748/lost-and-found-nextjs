@@ -1,5 +1,4 @@
 "use client";
-import { jwtDecode } from "jwt-decode";
 import { Label, TextInput, FileInput } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import { Dropdown, Button } from "flowbite-react";
@@ -16,6 +15,7 @@ import {
 } from "@/actions/revalidatingData";
 import { uploadPhoto } from "@/actions/uploadPhoto";
 import LoadingToast from "@/components/ui/LoadingToast";
+import { useRouter } from "next/navigation";
 
 let token = window.localStorage.getItem("token");
 console.log("ReportForm", token);
@@ -31,6 +31,7 @@ function FoundItemReportForm() {
     id: null,
     name: "Select Please",
   });
+  const router = useRouter();
 
   const submitReport = async (data: any) => {
     setLoading(true);
@@ -65,12 +66,14 @@ function FoundItemReportForm() {
       revalidateTagFromClient("Items");
       reset();
       toast.success("Reported Found Item successfully");
+      setLoading(false);
+      router.push("/lost-items");
       //------ ---------- ----------- ----------
     } catch (error) {
       console.error(error);
       toast.error("Couldn't Upload Product Photo");
+      setLoading(false);
     }
-    setLoading(false);
   };
   /*
   const { data: foundItems } = useGetReportFoundItemQuery({
