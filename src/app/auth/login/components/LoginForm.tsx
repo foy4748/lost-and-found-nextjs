@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import url from "url";
 import { useLoginUserMutation } from "@/redux/apiSlices/authApiSlice";
+import { signIn } from "next-auth/react";
 
 function LoginForm() {
   const dispatch = useAppDispatch();
@@ -29,8 +30,10 @@ function LoginForm() {
   const onFormSubmit = async (data: { email: string; password: string }) => {
     dispatch(startAuthLoading());
     const { email, password } = data;
+    console.log(email, password);
     try {
       const { data: result } = await loginUser({ email, password });
+      await signIn("credentials", { email, password, redirect: false });
       console.log(result);
       if (!result?.data || !result?.data?.token) {
         toast.error("Failed to login");

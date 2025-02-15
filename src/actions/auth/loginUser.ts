@@ -1,0 +1,37 @@
+"use server";
+
+import { TUserCredentialPayload } from "@/types/auth/login";
+import { cookies } from "next/headers";
+
+export const loginUser = async (data: TUserCredentialPayload) => {
+  try {
+    console.log("FROM LOGIN ACTION", data);
+    const SERVER_ADDRESS =
+      process.env.SERVER_ADDRESS || process.env.NEXT_PUBLIC_SERVER_ADDRESS;
+    const res = await fetch(`${SERVER_ADDRESS}/api/login/`, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    const d = await res.json();
+    console.log("LOGIN ACTION", d);
+    if (d.success) {
+      const ck = await cookies();
+      ck.set("token", String(d.data.token), {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        maxAge: 3600 * 1000,
+      });
+      return d;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
