@@ -5,11 +5,7 @@ import LoadingToast from "@/components/ui/LoadingToast";
 import { Button, FileInput, Label, TextInput } from "flowbite-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAppDispatch } from "@/redux/useRedux";
-import {
-  authenticateUser,
-  startAuthLoading,
-  stopAuthLoading,
-} from "@/redux/slices/authSlice";
+import { authenticateUser } from "@/redux/slices/authSlice";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import url from "url";
@@ -43,7 +39,6 @@ function RegisterForm() {
     let photoUrl: string | undefined;
 
     setLoading(true);
-    dispatch(startAuthLoading());
     if (data["photoFile"]?.length && data["photoFile"][0]) {
       // Uploading Photo to IMG BB ------------
       const photoFile = new FormData();
@@ -92,12 +87,10 @@ function RegisterForm() {
           router.refresh();
         }, 1000);
       } else {
-        dispatch(stopAuthLoading());
         toast.error("Failed to Register || Invalid Token");
       }
     } catch (e) {
       console.log(e);
-      dispatch(stopAuthLoading());
       toast.error("Failed to Register");
     }
     setLoading(false);

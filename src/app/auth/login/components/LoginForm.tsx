@@ -1,11 +1,7 @@
 "use client";
 import UnauthorizedToast from "@/components/ui/UnauthorizedToast";
 import { useAppDispatch } from "@/redux/useRedux";
-import {
-  authenticateUser,
-  startAuthLoading,
-  stopAuthLoading,
-} from "@/redux/slices/authSlice";
+import { authenticateUser } from "@/redux/slices/authSlice";
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -28,16 +24,15 @@ function LoginForm() {
   const searchParams = useSearchParams();
 
   const onFormSubmit = async (data: { email: string; password: string }) => {
-    dispatch(startAuthLoading());
     const { email, password } = data;
-    console.log(email, password);
     try {
       const { data: result } = await loginUser({ email, password });
-      await signIn("credentials", { email, password, redirect: false });
-      console.log(result);
-      if (!result?.data || !result?.data?.token) {
-        toast.error("Failed to login");
-      } else {
+      const nextAuthResponse = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+      if (nextAuthResponse?.ok) {
         toast.success("Logged in!");
         console.log(result);
         dispatch(
@@ -51,15 +46,12 @@ function LoginForm() {
         const { path } = url.parse(searchParams.get("callback") ?? "/");
         // console.log(searchParams.get("callback"));
         // console.log(path);
-        dispatch(stopAuthLoading());
-        setTimeout(() => {
-          router.push(String(path));
-          router.refresh();
-        }, 1000);
+        console.log("LOGIN PAGE", path);
+        router.push(String(path));
+        router.refresh();
       }
     } catch (error) {
       console.log(error);
-      dispatch(stopAuthLoading());
     }
   };
   return (

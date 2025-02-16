@@ -69,6 +69,7 @@ const authOptions: AuthOptions = {
       session.user.name = token?.name ? String(token?.name) : null;
       session.user.isAdmin = Boolean(token?.isAdmin);
       session.user.isDeleted = Boolean(token?.isDeleted);
+      session.user.token = String(token.token);
       return session;
     },
   },

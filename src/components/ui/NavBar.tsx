@@ -11,28 +11,24 @@ import {
 } from "@/redux/apiSlices/authApiSlice";
 import LoadingToast from "./LoadingToast";
 import { useRouter } from "next/navigation";
-import { useAppDispatch, useAppSelector } from "@/redux/useRedux";
-import { logoutUser, startAuthLoading } from "@/redux/slices/authSlice";
+import { useAppSelector } from "@/redux/useRedux";
 import useTokenExpireCheck from "@/hooks/useTokenExpireCheck";
+import { signOut } from "next-auth/react";
 
 export function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
-  const dispatch = useAppDispatch();
-  const { token, name, email, photoUrl } = useAppSelector(
-    (state) => state.auth
-  );
+  const { name, email, photoUrl } = useAppSelector((state) => state.auth);
   const [, { isLoading: isRegistering }] = useRegisterUserMutation();
   const [, { isLoading: isLogingIn }] = useLogoutUserMutation();
-  const [validity] = useTokenExpireCheck(String(token));
+  const [validity] = useTokenExpireCheck();
   const router = useRouter();
   const [logoutUserFunc, { isLoading }] = useLogoutUserMutation();
   const logOutUser = async () => {
-    dispatch(startAuthLoading());
     await logoutUserFunc(null);
+    await signOut();
     window.localStorage.removeItem("token");
     router.push("/");
     router.refresh();
-    dispatch(logoutUser());
   };
   return (
     <>

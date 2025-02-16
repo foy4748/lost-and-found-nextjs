@@ -13,8 +13,8 @@ type TDashboardDrawerProp = {
 
 export function DashboardDrawer({ isOpen, setIsOpen }: TDashboardDrawerProp) {
   const handleClose = () => setIsOpen(false);
-  const { isAdmin, token } = useAppSelector((state) => state.auth);
-  const [validity] = useTokenExpireCheck(String(token));
+  const { isAdmin } = useAppSelector((state) => state.auth);
+  const [validity] = useTokenExpireCheck();
 
   return (
     <>
