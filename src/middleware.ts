@@ -46,18 +46,21 @@ export async function middleware(request: NextRequest) {
   const isUserDeleted = nextAuthToken?.isDeleted;
 
   // Admin Logics
-  const isAdminRoute = path.includes("/dashboard/admin");
+  const isAdminRoute = path.startsWith("/dashboard/admin");
   const isAdmin = nextAuthToken?.isAdmin;
 
-  const LOGICS = {
-    notLoginPage,
-    isTokenInvalid,
-    isUserDeleted,
-    isAdminRoute,
-    isAdmin,
-  };
+  // ===================
+  // For Testing
+  // const LOGICS = {
+  //   notLoginPage,
+  //   isTokenInvalid,
+  //   isUserDeleted,
+  //   isAdminRoute,
+  //   isAdmin,
+  // };
 
-  console.log("MIDDLEWARE", LOGICS);
+  // console.log("MIDDLEWARE", LOGICS);
+  // ===================
 
   if (isUserDeleted) {
     console.log("MIDDLEWARE", "HIT 1");

@@ -1,5 +1,6 @@
 import Claims from "./components/Claims";
-function ClaimsForFounder({ params }: { params: { foundById: string } }) {
+async function ClaimsForFounder(props: { params: Promise<{ foundById: string }> }) {
+  const params = await props.params;
   return (
     <>
       <Claims enableEditButton={true} foundById={params.foundById} />

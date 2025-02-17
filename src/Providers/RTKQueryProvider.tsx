@@ -10,7 +10,7 @@ export default function ReduxToolkitProvider({
 }: {
   children: ReactNode;
 }) {
-  const storeRef = useRef<AppStore>();
+  const storeRef = useRef<AppStore>(undefined);
   if (!storeRef.current) {
     storeRef.current = makeStore();
   }

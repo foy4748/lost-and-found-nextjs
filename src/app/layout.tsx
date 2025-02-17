@@ -6,7 +6,6 @@ import ReduxToolkitProvider from "@/Providers/RTKQueryProvider";
 import { NavBar } from "@/components/ui/NavBar";
 import Footer from "@/components/ui/Footer";
 import NextAuthSessionProvider from "@/Providers/NextAuthSessionProvider";
-import TestComponent from "@/components/TestComponent";
 
 //const inter = Inter({ subsets: ["latin"] });
 
@@ -28,7 +27,6 @@ export default function RootLayout({
         <ReduxToolkitProvider>
           <NextAuthSessionProvider>
             <NavBar />
-            <TestComponent />
             {children}
             <Toaster />
             <Footer />

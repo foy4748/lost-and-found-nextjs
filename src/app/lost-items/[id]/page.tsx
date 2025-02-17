@@ -1,7 +1,8 @@
 import SingleLostItem from "./components/SingleLostItem";
 import Claims from "@/app/dashboard/(userDashboard)/user/claims/[foundById]/components/Claims";
 
-async function ReportFoundItem({ params }: { params: { id: string } }) {
+async function ReportFoundItem(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   // Single Item Data
   const foundItemRes = await fetch(
     `${process.env.SERVER_ADDRESS}/api/found-items/${params.id}`,

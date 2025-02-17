@@ -1,7 +1,6 @@
 "use client";
 // import UnauthorizedToast from "@/components/ui/UnauthorizedToast";
-import { useAppDispatch } from "@/redux/useRedux";
-import { authenticateUser } from "@/redux/slices/authSlice";
+// import { useAppDispatch } from "@/redux/useRedux";
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -11,8 +10,8 @@ import { signIn, useSession } from "next-auth/react";
 // import { useEffect } from "react";
 
 function LoginForm() {
-  const dispatch = useAppDispatch();
-  const session = useSession();
+  // const dispatch = useAppDispatch();
+  // const session = useSession();
   const pathname = usePathname();
   //const auth = useAppSelector((state) => state.auth);
   const [loginUser] = useLoginUserMutation();
@@ -63,6 +62,7 @@ function LoginForm() {
         let callbackUrl = pathname.includes("login") ? "/" : pathname;
         callbackUrl = searchParams.get("callbackUrl") || callbackUrl;
         console.log("LOGIN PAGE", callbackUrl);
+        // router.push("/");
         setTimeout(() => {
           router.push(callbackUrl);
         }, 1000);

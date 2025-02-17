@@ -7,7 +7,8 @@ export type TSearchParams = {
   categoryId: string;
   searchTerm: string;
 };
-function LostItemPage({ searchParams }: { searchParams: TSearchParams }) {
+async function LostItemPage(props: { searchParams: Promise<TSearchParams> }) {
+  const searchParams = await props.searchParams;
   return (
     <>
       <SearchAndFilterForm />
