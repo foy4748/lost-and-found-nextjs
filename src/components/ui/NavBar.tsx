@@ -4,6 +4,7 @@ import { Avatar, Dropdown, Navbar, Spinner } from "flowbite-react";
 import Image from "next/image";
 import Link from "next/link";
 import { DashboardDrawer } from "./DashboardDrawer";
+import { logoutUser as SliceLogoutUser } from "@/redux/slices/authSlice";
 import { useState } from "react";
 import {
   useLogoutUserMutation,
@@ -11,25 +12,30 @@ import {
 } from "@/redux/apiSlices/authApiSlice";
 import LoadingToast from "./LoadingToast";
 import { useRouter } from "next/navigation";
-import { useAppSelector } from "@/redux/useRedux";
+import { useAppDispatch, useAppSelector } from "@/redux/useRedux";
 import useTokenExpireCheck from "@/hooks/useTokenExpireCheck";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import { User } from "next-auth";
 
 export function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
-  const { name, email, photoUrl } = useAppSelector((state) => state.auth);
+  // const { name, email, photoUrl } = useAppSelector((state) => state.auth);
+  const { data: session } = useSession();
+  const { name, email, photoUrl } = session?.user || ({} as User);
+  const dispatch = useAppDispatch();
   const [, { isLoading: isRegistering }] = useRegisterUserMutation();
   const [, { isLoading: isLogingIn }] = useLogoutUserMutation();
   const [validity] = useTokenExpireCheck();
   const router = useRouter();
   const [logoutUserFunc, { isLoading }] = useLogoutUserMutation();
   const logOutUser = async () => {
+    dispatch(SliceLogoutUser());
     await logoutUserFunc(null);
     await signOut();
     window.localStorage.removeItem("token");
     router.push("/");
-    router.refresh();
   };
+
   return (
     <>
       <Navbar fluid rounded>

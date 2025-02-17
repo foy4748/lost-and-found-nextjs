@@ -1,8 +1,9 @@
 "use client";
 
 import useTokenExpireCheck from "@/hooks/useTokenExpireCheck";
-import { useAppSelector } from "@/redux/useRedux";
-import { Drawer, Sidebar, TextInput } from "flowbite-react";
+// import { useAppSelector } from "@/redux/useRedux";
+import { Drawer, Sidebar } from "flowbite-react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { Dispatch, SetStateAction } from "react";
 
@@ -13,7 +14,9 @@ type TDashboardDrawerProp = {
 
 export function DashboardDrawer({ isOpen, setIsOpen }: TDashboardDrawerProp) {
   const handleClose = () => setIsOpen(false);
-  const { isAdmin } = useAppSelector((state) => state.auth);
+  // const { isAdmin } = useAppSelector((state) => state.auth);
+  const { data: session } = useSession();
+  const isAdmin = Boolean(session?.user?.isAdmin);
   const [validity] = useTokenExpireCheck();
 
   return (

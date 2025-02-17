@@ -5,7 +5,6 @@ import { cookies } from "next/headers";
 
 export const loginUser = async (data: TUserCredentialPayload) => {
   try {
-    console.log("FROM LOGIN ACTION", data);
     const SERVER_ADDRESS =
       process.env.SERVER_ADDRESS || process.env.NEXT_PUBLIC_SERVER_ADDRESS;
     const res = await fetch(`${SERVER_ADDRESS}/api/login/`, {
@@ -17,7 +16,6 @@ export const loginUser = async (data: TUserCredentialPayload) => {
       credentials: "include",
     });
     const d = await res.json();
-    console.log("LOGIN ACTION", d);
     if (d.success) {
       const ck = await cookies();
       ck.set("token", String(d.data.token), {

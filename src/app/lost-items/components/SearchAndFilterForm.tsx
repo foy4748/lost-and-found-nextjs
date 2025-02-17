@@ -9,7 +9,6 @@ let debounce: unknown;
 function SearchAndFilterForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  console.log(searchParams.get("categoryId"));
   const { mappedCategories } = useCategory();
   const [searchTerm, setSearchTerm] = useState("");
 

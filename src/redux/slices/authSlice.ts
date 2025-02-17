@@ -44,6 +44,7 @@ export const authSlice = createSlice({
       state.isAdmin = Boolean(isAdmin);
       state.token = token;
       state.photoUrl = photoUrl;
+      return state;
     },
     logoutUser: (state) => {
       state.id = null;
@@ -52,6 +53,7 @@ export const authSlice = createSlice({
       state.isAdmin = null;
       state.token = null;
       state.photoUrl = undefined;
+      return state;
     },
   },
 });

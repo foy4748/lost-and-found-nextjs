@@ -7,8 +7,8 @@ import {
   fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store";
-import { logoutUser } from "../slices/authSlice";
-import toast from "react-hot-toast";
+// import { logoutUser } from "../slices/authSlice";
+// import toast from "react-hot-toast";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.NEXT_PUBLIC_SERVER_ADDRESS,
@@ -32,12 +32,12 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 > = async (args, api, extraOptions): Promise<any> => {
   const result = await baseQuery(args, api, extraOptions);
 
-  if (result?.error?.status === 403) {
-    api.dispatch(logoutUser());
-    toast.error("Unauthenticated State. Please Login");
-    window.location.href = `/auth/login?callback=${window.location.href}`;
-    return result;
-  }
+  // if (result?.error?.status === 403) {
+  //   api.dispatch(logoutUser());
+  //   toast.error("Unauthenticated State. Please Login");
+  //   window.location.href = `/auth/login?callback=${window.location.href}`;
+  //   return result;
+  // }
 
   return result;
 };

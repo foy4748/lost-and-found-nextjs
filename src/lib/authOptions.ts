@@ -29,7 +29,6 @@ const authOptions: AuthOptions = {
           password: String(credentials?.password),
         };
         const d = await loginUser(payload);
-        console.log("FROM AUTHORIZE", d);
         if (d.success) {
           // Any object returned will be saved in `user` property of the JWT
           return d.data;

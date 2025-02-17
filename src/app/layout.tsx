@@ -25,15 +25,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <NextAuthSessionProvider>
-          <ReduxToolkitProvider>
+        <ReduxToolkitProvider>
+          <NextAuthSessionProvider>
             <NavBar />
             <TestComponent />
             {children}
             <Toaster />
             <Footer />
-          </ReduxToolkitProvider>
-        </NextAuthSessionProvider>
+          </NextAuthSessionProvider>
+        </ReduxToolkitProvider>
       </body>
     </html>
   );
