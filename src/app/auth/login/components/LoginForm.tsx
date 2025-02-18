@@ -7,11 +7,11 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useLoginUserMutation } from "@/redux/apiSlices/authApiSlice";
 import { signIn, useSession } from "next-auth/react";
-// import { useEffect } from "react";
+import { useEffect } from "react";
 
 function LoginForm() {
   // const dispatch = useAppDispatch();
-  // const session = useSession();
+  const session = useSession();
   const pathname = usePathname();
   //const auth = useAppSelector((state) => state.auth);
   const [loginUser] = useLoginUserMutation();
@@ -24,20 +24,20 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // useEffect(() => {
-  //   console.log(session.status);
-  //   if (session.status == "authenticated") {
-  //     const { path } = url.parse(searchParams.get("callback") ?? "/");
-  //     // console.log(searchParams.get("callback"));
-  //     console.log("LOGIN FORM", path);
-  //     router.push(String(path));
-  //     router.refresh();
-  //     // redirect(String(path));
-  //   }
-  //   if (session.status == "loading") {
-  //     toast.success("Checking Status");
-  //   }
-  // }, [session.status, router, searchParams]);
+  useEffect(() => {
+    console.log(session.status);
+    if (session.status == "authenticated") {
+      let callbackUrl = pathname.includes("login") ? "/" : pathname;
+      callbackUrl = searchParams.get("callbackUrl") || callbackUrl;
+      console.log("LOGIN PAGE", callbackUrl);
+      router.push(String(callbackUrl));
+      router.refresh();
+      // redirect(String(path));
+    }
+    if (session.status == "loading") {
+      toast.success("Checking Status");
+    }
+  }, [session.status, router, searchParams, pathname]);
 
   const onFormSubmit = async (data: { email: string; password: string }) => {
     const { email, password } = data;
@@ -63,9 +63,7 @@ function LoginForm() {
         callbackUrl = searchParams.get("callbackUrl") || callbackUrl;
         console.log("LOGIN PAGE", callbackUrl);
         // router.push("/");
-        setTimeout(() => {
-          router.push(callbackUrl);
-        }, 1000);
+        router.push(callbackUrl);
       }
     } catch (error) {
       console.log(error);
