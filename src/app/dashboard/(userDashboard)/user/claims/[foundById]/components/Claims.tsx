@@ -5,6 +5,7 @@ import { Table } from "flowbite-react";
 import moment from "moment";
 import { UpdateClaim } from "./UpdateClaim";
 import { useGetClaimsQuery } from "@/redux/apiSlices/claimApiSlice";
+import TableSkeleton from "@/components/customUI/GridSystem/TableLoading";
 
 export const STATUS = ["PENDING", "APPROVED", "REJECTED"] as const;
 export type TStatus = (typeof STATUS)[number];
@@ -61,8 +62,9 @@ function Claims({
   foundById: string;
   enableEditButton: boolean;
 }) {
-  const { data: claims } = useGetClaimsQuery(foundById);
+  const { data: claims, isLoading, isFetching } = useGetClaimsQuery(foundById);
 
+  if (isLoading || isFetching) return <TableSkeleton />;
   return (
     <>
       <div className="overflow-x-auto">

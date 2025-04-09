@@ -22,11 +22,7 @@ export default function TablePagination({
   const totalPages = Math.ceil(totalItems / itemLimit);
 
   return (
-    <div
-      className={`flex overflow-x-auto sm:justify-center ${
-        totalPages <= 1 ? "hidden" : ""
-      }`}
-    >
+    <div className={`flex overflow-x-auto sm:justify-center `}>
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}

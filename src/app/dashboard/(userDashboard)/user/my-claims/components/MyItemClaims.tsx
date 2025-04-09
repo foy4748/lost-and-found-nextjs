@@ -6,11 +6,14 @@ import { TClaims } from "@/app/dashboard/(userDashboard)/user/claims/[foundById]
 import useCategory from "@/hooks/useCategory";
 import Image from "next/image";
 import { useGetClaimsByUserQuery } from "@/redux/apiSlices/claimApiSlice";
+import TableSkeleton from "@/components/customUI/GridSystem/TableLoading";
 
 function MyItemClaims() {
   //const [claims, setClaims] = useState<TClaims[]>([]);
   const { mappedCategories } = useCategory();
-  const { data } = useGetClaimsByUserQuery(null);
+  const { data, isLoading, isFetching } = useGetClaimsByUserQuery(null);
+
+  if (isLoading || isFetching) return <TableSkeleton />;
 
   return (
     <>

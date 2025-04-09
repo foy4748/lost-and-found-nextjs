@@ -1,15 +1,12 @@
 import FormLoading from "@/components/customUI/GridSystem/FormLoading";
-import FoundItemReportForm from "./components/FoundItemReportForm";
 import CenterItem from "@/components/ui/CenterItem";
 
-function ReportFoundItem() {
+export default function loading() {
   return (
     <>
       <CenterItem>
-        <FoundItemReportForm />
+        <FormLoading />
       </CenterItem>
     </>
   );
 }
-
-export default ReportFoundItem;

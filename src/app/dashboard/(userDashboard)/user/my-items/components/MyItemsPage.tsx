@@ -4,6 +4,7 @@ import MyItemsTable from "./MyItemsTable";
 import { useGetFoundItemByUserQuery } from "@/redux/apiSlices/reportFoundItemApiSlice";
 import { useState } from "react";
 import TablePagination from "@/components/ui/TablePagination";
+import TableSkeleton from "@/components/customUI/GridSystem/TableLoading";
 export type TFoundItemType = {
   category: {
     name: string;
@@ -37,7 +38,7 @@ function MyItemsPage() {
   const [itemLimit, setItemLimit] = useState<number>(5);
   const searchParams = useSearchParams();
   const isItemFound = searchParams.get("isItemFound");
-  const { data } = useGetFoundItemByUserQuery({
+  const { data, isLoading, isFetching } = useGetFoundItemByUserQuery({
     isItemFound,
     page: currentPage,
     limit: itemLimit,
@@ -65,18 +66,22 @@ function MyItemsPage() {
   */
   return (
     <>
-      <MyItemsTable data={data?.data} />
-      {data?.data && (
-        <TablePagination
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          totalItems={data?.meta?.total}
-          itemLimit={itemLimit}
-          setItemLimit={setItemLimit}
-        />
+      <TablePagination
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        totalItems={data?.meta?.total}
+        itemLimit={itemLimit}
+        setItemLimit={setItemLimit}
+      />
+      {isLoading || isFetching ? (
+        <TableSkeleton />
+      ) : (
+        <MyItemsTable data={data?.data} />
       )}
     </>
   );
 }
 
 export default MyItemsPage;
+// {data?.data && (
+// )}
