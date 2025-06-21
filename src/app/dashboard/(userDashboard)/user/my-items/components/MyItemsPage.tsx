@@ -64,12 +64,13 @@ function MyItemsPage() {
     })();
   }, [isItemFound]);
   */
+  console.log(data?.data);
   return (
     <>
       <TablePagination
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-        totalItems={data?.meta?.total}
+        totalItems={data?.meta?.total || 0}
         itemLimit={itemLimit}
         setItemLimit={setItemLimit}
       />
