@@ -2,7 +2,9 @@
 
 import useCategory from "@/hooks/useCategory";
 import { Select } from "flowbite-react";
-import { useRouter, useSearchParams } from "next/navigation";
+// import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 import { useEffect, useState } from "react";
 
 let debounce: unknown;

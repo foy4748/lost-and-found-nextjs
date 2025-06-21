@@ -6,7 +6,7 @@ import ReduxToolkitProvider from "@/Providers/RTKQueryProvider";
 import { NavBar } from "@/components/ui/NavBar";
 import Footer from "@/components/ui/Footer";
 import NextAuthSessionProvider from "@/Providers/NextAuthSessionProvider";
-
+import NextTopLoader from "nextjs-toploader";
 //const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -26,6 +26,7 @@ export default function RootLayout({
       <body>
         <ReduxToolkitProvider>
           <NextAuthSessionProvider>
+            <NextTopLoader />
             <NavBar />
             {children}
             <Toaster />
