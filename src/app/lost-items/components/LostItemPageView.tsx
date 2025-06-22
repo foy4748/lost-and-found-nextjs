@@ -30,27 +30,29 @@ async function LostItemPageView({ params }: { params: TSearchParams }) {
     url.searchParams.set("searchTerm", params?.searchTerm);
   }
 
+  if (params?.isItemFound) {
+    url.searchParams.set("isItemFound", params?.isItemFound);
+  }
+
   const res = await fetch(url.toString(), { next: { tags: ["Items"] } });
   const { data, meta } = await res.json();
 
   // For pagination
   const pages = Array.from(
     { length: Math.ceil(meta?.total / meta?.limit) },
-    (_, i) => i + 1
+    (_, i) => i + 1,
   );
 
   return (
     <>
       <Suspense fallback={"Loading..."}>
-        {data.length <= 0 ? (
+        {data?.length <= 0 ? (
           <CenterItem className="font-extrabold">No Items found</CenterItem>
         ) : (
           <></>
         )}
         <GridLayout>
-          {data?.map((d: TLostItem) => (
-            <LostItemCard key={d.id} data={d} />
-          ))}
+          {data?.map((d: TLostItem) => <LostItemCard key={d.id} data={d} />)}
         </GridLayout>
       </Suspense>
       {/* Pagination Bullets */}

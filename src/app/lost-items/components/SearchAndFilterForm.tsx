@@ -1,7 +1,7 @@
 "use client";
 
 import useCategory from "@/hooks/useCategory";
-import { Select } from "flowbite-react";
+import { Select, Button, ButtonGroup } from "flowbite-react";
 // import { useRouter, useSearchParams } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "nextjs-toploader/app";
@@ -13,10 +13,25 @@ function SearchAndFilterForm() {
   const searchParams = useSearchParams();
   const { mappedCategories } = useCategory();
   const [searchTerm, setSearchTerm] = useState("");
+  const [isFound, setIsFound] = useState<boolean | undefined>();
 
   useEffect(() => {
     setSearchTerm(String(searchParams.get("searchTerm") ?? ""));
+    const isFoundSearchParam = searchParams.get("isItemFound");
+    if (isFoundSearchParam === undefined || !isFoundSearchParam)
+      setIsFound(undefined);
+    if (isFoundSearchParam === "1") setIsFound(true);
+    if (isFoundSearchParam === "0") setIsFound(false);
   }, [searchParams]);
+
+  const handleIsFoundChange = (value) => {
+    const path = window.location.href;
+    const url = new URL(path);
+    if (value === true) url.searchParams.set("isItemFound", "1");
+    if (value === false) url.searchParams.set("isItemFound", "0");
+    if (value === undefined) url.searchParams.delete("isItemFound");
+    router.push(url.toString());
+  };
 
   const handleCategoryChange = (e: any) => {
     const value = String(e.target.value);
@@ -42,7 +57,27 @@ function SearchAndFilterForm() {
   };
   return (
     <>
-      <section className="flex justify-end px-2 my-4">
+      <section className="flex justify-end px-2 my-4 gap-2">
+        <ButtonGroup>
+          <Button
+            color={isFound === undefined ? undefined : "light"}
+            onClick={() => handleIsFoundChange(undefined)}
+          >
+            All
+          </Button>
+          <Button
+            color={isFound === true ? undefined : "light"}
+            onClick={() => handleIsFoundChange(true)}
+          >
+            Found
+          </Button>
+          <Button
+            color={isFound === false ? undefined : "light"}
+            onClick={() => handleIsFoundChange(false)}
+          >
+            Not Found
+          </Button>
+        </ButtonGroup>
         <Select
           value={searchParams.get("categoryId") || ""}
           onChange={handleCategoryChange}

@@ -6,6 +6,7 @@ export type TSearchParams = {
   page?: `${number}`;
   categoryId: string;
   searchTerm: string;
+  isItemFound: string | `${number}`;
 };
 async function LostItemPage(props: { searchParams: Promise<TSearchParams> }) {
   const searchParams = await props.searchParams;
