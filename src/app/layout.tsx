@@ -26,7 +26,7 @@ export default function RootLayout({
       <body>
         <ReduxToolkitProvider>
           <NextAuthSessionProvider>
-            <NextTopLoader />
+            <NextTopLoader color="#0e7490" showSpinner={false} />
             <NavBar />
             {children}
             <Toaster />
