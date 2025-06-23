@@ -12,7 +12,7 @@ import {
 } from "@/redux/apiSlices/authApiSlice";
 import LoadingToast from "./LoadingToast";
 import { useRouter } from "next/navigation";
-import { useAppDispatch, useAppSelector } from "@/redux/useRedux";
+import { useAppDispatch } from "@/redux/useRedux";
 import useTokenExpireCheck from "@/hooks/useTokenExpireCheck";
 import { signOut, useSession } from "next-auth/react";
 import { User } from "next-auth";

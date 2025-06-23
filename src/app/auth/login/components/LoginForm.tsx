@@ -8,9 +8,11 @@ import toast from "react-hot-toast";
 import { useLoginUserMutation } from "@/redux/apiSlices/authApiSlice";
 import { signIn, useSession } from "next-auth/react";
 import { useEffect } from "react";
+import useTokenExpireCheck from "@/hooks/useTokenExpireCheck";
 
 function LoginForm() {
   // const dispatch = useAppDispatch();
+  const [validity] = useTokenExpireCheck();
   const session = useSession();
   const pathname = usePathname();
   //const auth = useAppSelector((state) => state.auth);
@@ -27,17 +29,19 @@ function LoginForm() {
   useEffect(() => {
     console.log(session.status);
     if (session.status == "authenticated") {
-      let callbackUrl = pathname.includes("login") ? "/" : pathname;
-      callbackUrl = searchParams.get("callbackUrl") || callbackUrl;
-      console.log("LOGIN PAGE", callbackUrl);
-      router.push(String(callbackUrl));
-      router.refresh();
+      if (validity) {
+        let callbackUrl = pathname.includes("login") ? "/" : pathname;
+        callbackUrl = searchParams.get("callbackUrl") || callbackUrl;
+        console.log("LOGIN PAGE", callbackUrl);
+        router.push(String(callbackUrl));
+        router.refresh();
+      }
       // redirect(String(path));
     }
     if (session.status == "loading") {
       toast.success("Checking Status");
     }
-  }, [session.status, router, searchParams, pathname]);
+  }, [session.status, router, searchParams, pathname, validity]);
 
   const onFormSubmit = async (data: { email: string; password: string }) => {
     const { email, password } = data;
