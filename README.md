@@ -5,7 +5,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 # Instructions
 
 ### Deployed Server Address
-- [Client - Vercel](https://apollo-assignment-09.vercel.app) : [https://apollo-assignment-09.vercel.app](https://apollo-assignment-08.vercel.app)
+- [Client - Vercel](https://apollo-assignment-09.vercel.app) : [https://apollo-assignment-09.vercel.app](https://apollo-assignment-09.vercel.app)
 - [Server - Render](https://lost-and-found-expressjs.onrender.com) : [https://lost-and-found-expressjs.onrender.com](https://lost-and-found-expressjs.onrender.com)
 
 ### Github Repo Link
