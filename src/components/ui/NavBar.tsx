@@ -54,7 +54,7 @@ export function NavBar() {
         <div className="flex md:order-2">
           {isRegistering || isLogingIn ? (
             <Spinner></Spinner>
-          ) : (
+          ) : validity ? (
             <Dropdown
               arrowIcon={false}
               inline
@@ -95,6 +95,8 @@ export function NavBar() {
                 </>
               )}
             </Dropdown>
+          ) : (
+            <></>
           )}
           <Navbar.Toggle />
         </div>
@@ -129,7 +131,10 @@ export function NavBar() {
           )}
         </Navbar.Collapse>
       </Navbar>
-      <DashboardDrawer isOpen={isOpen} setIsOpen={setIsOpen} />
+      <DashboardDrawer
+        isOpen={Boolean(isOpen && validity)}
+        setIsOpen={setIsOpen}
+      />
       <LoadingToast isLoading={isLoading || isRegistering || isLogingIn} />
     </>
   );
