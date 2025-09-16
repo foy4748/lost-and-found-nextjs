@@ -18,6 +18,7 @@ function MyItemClaims() {
   return (
     <>
       <div className="overflow-x-auto">
+        <h1 className="form-title">My Claims</h1>
         <Table hoverable>
           <Table.Head>
             <Table.HeadCell>Found By</Table.HeadCell>

@@ -1,5 +1,7 @@
 import Claims from "./components/Claims";
-async function ClaimsForFounder(props: { params: Promise<{ foundById: string }> }) {
+async function ClaimsForFounder(props: {
+  params: Promise<{ foundById: string }>;
+}) {
   const params = await props.params;
   return (
     <>

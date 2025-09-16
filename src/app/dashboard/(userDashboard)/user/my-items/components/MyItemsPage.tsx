@@ -34,7 +34,7 @@ export type TFoundBy = {
 
 function MyItemsPage() {
   //const [data, setData] = useState([]);
-  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemLimit, setItemLimit] = useState<number>(5);
   const searchParams = useSearchParams();
   const isItemFound = searchParams.get("isItemFound");
@@ -67,6 +67,9 @@ function MyItemsPage() {
   console.log(data?.data);
   return (
     <>
+      <h1 className="form-title">
+        {Number(isItemFound) != 0 ? "My Found Items" : "My Lost Items"}
+      </h1>
       <TablePagination
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}

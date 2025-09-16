@@ -21,7 +21,7 @@ const authOptions: AuthOptions = {
         email: { label: "Email", type: "email", placeholder: "test@test.com" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials, _req) {
         // Add logic here to look up the user from the credentials supplied
 
         const payload = {

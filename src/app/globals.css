@@ -4,7 +4,7 @@
 
 @layer components {
   .form-title {
-    @apply text-center font-semibold text-2xl;
+    @apply text-center font-semibold text-2xl my-8;
   }
 }
 

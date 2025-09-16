@@ -1,9 +1,9 @@
 "use client";
 
 import { Button, Label, Modal, TextInput } from "flowbite-react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { TFoundItemType } from "../MyItemsPage";
-import { Dropdown, FileInput, Select } from "flowbite-react";
+import { FileInput, Select } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import useCategory from "@/hooks/useCategory";
 import toast from "react-hot-toast";

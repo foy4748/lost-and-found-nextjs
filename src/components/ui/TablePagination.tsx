@@ -1,7 +1,7 @@
 "use client";
 
 import { Pagination } from "flowbite-react";
-import { SetStateAction, useState, Dispatch } from "react";
+import { SetStateAction, Dispatch } from "react";
 
 type TTablePagination = {
   currentPage: number;
@@ -16,7 +16,6 @@ export default function TablePagination({
   setCurrentPage,
   totalItems,
   itemLimit,
-  setItemLimit,
 }: TTablePagination) {
   const onPageChange = (page: number) => setCurrentPage(page);
   const totalPages = Math.ceil(totalItems / itemLimit);
@@ -24,6 +23,7 @@ export default function TablePagination({
   return (
     <div className={`flex overflow-x-auto sm:justify-center `}>
       <Pagination
+        className="my-4"
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={onPageChange}

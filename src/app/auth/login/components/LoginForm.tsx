@@ -1,17 +1,18 @@
 "use client";
 // import UnauthorizedToast from "@/components/ui/UnauthorizedToast";
 // import { useAppDispatch } from "@/redux/useRedux";
-import { Button, Checkbox, Label, TextInput } from "flowbite-react";
+import { Button, Label, TextInput } from "flowbite-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useLoginUserMutation } from "@/redux/apiSlices/authApiSlice";
 import { signIn, useSession } from "next-auth/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useTokenExpireCheck from "@/hooks/useTokenExpireCheck";
 
 function LoginForm() {
   // const dispatch = useAppDispatch();
+  const [isWrongInput, setIsWrongInput] = useState(false);
   const [validity] = useTokenExpireCheck();
   const session = useSession();
   const pathname = usePathname();
@@ -44,6 +45,7 @@ function LoginForm() {
   }, [session.status, router, searchParams, pathname, validity]);
 
   const onFormSubmit = async (data: { email: string; password: string }) => {
+    setIsWrongInput(false);
     const { email, password } = data;
     try {
       const { data: result } = await loginUser({ email, password });
@@ -68,6 +70,9 @@ function LoginForm() {
         console.log("LOGIN PAGE", callbackUrl);
         // router.push("/");
         router.push(callbackUrl);
+      } else {
+        toast.error("Wrong Credentials / Invalid Email-Password");
+        setIsWrongInput(true);
       }
     } catch (error) {
       console.log(error);
@@ -115,9 +120,12 @@ function LoginForm() {
             {...register("password")}
           />
         </div>
-        <div className="flex items-center gap-2">
-          <Checkbox id="remember" />
-          <Label htmlFor="remember">Remember me</Label>
+        <div
+          className={`flex items-center gap-2 ${isWrongInput ? "" : "hidden"}`}
+        >
+          <p className="text-red-500">
+            Wrong Credentials / Invalid Email-Password
+          </p>
         </div>
         <Button type="submit">Submit</Button>
       </form>
