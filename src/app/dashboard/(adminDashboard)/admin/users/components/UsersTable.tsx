@@ -17,6 +17,7 @@ function UsersTable() {
   return (
     <>
       <div className="overflow-x-auto">
+        <h1 className="form-title">User List</h1>
         <Table hoverable>
           <Table.Head>
             <Table.HeadCell>Name</Table.HeadCell>

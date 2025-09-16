@@ -3,6 +3,7 @@ import { useGetClaimsAnalyticsQuery } from "@/redux/apiSlices/authApiSlice";
 import { useGetFoundItemsAnalyticsQuery } from "@/redux/apiSlices/reportFoundItemApiSlice";
 import AnalyticsS from "./AnalyticsS";
 import { ReactGoogleChartProps } from "react-google-charts";
+import CenterItem from "@/components/ui/CenterItem";
 
 function Analytics() {
   const { data: foundItemsAnlytics } = useGetFoundItemsAnalyticsQuery(null);
@@ -32,10 +33,13 @@ function Analytics() {
   ];
   return (
     <>
-      <AnalyticsS
-        dataForFoundItems={dataForFoundItems}
-        dataForClaimItems={dataForClaimItems}
-      />
+      <h1 className="form-title">Analytics</h1>
+      <CenterItem>
+        <AnalyticsS
+          dataForFoundItems={dataForFoundItems}
+          dataForClaimItems={dataForClaimItems}
+        />
+      </CenterItem>
     </>
   );
 }
