@@ -57,7 +57,7 @@ function SearchAndFilterForm() {
   };
   return (
     <>
-      <section className="flex justify-end px-2 my-4 gap-2">
+      <section className="flex flex-col md:flex-row justify-end px-2 my-4 gap-2">
         <ButtonGroup>
           <Button
             color={isFound === undefined ? undefined : "light"}
