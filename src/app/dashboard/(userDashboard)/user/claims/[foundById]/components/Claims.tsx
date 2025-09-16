@@ -115,7 +115,7 @@ function Claims({
         </div>
       </>
     );
-  else return <h1 className="text-center italic">No Claims Yet</h1>;
+  else return <h1 className="text-center italic my-8">No Claims Yet</h1>;
 }
 
 export default Claims;
