@@ -4,6 +4,8 @@ import { TSearchParams } from "@/app/lost-items/page";
 import PaginationButton from "@/components/ui/PaginationButton";
 import { Suspense } from "react";
 import CenterItem from "@/components/ui/CenterItem";
+import TablePagination from "@/components/ui/TablePagination";
+import ItemsPagination from "./ItemsPagination";
 
 export type TLostItem = {
   id: string;
@@ -56,6 +58,8 @@ async function LostItemPageView({ params }: { params: TSearchParams }) {
         </GridLayout>
       </Suspense>
       {/* Pagination Bullets */}
+      <ItemsPagination totalItems={meta?.total} />
+      {/*
       <div className="flex justify-center my-10">
         <div className="flex justify-around w-1/2">
           {pages.map((itm, idx) => (
@@ -67,6 +71,7 @@ async function LostItemPageView({ params }: { params: TSearchParams }) {
           ))}
         </div>
       </div>
+	  */}
     </>
   );
 }
