@@ -1,10 +1,17 @@
 "use client";
 import TablePagination from "@/components/ui/TablePagination";
-import React, { useState } from "react";
+import { useParams, useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 function ItemsPagination({ totalItems }: { totalItems: number | `${number}` }) {
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const searchParams = useSearchParams();
   const [itemLimit, setItemLimit] = useState<number>(12);
+  useEffect(() => {
+    if (searchParams.get("page")) {
+      setCurrentPage(Number(searchParams.get("page")));
+    }
+  }, [searchParams]);
   return (
     <>
       <TablePagination

@@ -1,10 +1,8 @@
 import GridLayout from "@/components/ui/GridLayout";
 import LostItemCard from "@/components/ui/LostItemCard";
 import { TSearchParams } from "@/app/lost-items/page";
-import PaginationButton from "@/components/ui/PaginationButton";
 import { Suspense } from "react";
 import CenterItem from "@/components/ui/CenterItem";
-import TablePagination from "@/components/ui/TablePagination";
 import ItemsPagination from "./ItemsPagination";
 
 export type TLostItem = {
@@ -36,14 +34,12 @@ async function LostItemPageView({ params }: { params: TSearchParams }) {
     url.searchParams.set("isItemFound", params?.isItemFound);
   }
 
-  const res = await fetch(url.toString(), { next: { tags: ["Items"] } });
+  const res = await fetch(url.toString(), {
+    next: { tags: ["Items"] },
+    cache: "no-store",
+  });
   const { data, meta } = await res.json();
-
-  // For pagination
-  const pages = Array.from(
-    { length: Math.ceil(meta?.total / meta?.limit) },
-    (_, i) => i + 1,
-  );
+  console.log({ url: url.toString(), meta });
 
   return (
     <>

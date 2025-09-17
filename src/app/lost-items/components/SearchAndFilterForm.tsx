@@ -24,12 +24,13 @@ function SearchAndFilterForm() {
     if (isFoundSearchParam === "0") setIsFound(false);
   }, [searchParams]);
 
-  const handleIsFoundChange = (value) => {
+  const handleIsFoundChange = (value: boolean | undefined) => {
     const path = window.location.href;
     const url = new URL(path);
     if (value === true) url.searchParams.set("isItemFound", "1");
     if (value === false) url.searchParams.set("isItemFound", "0");
     if (value === undefined) url.searchParams.delete("isItemFound");
+    url.searchParams.set("page", String(1));
     router.push(url.toString());
   };
 

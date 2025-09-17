@@ -1,6 +1,6 @@
 import { MyJWTPayLoad } from "@/middleware";
 import { JwtPayload, jwtDecode } from "jwt-decode";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 const useTokenExpireCheck = () => {
@@ -11,7 +11,7 @@ const useTokenExpireCheck = () => {
     try {
       if (session.status == "authenticated") {
         const decoded: JwtPayload & MyJWTPayLoad = jwtDecode(
-          String(session?.data?.user?.token)
+          String(session?.data?.user?.token),
         );
         // Logics
         const isTokenInvalid = Date.now() >= Number(decoded.exp) * 1000;
