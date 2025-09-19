@@ -16,30 +16,13 @@ export type TLostItem = {
   photoUrl?: string;
 };
 
-async function LostItemPageView({ params }: { params: TSearchParams }) {
-  const url = new URL(`${process.env.SERVER_ADDRESS}/api/found-items`);
-
-  url.searchParams.set("limit", params?.limit ?? "12");
-  url.searchParams.set("page", params?.page ?? "1");
-
-  if (params?.categoryId) {
-    url.searchParams.set("categoryId", params?.categoryId);
-  }
-
-  if (params?.searchTerm) {
-    url.searchParams.set("searchTerm", params?.searchTerm);
-  }
-
-  if (params?.isItemFound) {
-    url.searchParams.set("isItemFound", params?.isItemFound);
-  }
-
-  const res = await fetch(url.toString(), {
-    next: { tags: ["Items"], revalidate: 60 },
-  });
-  const { data, meta } = await res.json();
-  console.log({ url: url.toString(), meta });
-
+async function LostItemPageView({
+  data,
+  meta,
+}: {
+  data: TLostItem[];
+  meta: { total: number | `${number}` };
+}) {
   return (
     <>
       <Suspense fallback={"Loading..."}>

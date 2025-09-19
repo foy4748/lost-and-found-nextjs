@@ -2,8 +2,15 @@ import { Suspense } from "react";
 import LostItemPageView from "./components/LostItemPageView";
 import SearchAndFilterForm from "./components/SearchAndFilterForm";
 import Loading from "./loading";
+import getItems from "@/actions/products";
 
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
+
+export async function generateMetadata(props: {
+  searchParams: Promise<TSearchParams>;
+}) {
+  const searchParams = await props.searchParams;
+}
 
 export type TSearchParams = {
   limit?: `${number}`;
@@ -18,11 +25,14 @@ async function LostItemPage({
   searchParams: Promise<TSearchParams>;
 }) {
   const parsedSearchParams = await searchParams;
+  const { data, meta } = await getItems(parsedSearchParams);
   return (
     <>
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<p>Loading...</p>}>
         <SearchAndFilterForm />
-        <LostItemPageView params={parsedSearchParams} />
+      </Suspense>
+      <Suspense fallback={<Loading />}>
+        <LostItemPageView data={data} meta={meta} />
       </Suspense>
     </>
   );

@@ -8,6 +8,7 @@ import { useRouter } from "nextjs-toploader/app";
 import { useEffect, useState } from "react";
 
 let debounce: unknown;
+
 function SearchAndFilterForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -32,6 +33,7 @@ function SearchAndFilterForm() {
     if (value === undefined) url.searchParams.delete("isItemFound");
     url.searchParams.set("page", String(1));
     router.push(url.toString());
+    router.refresh();
   };
 
   const handleCategoryChange = (e: any) => {
@@ -41,6 +43,7 @@ function SearchAndFilterForm() {
     url.searchParams.set("categoryId", value);
     url.searchParams.set("page", String(1));
     router.push(url.toString());
+    router.refresh();
   };
 
   const handleSearchChange = (e: any) => {
@@ -53,6 +56,7 @@ function SearchAndFilterForm() {
       url.searchParams.set("searchTerm", String(value));
       url.searchParams.set("page", String(1));
       router.push(url.toString());
+      router.refresh();
       console.log(url.searchParams.get("searchTerm"));
     }, 850);
   };
