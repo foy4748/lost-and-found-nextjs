@@ -64,7 +64,6 @@ function MyItemsPage() {
     })();
   }, [isItemFound]);
   */
-  console.log(data?.data);
   return (
     <>
       <h1 className="form-title">

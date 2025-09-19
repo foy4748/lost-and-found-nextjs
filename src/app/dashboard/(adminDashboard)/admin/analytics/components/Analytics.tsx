@@ -8,7 +8,7 @@ import CenterItem from "@/components/ui/CenterItem";
 function Analytics() {
   const { data: foundItemsAnlytics } = useGetFoundItemsAnalyticsQuery(null);
   const { data: claimsAnlytics } = useGetClaimsAnalyticsQuery(null);
-  console.log(claimsAnlytics);
+  // console.log(claimsAnlytics);
 
   const foundItemsCount = foundItemsAnlytics?.data?.["foundItemsCount"];
   const lostItemsCount =

@@ -1,5 +1,7 @@
+import { Suspense } from "react";
 import LostItemPageView from "./components/LostItemPageView";
 import SearchAndFilterForm from "./components/SearchAndFilterForm";
+import Loading from "./loading";
 
 export type TSearchParams = {
   limit?: `${number}`;
@@ -12,8 +14,10 @@ async function LostItemPage(props: { searchParams: Promise<TSearchParams> }) {
   const searchParams = await props.searchParams;
   return (
     <>
-      <SearchAndFilterForm />
-      <LostItemPageView params={searchParams} />
+      <Suspense fallback={<Loading />}>
+        <SearchAndFilterForm />
+        <LostItemPageView params={searchParams} />
+      </Suspense>
     </>
   );
 }
