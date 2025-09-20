@@ -14,6 +14,8 @@ export type TLostItem = {
   location: string;
   isItemFound: boolean;
   photoUrl?: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 async function LostItemPageView({
