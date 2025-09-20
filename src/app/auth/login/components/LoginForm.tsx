@@ -32,12 +32,12 @@ function LoginForm() {
   console.log(session.status);
 
   useEffect(() => {
-    console.log(session.status);
     if (session.status == "authenticated") {
       if (validity) {
         let callbackUrl = pathname.includes("login") ? "/" : pathname;
         callbackUrl = searchParams.get("callbackUrl") || callbackUrl;
         console.log("LOGIN PAGE", callbackUrl);
+        toast.success("Redirecting...");
         router.push(String(callbackUrl));
         router.refresh();
       }
@@ -87,7 +87,7 @@ function LoginForm() {
         className="flex w-11/12 md:w-1/2 flex-col gap-4"
       >
         <h1 className="form-title mt-10">Login</h1>
-        {(isLoading || session.status == "loading") && (
+        {(isLoading || session.status == "loading" || authLoading) && (
           <CenterItem>
             <LoaderIcon />
           </CenterItem>
