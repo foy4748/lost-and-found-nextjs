@@ -32,7 +32,6 @@ const getItems = async (params: TSearchParams) => {
     },
   });
   const { data, meta } = await res.json();
-  console.log({ url: url.toString(), meta });
   return { data, meta };
 };
 

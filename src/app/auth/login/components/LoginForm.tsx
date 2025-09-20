@@ -2,13 +2,15 @@
 // import UnauthorizedToast from "@/components/ui/UnauthorizedToast";
 // import { useAppDispatch } from "@/redux/useRedux";
 import { Button, Label, TextInput } from "flowbite-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
+import toast, { LoaderIcon } from "react-hot-toast";
 import { useLoginUserMutation } from "@/redux/apiSlices/authApiSlice";
 import { signIn, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import useTokenExpireCheck from "@/hooks/useTokenExpireCheck";
+import CenterItem from "@/components/ui/CenterItem";
 
 function LoginForm() {
   // const dispatch = useAppDispatch();
@@ -16,8 +18,9 @@ function LoginForm() {
   const [validity] = useTokenExpireCheck();
   const session = useSession();
   const pathname = usePathname();
+  const [authLoading, setAuthLoading] = useState<Boolean>(false);
   //const auth = useAppSelector((state) => state.auth);
-  const [loginUser] = useLoginUserMutation();
+  const [loginUser, { isLoading }] = useLoginUserMutation();
   const { handleSubmit, register } = useForm({
     defaultValues: {
       email: "",
@@ -26,6 +29,7 @@ function LoginForm() {
   });
   const router = useRouter();
   const searchParams = useSearchParams();
+  console.log(session.status);
 
   useEffect(() => {
     console.log(session.status);
@@ -39,16 +43,17 @@ function LoginForm() {
       }
       // redirect(String(path));
     }
-    if (session.status == "loading") {
-      toast.success("Checking Status");
-    }
+    // if (session.status == "loading") {
+    //   toast.success("Checking Status");
+    // }
   }, [session.status, router, searchParams, pathname, validity]);
 
   const onFormSubmit = async (data: { email: string; password: string }) => {
     setIsWrongInput(false);
+    setAuthLoading(true);
     const { email, password } = data;
     try {
-      const { data: result } = await loginUser({ email, password });
+      await loginUser({ email, password });
       const nextAuthResponse = await signIn("credentials", {
         email,
         password,
@@ -56,28 +61,25 @@ function LoginForm() {
       });
       if (nextAuthResponse?.ok) {
         toast.success("Logged in!");
-        console.log(result);
-        // dispatch(
-        //   authenticateUser({
-        //     user: result.data,
-        //     token: result.data.token,
-        //     photoUrl: result.data.profile.photoUrl,
-        //   })
-        // );
-        // window.localStorage.setItem("token", result?.data?.token);
         let callbackUrl = pathname.includes("login") ? "/" : pathname;
         callbackUrl = searchParams.get("callbackUrl") || callbackUrl;
         console.log("LOGIN PAGE", callbackUrl);
         // router.push("/");
+        setAuthLoading(false);
         router.push(callbackUrl);
       } else {
         toast.error("Wrong Credentials / Invalid Email-Password");
         setIsWrongInput(true);
+        setAuthLoading(false);
       }
     } catch (error) {
       console.log(error);
+      toast.error("Something Went Wrong");
+      setIsWrongInput(true);
+      setAuthLoading(false);
     }
   };
+
   return (
     <>
       <form
@@ -85,6 +87,11 @@ function LoginForm() {
         className="flex w-11/12 md:w-1/2 flex-col gap-4"
       >
         <h1 className="form-title mt-10">Login</h1>
+        {(isLoading || session.status == "loading") && (
+          <CenterItem>
+            <LoaderIcon />
+          </CenterItem>
+        )}
         {/*
         <p className="text-red-500">
           {searchParams.get("isAdmin") === "0" ||
