@@ -1,10 +1,12 @@
 "use client";
 
 import useTokenExpireCheck from "@/hooks/useTokenExpireCheck";
+import { cn } from "@/lib/utils";
 // import { useAppSelector } from "@/redux/useRedux";
 import { Drawer, Sidebar } from "flowbite-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 
 type TDashboardDrawerProp = {
@@ -16,8 +18,11 @@ export function DashboardDrawer({ isOpen, setIsOpen }: TDashboardDrawerProp) {
   const handleClose = () => setIsOpen(false);
   // const { isAdmin } = useAppSelector((state) => state.auth);
   const { data: session } = useSession();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const isAdmin = Boolean(session?.user?.isAdmin);
   const [validity] = useTokenExpireCheck();
+  console.log(pathname);
 
   return (
     <>
@@ -36,6 +41,10 @@ export function DashboardDrawer({ isOpen, setIsOpen }: TDashboardDrawerProp) {
                       onClick={handleClose}
                       as={Link}
                       href="/dashboard/user/my-claims"
+                      className={cn({
+                        "text-cyan-700":
+                          pathname == "/dashboard/user/my-claims",
+                      })}
                     >
                       My Claims
                     </Sidebar.Item>
@@ -43,6 +52,11 @@ export function DashboardDrawer({ isOpen, setIsOpen }: TDashboardDrawerProp) {
                       onClick={handleClose}
                       as={Link}
                       href="/dashboard/user/my-items?isItemFound=0"
+                      className={cn({
+                        "text-cyan-700":
+                          pathname == "/dashboard/user/my-items" &&
+                          searchParams.get("isItemFound") == "0",
+                      })}
                     >
                       My Lost Items
                     </Sidebar.Item>
@@ -50,6 +64,11 @@ export function DashboardDrawer({ isOpen, setIsOpen }: TDashboardDrawerProp) {
                       as={Link}
                       onClick={handleClose}
                       href="/dashboard/user/my-items?isItemFound=1"
+                      className={cn({
+                        "text-cyan-700":
+                          pathname == "/dashboard/user/my-items" &&
+                          searchParams.get("isItemFound") == "1",
+                      })}
                     >
                       My Found Items
                     </Sidebar.Item>
@@ -64,6 +83,9 @@ export function DashboardDrawer({ isOpen, setIsOpen }: TDashboardDrawerProp) {
                       as={Link}
                       onClick={handleClose}
                       href="/dashboard/user/profile"
+                      className={cn({
+                        "text-cyan-700": pathname == "/dashboard/user/profile",
+                      })}
                     >
                       Profile
                     </Sidebar.Item>
@@ -71,6 +93,10 @@ export function DashboardDrawer({ isOpen, setIsOpen }: TDashboardDrawerProp) {
                       as={Link}
                       onClick={handleClose}
                       href="/dashboard/user/change-password"
+                      className={cn({
+                        "text-cyan-700":
+                          pathname == "/dashboard/user/change-password",
+                      })}
                     >
                       Change Password
                     </Sidebar.Item>
@@ -87,6 +113,10 @@ export function DashboardDrawer({ isOpen, setIsOpen }: TDashboardDrawerProp) {
                           as={Link}
                           onClick={handleClose}
                           href="/dashboard/admin/users"
+                          className={cn({
+                            "text-cyan-700":
+                              pathname == "/dashboard/admin/users",
+                          })}
                         >
                           Users
                         </Sidebar.Item>
@@ -94,6 +124,10 @@ export function DashboardDrawer({ isOpen, setIsOpen }: TDashboardDrawerProp) {
                           as={Link}
                           onClick={handleClose}
                           href="/dashboard/admin/analytics"
+                          className={cn({
+                            "text-cyan-700":
+                              pathname == "/dashboard/admin/analytics",
+                          })}
                         >
                           Analytics
                         </Sidebar.Item>

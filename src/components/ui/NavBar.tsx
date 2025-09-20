@@ -11,11 +11,12 @@ import {
   useRegisterUserMutation,
 } from "@/redux/apiSlices/authApiSlice";
 import LoadingToast from "./LoadingToast";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAppDispatch } from "@/redux/useRedux";
 import useTokenExpireCheck from "@/hooks/useTokenExpireCheck";
 import { signOut, useSession } from "next-auth/react";
 import { User } from "next-auth";
+import { cn } from "@/lib/utils";
 
 export function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,6 +29,7 @@ export function NavBar() {
   const [validity] = useTokenExpireCheck();
   const router = useRouter();
   const [logoutUserFunc, { isLoading }] = useLogoutUserMutation();
+  const pathname = usePathname();
   const logOutUser = async () => {
     dispatch(SliceLogoutUser());
     await logoutUserFunc(null);
@@ -76,7 +78,12 @@ export function NavBar() {
                       {email}
                     </span>
                   </Dropdown.Header>
-                  <Dropdown.Item onClick={() => setIsOpen(true)}>
+                  <Dropdown.Item
+                    className={cn({
+                      "text-cyan-700": pathname.includes("/dashboard"),
+                    })}
+                    onClick={() => setIsOpen(true)}
+                  >
                     Dashboard
                   </Dropdown.Item>
                   <Dropdown.Divider />
@@ -101,30 +108,53 @@ export function NavBar() {
           <Navbar.Toggle />
         </div>
         <Navbar.Collapse>
-          <Navbar.Link href="/" active>
+          <Navbar.Link href="/" active={pathname == "/"}>
             Home
           </Navbar.Link>
-          <Navbar.Link as={Link} href="/lost-items">
+          <Navbar.Link
+            as={Link}
+            href="/lost-items"
+            active={pathname == "/lost-items"}
+          >
             Lost Items
           </Navbar.Link>
-          <Navbar.Link as={Link} href="/report-lost-item">
+          <Navbar.Link
+            as={Link}
+            href="/report-lost-item"
+            active={pathname == "/report-lost-item"}
+          >
             Report Lost
           </Navbar.Link>
-          <Navbar.Link as={Link} href="/report-found-item">
+          <Navbar.Link
+            as={Link}
+            href="/report-found-item"
+            active={pathname == "/report-found-item"}
+          >
             Report Found
           </Navbar.Link>
           {validity ? (
             <>
-              <Navbar.Link onClick={() => setIsOpen(true)}>
+              <Navbar.Link
+                active={pathname.includes("/dashboard")}
+                onClick={() => setIsOpen(true)}
+              >
                 Dashboard
               </Navbar.Link>
             </>
           ) : (
             <>
-              <Navbar.Link as={Link} href="/auth/login">
+              <Navbar.Link
+                as={Link}
+                href="/auth/login"
+                active={pathname == "/auth/login"}
+              >
                 Login
               </Navbar.Link>
-              <Navbar.Link as={Link} href="/auth/register">
+              <Navbar.Link
+                as={Link}
+                href="/auth/register"
+                active={pathname == "/auth/register"}
+              >
                 Register
               </Navbar.Link>
             </>
