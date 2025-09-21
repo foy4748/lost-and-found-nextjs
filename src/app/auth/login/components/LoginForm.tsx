@@ -18,7 +18,7 @@ function LoginForm() {
   const [validity] = useTokenExpireCheck();
   const session = useSession();
   const pathname = usePathname();
-  const [authLoading, setAuthLoading] = useState<Boolean>(false);
+  const [authLoading, setAuthLoading] = useState<boolean>(false);
   //const auth = useAppSelector((state) => state.auth);
   const [loginUser, { isLoading }] = useLoginUserMutation();
   const { handleSubmit, register } = useForm({
@@ -134,7 +134,9 @@ function LoginForm() {
             Wrong Credentials / Invalid Email-Password
           </p>
         </div>
-        <Button type="submit">Submit</Button>
+        <Button disabled={authLoading || isLoading} type="submit">
+          Submit
+        </Button>
       </form>
     </>
   );

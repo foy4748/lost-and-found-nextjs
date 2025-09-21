@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { Dropdown, Button } from "flowbite-react";
 import { useGetCategoryQuery } from "@/redux/apiSlices/categoryApiSlice";
 import { useState } from "react";
-import toast from "react-hot-toast";
+import toast, { LoaderIcon } from "react-hot-toast";
 import {
   //useGetReportFoundItemQuery,
   usePostReportFoundItemMutation,
@@ -17,6 +17,7 @@ import { uploadPhoto } from "@/actions/uploadPhoto";
 import LoadingToast from "@/components/ui/LoadingToast";
 import { useRouter } from "next/navigation";
 import { validateFileSize } from "@/utilities/utilities";
+import CenterItem from "@/components/ui/CenterItem";
 
 let token = window.localStorage.getItem("token");
 console.log("ReportForm", token);
@@ -50,6 +51,7 @@ function FoundItemReportForm() {
     console.log(payload);
     if (!selectedCategory.id) {
       toast.error("Please, select category");
+      setLoading(false);
       return;
     }
     //postReport(payload);
@@ -62,6 +64,7 @@ function FoundItemReportForm() {
         type: "manual",
         message: fileSizeError as string,
       });
+      setLoading(false);
       toast.error(fileSizeError as string);
       return;
     }
@@ -75,6 +78,7 @@ function FoundItemReportForm() {
       const photoUrl = await uploadPhoto(photoFile);
       if (!photoUrl) {
         toast.error("Couldn't Upload Product Photo");
+        setLoading(false);
         return;
       }
       // Setting photo URL in payload
@@ -111,6 +115,11 @@ function FoundItemReportForm() {
     >
       <div>
         <h1 className="form-title">Report a Found Item</h1>
+        {(loading || isLoading) && (
+          <CenterItem>
+            <LoaderIcon />
+          </CenterItem>
+        )}
       </div>
       <div className="flex flex-col gap-4">
         <div>
@@ -184,7 +193,9 @@ function FoundItemReportForm() {
           )}
         </div>
       </div>
-      <Button type="submit">Submit</Button>
+      <Button disabled={loading || isLoading} type="submit">
+        Submit
+      </Button>
       <LoadingToast isLoading={loading || isLoading} />
     </form>
   );
