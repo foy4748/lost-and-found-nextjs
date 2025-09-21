@@ -32,7 +32,7 @@ export type PickFields<T, K extends keyof T> = Pick<T, K>;
 
 export function pickFieldsFromObject<T extends object, K extends keyof T>(
   source: T,
-  keys: K[]
+  keys: K[],
 ): PickFields<T, K> {
   const result: Partial<PickFields<T, K>> = {};
   for (const key of keys) {
@@ -42,3 +42,11 @@ export function pickFieldsFromObject<T extends object, K extends keyof T>(
   }
   return result as PickFields<T, K>;
 }
+// Validate file size (max 1MB)
+export const validateFileSize = (fileList: FileList | undefined) => {
+  if (!fileList || fileList.length === 0) return true; // No file is acceptable
+
+  const file = fileList[0];
+  const maxSize = 1 * 1024 * 1024; // 1MB in bytes
+  return file.size <= maxSize || "File size must be less than 1MB";
+};
