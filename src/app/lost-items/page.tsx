@@ -18,6 +18,8 @@ export type TSearchParams = {
   categoryId: string;
   searchTerm: string;
   isItemFound: string | `${number}`;
+  sortBy?: string;
+  sortOrder?: string;
 };
 async function LostItemPage({
   searchParams,

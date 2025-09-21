@@ -20,6 +20,11 @@ const getItems = async (params: TSearchParams) => {
     url.searchParams.set("isItemFound", params?.isItemFound);
   }
 
+  if (params?.sortBy && params.sortOrder) {
+    url.searchParams.set("sortBy", params?.sortBy);
+    url.searchParams.set("sortOrder", params?.sortOrder);
+  }
+
   const res = await fetch(url.toString(), {
     next: {
       tags: [
@@ -27,6 +32,8 @@ const getItems = async (params: TSearchParams) => {
         String(url.searchParams.get("categoryId")),
         String(url.searchParams.get("searchTerm")),
         String(url.searchParams.get("isItemFound")),
+        String(url.searchParams.get("sortBy")),
+        String(url.searchParams.get("sortOrder")),
       ],
       revalidate: 60,
     },
