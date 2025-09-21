@@ -16,6 +16,7 @@ import {
 import { uploadPhoto } from "@/actions/uploadPhoto";
 import LoadingToast from "@/components/ui/LoadingToast";
 import { useRouter } from "next/navigation";
+import { validateFileSize } from "@/utilities/utilities";
 
 let token = window.localStorage.getItem("token");
 console.log("ReportForm", token);
@@ -23,7 +24,14 @@ console.log("ReportForm", token);
 
 function FoundItemReportForm() {
   const [loading, setLoading] = useState(false);
-  const { register, handleSubmit, reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    setError,
+    formState: { errors },
+  } = useForm();
   const [postReport, { isLoading }] = usePostReportFoundItemMutation();
 
   const { data: categoires } = useGetCategoryQuery(null);
@@ -32,6 +40,9 @@ function FoundItemReportForm() {
     name: "Select Please",
   });
   const router = useRouter();
+
+  // Watch the photoFile field to get its value
+  const photoFileValue = watch("photoFile");
 
   const submitReport = async (data: any) => {
     setLoading(true);
@@ -43,6 +54,17 @@ function FoundItemReportForm() {
     }
     //postReport(payload);
     //console.log(foundItems);
+
+    // Validate file size before proceeding
+    const fileSizeError = validateFileSize(data.photoFile);
+    if (fileSizeError !== true) {
+      setError("photoFile", {
+        type: "manual",
+        message: fileSizeError as string,
+      });
+      toast.error(fileSizeError as string);
+      return;
+    }
 
     // Uploading Photo to IMG BB ------------
     const photoFile = new FormData();
@@ -149,6 +171,17 @@ function FoundItemReportForm() {
             <Label htmlFor="file-upload" value="Upload Photo" />
           </div>
           <FileInput id="file-upload" required {...register("photoFile")} />
+          {errors.photoFile && (
+            <p className="text-red-500 text-sm mt-1">
+              {String(errors.photoFile.message)}
+            </p>
+          )}
+          {photoFileValue && photoFileValue[0] && (
+            <p className="text-gray-600 text-sm mt-1">
+              Selected file: {photoFileValue[0].name} (
+              {(photoFileValue[0].size / 1024).toFixed(2)} KB)
+            </p>
+          )}
         </div>
       </div>
       <Button type="submit">Submit</Button>
