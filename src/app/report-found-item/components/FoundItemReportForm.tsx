@@ -74,31 +74,38 @@ function FoundItemReportForm() {
     const file = data["photoFile"][0];
     photoFile.append("image", file);
 
+    let photoUrl: string | undefined | null;
     try {
-      const photoUrl = await uploadPhoto(photoFile);
+      photoUrl = await uploadPhoto(photoFile);
       if (!photoUrl) {
         toast.error("Couldn't Upload Product Photo");
-        setLoading(false);
-        return;
       }
       // Setting photo URL in payload
       payload["photoUrl"] = String(photoUrl);
-
-      //------ ---------- ----------- ----------
-
-      // Posting Item data in database ------------
-      delete payload["photoFile"];
-      await postReport(payload);
-      revalidateTagFromClient("Items");
-      reset();
-      toast.success("Reported Found Item successfully");
-      setLoading(false);
-      router.push("/lost-items");
-      //------ ---------- ----------- ----------
     } catch (error) {
       console.error(error);
       toast.error("Couldn't Upload Product Photo");
+    }
+
+    //------ ---------- ----------- ----------
+
+    try {
+      // Posting Item data in database ------------
+      delete payload["photoFile"];
+      const { error } = await postReport(payload);
+      if (!error) {
+        revalidateTagFromClient("Items");
+        reset();
+        toast.success("Reported Found Item successfully");
+        router.push("/lost-items");
+      } else {
+        toast.error("FAILED to Report Found Item");
+      }
       setLoading(false);
+      //------ ---------- ----------- ----------
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
     }
   };
   /*
@@ -179,7 +186,7 @@ function FoundItemReportForm() {
           <div className="mb-2 block">
             <Label htmlFor="file-upload" value="Upload Photo" />
           </div>
-          <FileInput id="file-upload" required {...register("photoFile")} />
+          <FileInput id="file-upload" {...register("photoFile")} />
           {errors.photoFile && (
             <p className="text-red-500 text-sm mt-1">
               {String(errors.photoFile.message)}

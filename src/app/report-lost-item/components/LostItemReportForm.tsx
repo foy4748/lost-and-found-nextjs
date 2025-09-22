@@ -74,13 +74,17 @@ function LostItemReportForm() {
 
       // Posting Item data in database ------------
       delete payload["photoFile"];
-      await postReport(payload);
-      reset();
-      revalidateTagFromClient("Items");
-      toast.success("Reported Lost Item successfully");
+      const { error } = await postReport(payload);
+      if (!error) {
+        reset();
+        revalidateTagFromClient("Items");
+        toast.success("Reported Lost Item successfully");
+        router.push("/lost-items");
+      } else {
+        toast.error("FAILED to Report Lost Item");
+      }
       //------ ---------- ----------- ----------
       setLoading(false);
-      router.push("/lost-items");
     } catch (error) {
       console.error(error);
       toast.error("Couldn't Upload Product Photo");
