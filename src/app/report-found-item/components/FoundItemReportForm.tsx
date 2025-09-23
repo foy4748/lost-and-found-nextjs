@@ -16,7 +16,11 @@ import {
 import { uploadPhoto } from "@/actions/uploadPhoto";
 import LoadingToast from "@/components/ui/LoadingToast";
 import { useRouter } from "next/navigation";
-import { validateFileSize } from "@/utilities/utilities";
+import {
+  TreportLostItemFormData,
+  reportLostItemSchema,
+} from "@/valiations/ReportLostItemValidation";
+import { zodResolver } from "@hookform/resolvers/zod";
 import CenterItem from "@/components/ui/CenterItem";
 
 let token = window.localStorage.getItem("token");
@@ -29,10 +33,13 @@ function FoundItemReportForm() {
     register,
     handleSubmit,
     reset,
+    setValue,
     watch,
     setError,
     formState: { errors },
-  } = useForm();
+  } = useForm<TreportLostItemFormData>({
+    resolver: zodResolver(reportLostItemSchema),
+  });
   const [postReport, { isLoading }] = usePostReportFoundItemMutation();
 
   const { data: categoires } = useGetCategoryQuery(null);
@@ -45,29 +52,21 @@ function FoundItemReportForm() {
   // Watch the photoFile field to get its value
   const photoFileValue = watch("photoFile");
 
-  const submitReport = async (data: any) => {
+  const submitReport = async (data: TreportLostItemFormData) => {
     setLoading(true);
-    const payload = { ...data, categoryId: selectedCategory.id };
+    const payload = { ...data, categoryId: selectedCategory.id, photoUrl: "" };
     console.log(payload);
     if (!selectedCategory.id) {
       toast.error("Please, select category");
+      setError("categoryId", {
+        type: "manual",
+        message: "Please, select category",
+      });
       setLoading(false);
       return;
     }
     //postReport(payload);
     //console.log(foundItems);
-
-    // Validate file size before proceeding
-    const fileSizeError = validateFileSize(data.photoFile);
-    if (fileSizeError !== true) {
-      setError("photoFile", {
-        type: "manual",
-        message: fileSizeError as string,
-      });
-      setLoading(false);
-      toast.error(fileSizeError as string);
-      return;
-    }
 
     // Uploading Photo to IMG BB ------------
     const photoFile = new FormData();
@@ -139,6 +138,11 @@ function FoundItemReportForm() {
             sizing="sm"
             {...register("foundItemName")}
           />
+          {errors.foundItemName && (
+            <p className="text-red-500 text-sm mt-1">
+              {String(errors.foundItemName.message)}
+            </p>
+          )}
         </div>
         <div>
           <div className="mb-2 block">
@@ -150,6 +154,11 @@ function FoundItemReportForm() {
             sizing="lg"
             {...register("description")}
           />
+          {errors.description && (
+            <p className="text-red-500 text-sm mt-1">
+              {String(errors.description.message)}
+            </p>
+          )}
         </div>
         <div>
           <div className="mb-2 block">
@@ -161,6 +170,11 @@ function FoundItemReportForm() {
             sizing="sm"
             {...register("location")}
           />
+          {errors.location && (
+            <p className="text-red-500 text-sm mt-1">
+              {String(errors.location.message)}
+            </p>
+          )}
         </div>
         <div>
           <div className="mb-2 block">
@@ -172,15 +186,21 @@ function FoundItemReportForm() {
                 <Dropdown.Item
                   key={c.id}
                   value={c.id}
-                  onClick={() =>
-                    setSelectedCategory({ id: c.id, name: c.name })
-                  }
+                  onClick={() => {
+                    setSelectedCategory({ id: c.id, name: c.name });
+                    setValue("categoryId", c.id);
+                  }}
                 >
                   {c.name}
                 </Dropdown.Item>
               );
             })}
           </Dropdown>
+          {errors.categoryId && (
+            <p className="text-red-500 text-sm mt-1">
+              {String(errors.categoryId.message)}
+            </p>
+          )}
         </div>
         <div>
           <div className="mb-2 block">

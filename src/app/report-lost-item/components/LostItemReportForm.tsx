@@ -8,12 +8,14 @@ import toast, { LoaderIcon } from "react-hot-toast";
 import { usePostReportLostItemMutation } from "@/redux/apiSlices/reportFoundItemApiSlice";
 import LoadingToast from "@/components/ui/LoadingToast";
 import { useRouter } from "next/navigation";
-import { validateFileSize } from "@/utilities/utilities";
 import { uploadPhoto } from "@/actions/uploadPhoto";
 import { revalidateTagFromClient } from "@/actions/revalidatingData";
 import CenterItem from "@/components/ui/CenterItem";
-
-//const decoded = jwtDecode(String(token)) as { id: string };
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  TreportLostItemFormData,
+  reportLostItemSchema,
+} from "@/valiations/ReportLostItemValidation";
 
 function LostItemReportForm() {
   const [loading, setLoading] = useState(false);
@@ -21,10 +23,13 @@ function LostItemReportForm() {
     register,
     handleSubmit,
     setError,
+    setValue,
     watch,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm<TreportLostItemFormData>({
+    resolver: zodResolver(reportLostItemSchema),
+  });
   const [postReport, { isLoading }] = usePostReportLostItemMutation();
 
   const { data: categoires } = useGetCategoryQuery(null);
@@ -37,11 +42,19 @@ function LostItemReportForm() {
   // Watch the photoFile field to get its value
   const photoFileValue = watch("photoFile");
 
-  const submitReport = async (data: any) => {
+  const submitReport = async (data: TreportLostItemFormData) => {
     setLoading(true);
-    const payload = { ...data, categoryId: selectedCategory.id };
+    const payload = {
+      ...data,
+      categoryId: selectedCategory.id,
+      photoUrl: "",
+    };
     if (!selectedCategory.id) {
       toast.error("Please, select category");
+      setError("categoryId", {
+        type: "manual",
+        message: "Please, select category",
+      });
       setLoading(false);
       return;
     }
@@ -51,17 +64,6 @@ function LostItemReportForm() {
     const file = data["photoFile"][0];
     photoFile.append("image", file);
 
-    // Validate file size before proceeding
-    const fileSizeError = validateFileSize(data.photoFile);
-    if (fileSizeError !== true) {
-      setError("photoFile", {
-        type: "manual",
-        message: fileSizeError as string,
-      });
-      setLoading(false);
-      toast.error(fileSizeError as string);
-      return;
-    }
     try {
       const photoUrl = await uploadPhoto(photoFile);
       if (!photoUrl) {
@@ -123,6 +125,11 @@ function LostItemReportForm() {
             sizing="sm"
             {...register("foundItemName")}
           />
+          {errors.foundItemName && (
+            <p className="text-red-500 text-sm mt-1">
+              {String(errors.foundItemName.message)}
+            </p>
+          )}
         </div>
         <div>
           <div className="mb-2 block">
@@ -134,6 +141,11 @@ function LostItemReportForm() {
             sizing="lg"
             {...register("description")}
           />
+          {errors.description && (
+            <p className="text-red-500 text-sm mt-1">
+              {String(errors.description.message)}
+            </p>
+          )}
         </div>
         <div>
           <div className="mb-2 block">
@@ -145,6 +157,11 @@ function LostItemReportForm() {
             sizing="sm"
             {...register("location")}
           />
+          {errors.location && (
+            <p className="text-red-500 text-sm mt-1">
+              {String(errors.location.message)}
+            </p>
+          )}
         </div>
         <div>
           <div className="mb-2 block">
@@ -156,15 +173,21 @@ function LostItemReportForm() {
                 <Dropdown.Item
                   key={c.id}
                   value={c.id}
-                  onClick={() =>
-                    setSelectedCategory({ id: c.id, name: c.name })
-                  }
+                  onClick={() => {
+                    setSelectedCategory({ id: c.id, name: c.name });
+                    setValue("categoryId", c.id);
+                  }}
                 >
                   {c.name}
                 </Dropdown.Item>
               );
             })}
           </Dropdown>
+          {errors.categoryId && (
+            <p className="text-red-500 text-sm mt-1">
+              {String(errors.categoryId.message)}
+            </p>
+          )}
         </div>
         <div>
           <div className="mb-2 block">
