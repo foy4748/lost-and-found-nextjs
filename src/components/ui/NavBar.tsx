@@ -56,7 +56,7 @@ export function NavBar() {
         <div className="flex md:order-2">
           {isRegistering || isLogingIn ? (
             <Spinner></Spinner>
-          ) : validity ? (
+          ) : validity && pathname !== "/auth/login" ? (
             <Dropdown
               arrowIcon={false}
               inline
@@ -70,7 +70,7 @@ export function NavBar() {
                 />
               }
             >
-              {validity ? (
+              {validity && pathname !== "/auth/login" ? (
                 <>
                   <Dropdown.Header>
                     <span className="block text-sm">{name}</span>
@@ -132,7 +132,7 @@ export function NavBar() {
           >
             Report Found
           </Navbar.Link>
-          {validity ? (
+          {validity && pathname !== "/auth/login" ? (
             <>
               <Navbar.Link
                 active={pathname.includes("/dashboard")}
@@ -162,7 +162,7 @@ export function NavBar() {
         </Navbar.Collapse>
       </Navbar>
       <DashboardDrawer
-        isOpen={Boolean(isOpen && validity)}
+        isOpen={Boolean(isOpen && validity && pathname !== "/auth/login")}
         setIsOpen={setIsOpen}
       />
       <LoadingToast isLoading={isLoading || isRegistering || isLogingIn} />
