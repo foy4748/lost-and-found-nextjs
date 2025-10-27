@@ -6,11 +6,11 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ### Deployed Server Address
 - [Client - Vercel](https://apollo-assignment-09.vercel.app) : [https://apollo-assignment-09.vercel.app](https://apollo-assignment-09.vercel.app)
-- [Server - Render](https://lost-and-found-expressjs.onrender.com) : [https://lost-and-found-expressjs.onrender.com](https://lost-and-found-expressjs.onrender.com)
+- [Server - Vercel](https://apollo-assignment-08.vercel.app) : [https://apollo-assignment-08.vercel.app](https://apollo-assignment-08.vercel.app)
 
 ### Github Repo Link
 - [Client - Github](https://github.com/foy4748/lost-and-found-nextjs) : [https://github.com/foy4748/lost-and-found-nextjs](https://github.com/foy4748/lost-and-found-nextjs) 
-[Server - Github](https://github.com/Porgramming-Hero-web-course/l2-b2-fullstack-track-assignment-8-foy4748)
+[Server - Github](https://github.com/foy4748/lost-and-found-expressjs) : [https://github.com/foy4748/lost-and-found-expressjs](https://github.com/foy4748/lost-and-found-expressjs)
 
 ### Explanation Video Link
 - [Google Drive]()
@@ -36,9 +36,10 @@ First, install the dependencies
 pnpm install
 ```
 
-Copy env.local.example file to .env.local file. Then update .env file using necessary server links and image uploading platform token
+Copy env.example file to .env.local  file (or .env.production if necessary). Then update .env file using necessary server links and image uploading platform token
 ```console
-cp env.local.example .env.local
+cp env.example .env.local
+cp env.example .env.production
 ```
 
 Then, run the development server:
